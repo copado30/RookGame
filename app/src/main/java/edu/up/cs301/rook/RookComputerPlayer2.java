@@ -2,7 +2,7 @@ package edu.up.cs301.rook;
 
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
-import edu.up.cs301.counter.R;
+import edu.up.cs301.rook.R;
 
 import android.app.Activity;
 import android.os.Handler;
