@@ -28,21 +28,25 @@ public abstract class GameState extends GameInfo {
      *
      * @return Number of Setup turns in game
      */
-    public int getNumSetupTurns(){ return numSetupTurns; }
+    public int getNumSetupTurns() {
+        return numSetupTurns;
+    }
 
     /**
      * getCurrentSetupTurn
      *
      * @return The Current Setup Turn number
      */
-    public int getCurrentSetupTurn(){ return currentSetupTurn; }
+    public int getCurrentSetupTurn() {
+        return currentSetupTurn;
+    }
 
     /**
      * incCurrentSetupTurn
      *
      * @return Whether or not the increment was successful
      */
-    public boolean incCurrentSetupTurn(){
+    public boolean incCurrentSetupTurn() {
         this.currentSetupTurn++;
         return true;
     }
@@ -52,7 +56,7 @@ public abstract class GameState extends GameInfo {
      *
      * @return String representation of this instance
      */
-    public String toString(){
+    public String toString() {
         return numSetupTurns + SEPARATOR + currentSetupTurn;
     }
 

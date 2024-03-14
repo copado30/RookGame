@@ -6,56 +6,49 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
 /**
  * This contains the state for the Counter game. The state consist of simply
  * the value of the counter.
- * 
+ *
  * @author Steven R. Vegdahl
  * @version July 2013
  */
-public class RookState extends GameState {
-	
-	// to satisfy Serializable interface
-	private static final long serialVersionUID = 7737393762469851826L;
-	
-	// the value of the counter
-	private int counter;
-	
-	/**
-	 * constructor, initializing the counter value from the parameter
-	 * 
-	 * @param counterVal
-	 * 		the value to which the counter's value should be initialized
-	 */
-	public RookState(int counterVal) {
-		counter = counterVal;
-	}
-	
-	/**
-	 * copy constructor; makes a copy of the original object
-	 * 
-	 * @param orig
-	 * 		the object from which the copy should be made
-	 */
-	public RookState(RookState orig) {
-		// set the counter to that of the original
-		this.counter = orig.counter;
-	}
 
-	/**
-	 * getter method for the counter
-	 * 
-	 * @return
-	 * 		the value of the counter
-	 */
-	public int getCounter() {
-		return counter;
-	}
-	
-	/**
-	 * setter method for the counter
-	 * 
-	 * @param counter
-	 * 		the value to which the counter should be set
-	 */
-	public void setCounter(int counter) {
-		this.counter = counter;
-	}
+
+public class RookState extends GameState {
+    private int team1Score;
+    private int team2Score;
+    private int player1Score;
+    private int player2Score;
+    private int player3Score;
+    private int player4Score;
+    private int bidNum;
+    private int playerId;
+
+    public RookState() {
+
+    }
+
+    public RookState(int i) {
+
+    }
+
+    public RookState(RookState gameState) {
+        this.team1Score = gameState.team1Score;
+        this.team2Score = gameState.team2Score;
+        this.player1Score = gameState.player1Score;
+        this.player2Score = gameState.player2Score;
+        this.player3Score = gameState.player3Score;
+        this.player4Score = gameState.player4Score;
+        this.bidNum = gameState.bidNum;
+        this.playerId = gameState.playerId;
+
+    }
+
+    @Override
+    public String toString() {
+        if (team1Score > team2Score) {
+            return "It is player " + playerId + " turn. Team 1 is in the lead with: " + team1Score;
+        } else if (team2Score > team1Score) {
+            return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
+        }
+        return "It is player " + playerId + " turn. Teams are tied.";
+    }
 }
