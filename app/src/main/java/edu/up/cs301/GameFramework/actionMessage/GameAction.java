@@ -49,6 +49,9 @@ public abstract class GameAction implements Serializable {
     public GamePlayer getPlayer() {
         return player;
     }
+    public int getPlayerNum(){
+        return getPlayerNum();
+    }
 
     /** Resets the source of the action. The intent is that it be used only
      *  by ProxyGame and ProxyPlayer.

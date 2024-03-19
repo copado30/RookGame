@@ -67,37 +67,7 @@ public class RookState extends GameState {
 
 
     public void shuffle(){
-        for(int i = 0; i < deck.length; i++)
-            if(i < 4){
-                deck[i].setNum(5);
-            }
-            else if (i < 8){
-                deck[i].setNum(6);
-            }
-            else if (i < 12){
-                deck[i].setNum(7);
-            }
-            else if (i < 16){
-                deck[i].setNum(8);
-            }
-            else if (i < 20){
-                deck[i].setNum(9);
-            }
-            else if (i < 24){
-                deck[i].setNum(10);
-            }
-            else if (i < 28){
-                deck[i].setNum(11);
-            }
-            else if (i < 32){
-                deck[i].setNum(12);
-            }
-            else if (i < 36){
-                deck[i].setNum(13);
-            }
-            else if (i < 40){
-                deck[i].setNum(14);
-            }
+
     }
 
 
@@ -105,10 +75,11 @@ public class RookState extends GameState {
      *
      * when player wins nest, they can discard
      */
-    public boolean discardCard(int index){
-        if((!bidPhase || !(playerId == 1)) && !bidWinner) {
+    public boolean discardCard(DiscardingAction action){
+        if(!bidPhase ||  playerId != action.getPlayerNum() || !bidWinner) {
             return false;
         }
+
         bidPhase = false;
         return true;
     }
@@ -118,8 +89,8 @@ public class RookState extends GameState {
      *
      * when its the bidding round and their turn to bid
      */
-    public boolean bid(){
-        if(!bidPhase || !(playerId == 1)) {//1 needs to be replaced by the player who's turn it is
+    public boolean bid(BidAction action){
+        if(!bidPhase ||  playerId != action.getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
             return false;
         }
         return true;
@@ -129,16 +100,16 @@ public class RookState extends GameState {
      *
      * if they want to pass on a bid turn
      */
-    public boolean passTurn(int playerNum){
-        if((!bidPhase) || (playerNum != playerId)){
+    public boolean passTurn(PassingAction action){
+        if((!bidPhase) ||  playerId != action.getPlayerNum()){
             return false;
         }
         return true;
     }
 
 
-    public boolean playCard(int playerNum){
-        if(bidPhase || playerNum != playerId) {
+    public boolean playCard(PlayCardAction action){
+        if(bidPhase || playerId != action.getPlayerNum()) {
             return false;
         }
         return true;
