@@ -2,6 +2,7 @@ package edu.up.cs301.rook;
 
 import edu.up.cs301.GameFramework.Card;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import java.util.*;
 
 
 
@@ -67,14 +68,16 @@ public class RookState extends GameState {
 
     public void createDeck(){
         String[] colors = new String[]{"Black","Green","Yellow","Red"};
-
+            int slot = 0;
         for(int j = 1; j <= colors.length; j++){
-            for(int i = 4; i < 14; i++){
-                deck[i-4].setNum(i);
-                deck[i-4].setCardSuit(colors[j]);
+            if(j > 1){slot += 13;}
 
-                if(i == 5){deck[i*j].setCardVal(5);}
-                else if(i == 10 || i == 14){deck[i*j].setCardVal(10);}
+            for(int i = 4; i <= 14; i++){
+                deck[(i-4)+slot].setNum(i);
+                deck[(i-4)+slot].setCardSuit(colors[j-1]);
+
+                if(i == 5){deck[(i-4)+slot].setCardVal(5);}
+                else if(i == 10 || i == 14){deck[(i-4)+slot].setCardVal(10);}
             }
         }
         deck[41].setCardSuit("Rook");
@@ -82,7 +85,12 @@ public class RookState extends GameState {
         deck[41].setCardVal(20);
     }
     public void shuffle(){
-
+        for(int i = 0; i < 1000; i++){
+            Random spot = new Random();
+            //temp1 and temp 2 represent the indexes of the cards
+            int temp1 = spot.nextInt(), temp2 = spot.nextInt();
+            Card holderCard = new Card(deck[temp1]);//create a copy of a card as a place holder
+        }
 
 
     }

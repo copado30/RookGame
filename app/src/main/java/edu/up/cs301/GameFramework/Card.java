@@ -10,6 +10,11 @@ public class Card {
         this.num = num;
         this.cardSuit = cardSuit;
     }
+    public Card(Card card){
+        card.setCardVal(this.cardVal);
+        card.setCardSuit(this.cardSuit);
+        card.setNum(this.num);
+    }
 
     public void setNum(int num) {
         this.num = num;
