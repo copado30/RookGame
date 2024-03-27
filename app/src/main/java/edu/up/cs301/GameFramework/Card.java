@@ -3,9 +3,9 @@ package edu.up.cs301.GameFramework;
 public class Card {
     private int cardVal;
     private int num;
-    private int cardSuit; //color of card (red, yellow, black, green)
+    private String cardSuit; //color of card (red, yellow, black, green)
 
-    public Card(int cardVal, int num, int cardSuit){
+    public Card(int cardVal, int num, String cardSuit){
         this.cardVal = cardVal;
         this.num = num;
         this.cardSuit = cardSuit;
@@ -14,4 +14,7 @@ public class Card {
     public void setNum(int num) {
         this.num = num;
     }
+    public void setCardSuit(String suit){this.cardSuit = suit;}
+
+    public void setCardVal(int cardVal) {this.cardVal = cardVal;}
 }

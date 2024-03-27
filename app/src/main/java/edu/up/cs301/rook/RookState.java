@@ -65,8 +65,25 @@ public class RookState extends GameState {
     }
 
 
+    public void createDeck(){
+        String[] colors = new String[]{"Black","Green","Yellow","Red"};
 
+        for(int j = 1; j <= colors.length; j++){
+            for(int i = 4; i < 14; i++){
+                deck[i-4].setNum(i);
+                deck[i-4].setCardSuit(colors[j]);
+
+                if(i == 5){deck[i*j].setCardVal(5);}
+                else if(i == 10 || i == 14){deck[i*j].setCardVal(10);}
+            }
+        }
+        deck[41].setCardSuit("Rook");
+        deck[41].setNum(20);
+        deck[41].setCardVal(20);
+    }
     public void shuffle(){
+
+
 
     }
 
