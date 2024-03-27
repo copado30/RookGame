@@ -88,11 +88,12 @@ public class RookState extends GameState {
         for(int i = 0; i < 1000; i++){
             Random spot = new Random();
             //temp1 and temp 2 represent the indexes of the cards
-            int temp1 = spot.nextInt(), temp2 = spot.nextInt();
-            Card holderCard = new Card(deck[temp1]);//create a copy of a card as a place holder
+            int num1 = spot.nextInt(41), num2 = spot.nextInt(41);
+            Card holderCard = new Card(deck[num1]);//create a copy of a card as a place holder
+            deck[num1] = deck[num2];//swaps the cards
+            deck[num2] = holderCard;
         }
-
-
+        //chooses randomly what cards change spots and does it a bunch of times
     }
 
 
