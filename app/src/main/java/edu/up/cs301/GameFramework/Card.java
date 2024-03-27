@@ -11,9 +11,9 @@ public class Card {
         this.cardSuit = cardSuit;
     }
     public Card(Card card){
-        card.setCardVal(this.cardVal);
-        card.setCardSuit(this.cardSuit);
-        card.setNum(this.num);
+        this.cardVal = card.cardVal;
+        this.cardSuit = card.cardSuit;
+        this.num = card.num;
     }
 
     public void setNum(int num) {
