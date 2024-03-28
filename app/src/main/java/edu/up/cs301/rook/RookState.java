@@ -16,6 +16,8 @@ public class RookState extends GameState {
     private int player4Score;
     private int bidNum;
     public int playerId;
+    public int roundScore;
+
     private boolean bidPhase = true;
     private boolean bidWinner = false;
 
@@ -38,7 +40,7 @@ public class RookState extends GameState {
         player3Score = 0;
         player4Score = 0;
         bidNum = 0;
-        playerId = 1;
+        playerId = 0;
     }
 
     public RookState(int i) {
@@ -60,9 +62,9 @@ public class RookState extends GameState {
     @Override
     public String toString() {
         if (team1Score > team2Score) {
-            return "It is player " + playerId + " turn. Team 1 is in the lead with: " + team1Score;
+            return "It is player " + playerId + " turn. Team 1 is in the lead with: " + team1Score + " " + add;
         } else if (team2Score > team1Score) {
-            return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
+            return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score + " " + add;
         }
         return "It is player " + playerId + " turn. Teams are tied." + add;
     }
@@ -138,9 +140,11 @@ public class RookState extends GameState {
 
 
     public boolean playCard(PlayCardAction action){
-        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
+        if(!bidPhase || playerId != action.getPlayer().getPlayerNum()) { //remove ! from bidPhase when developing game
             return false;
         }
+        //roundScore += card.getCardVal();
+
         return true;
     }
 }

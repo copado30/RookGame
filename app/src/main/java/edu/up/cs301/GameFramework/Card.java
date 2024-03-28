@@ -22,4 +22,5 @@ public class Card {
     public void setCardSuit(String suit){this.cardSuit = suit;}
 
     public void setCardVal(int cardVal) {this.cardVal = cardVal;}
+     public int getCardVal(){return cardVal;}
 }
