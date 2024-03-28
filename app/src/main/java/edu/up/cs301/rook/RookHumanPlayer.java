@@ -1,5 +1,6 @@
 package edu.up.cs301.rook;
 
+import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
@@ -8,6 +9,7 @@ import edu.up.cs301.rook.R;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
@@ -29,22 +31,23 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	/* instance variables */
 	
 	// The TextView the displays the current counter value
-	private TextView counterValueTextView;
+	private TextView testResultsTextView;
 	
 	// the most recent game state, as given to us by the CounterLocalGame
 	private RookState state;
 	
 	// the android activity that we are running
 	private GameMainActivity myActivity;
-	
+	private EditText editText;
+	private Button runTestButton;
+	boolean firstRun = true; // for first press of RunTest button
+
 	/**
 	 * constructor
 	 * @param name
 	 * 		the player's name
 	 */
-	public RookHumanPlayer(String name) {
-		super(name);
-	}
+	public RookHumanPlayer(String name) {super(name);}
 
 	/**
 	 * Returns the GUI's top view object
@@ -53,7 +56,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	 * 		the top object in the GUI's view heirarchy
 	 */
 	public View getTopView() {
-		return myActivity.findViewById(R.id.top_gui_layout);
+		return myActivity.findViewById(R.id.game_state_test_layout);
 	}
 	
 	/**
@@ -75,22 +78,33 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		// if we are not yet connected to a game, ignore
 		if (game == null) return;
 
-		// Construct the action and send it to the game
-		GameAction action = null;
-		if (button.getId() == R.id.plusButton) {
-			// plus button: create "increment" action
-			action = new RookMoveAction(this, true);
+		if(firstRun){
+			testResultsTextView.setText("");
+			firstRun = false;
 		}
-		else if (button.getId() == R.id.minusButton) {
-			// minus button: create "decrement" action
-			action = new RookMoveAction(this, false);
+
+		RookState firstInstance = new RookState();
+		RookState secondInstance = new RookState();
+
+
+		firstInstance.createDeck();
+		firstInstance.shuffle();
+
+		//firstInstance.discardCard(new DiscardingAction(this));
+		testResultsTextView.setText(testResultsTextView.getText() + firstInstance.toString() + " ");
+		//firstInstance.bid(action);
+		//firstInstance.passTurn(action);
+		//firstInstance.playCard(action);
+
+		//testResultsTextView.setText(firstInstance.toString());
+		RookState firstCopy = new RookState(firstInstance); // perspective of player 1
+		RookState secondCopy = new RookState(secondInstance);
+
+		if(firstCopy.toString().equals(secondCopy.toString())) {
+			testResultsTextView.setText(testResultsTextView.getText() + ". firstCopy and secondCopy are equal to each other. ");
+			testResultsTextView.setText(testResultsTextView.getText() + " " + firstCopy.toString() + " ");
+			testResultsTextView.setText(testResultsTextView.getText() + " " + secondCopy.toString() + " ");
 		}
-		else {
-			// something else was pressed: ignore
-			return;
-		}
-		
-		game.sendAction(action); // send action to the game
 	}// onClick
 	
 	/**
@@ -122,24 +136,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		this.myActivity = activity;
 		
 	    // Load the layout resource for our GUI
-		activity.setContentView(R.layout.counter_human_player);
-		
-		// make this object the listener for both the '+' and '-' 'buttons
-		Button plusButton = (Button) activity.findViewById(R.id.plusButton);
-		plusButton.setOnClickListener(this);
-		Button minusButton = (Button) activity.findViewById(R.id.minusButton);
-		minusButton.setOnClickListener(this);
+		activity.setContentView(R.layout.unit_test);
+		testResultsTextView = activity.findViewById(R.id.edit_text_results);
 
-		// remember the field that we update to display the counter's value
-		this.counterValueTextView =
-				(TextView) activity.findViewById(R.id.counterValueTextView);
-		
-		// if we have a game state, "simulate" that we have just received
-		// the state from the game so that the GUI values are updated
-		if (state != null) {
-			receiveInfo(state);
-		}
-	}
+		runTestButton = activity.findViewById(R.id.run_test_button);
+		runTestButton.setOnClickListener(this);
+
+	}//setAsGui
 
 }// class CounterHumanPlayer
 

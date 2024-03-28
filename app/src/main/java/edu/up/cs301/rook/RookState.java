@@ -18,7 +18,9 @@ public class RookState extends GameState {
     public int playerId;
     private boolean bidPhase = true;
     private boolean bidWinner = false;
-    public Card[] deck = new Card[41];
+
+    private String add = "";
+    public Card[] deck = new Card[41];//should be 41
 
     public Card[] hand1 = new Card[9];
 
@@ -62,27 +64,26 @@ public class RookState extends GameState {
         } else if (team2Score > team1Score) {
             return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
         }
-        return "It is player " + playerId + " turn. Teams are tied.";
+        return "It is player " + playerId + " turn. Teams are tied." + add;
     }
 
 
     public void createDeck(){
         String[] colors = new String[]{"Black","Green","Yellow","Red"};
-            int slot = 0;
+            int newColorStart = 0; // where in array the new set of colored cards begins
         for(int j = 1; j <= colors.length; j++){
-            if(j > 1){slot += 13;}
+            if(j > 1){newColorStart += 10;}
 
-            for(int i = 4; i <= 14; i++){
-                deck[(i-4)+slot].setNum(i);
-                deck[(i-4)+slot].setCardSuit(colors[j-1]);
-
-                if(i == 5){deck[(i-4)+slot].setCardVal(5);}
-                else if(i == 10 || i == 14){deck[(i-4)+slot].setCardVal(10);}
+            for(int i = 4; i < 14; i++){
+                if(i == 5){deck[(i-4)+newColorStart] = new Card(5,i,colors[j-1]);}
+                else if(i == 10 || i == 14){deck[(i-4)+newColorStart] = new Card(5,i,colors[j-1]);}
+                else{
+                    deck[(i-4)+newColorStart] = new Card(0,i,colors[j-1]);
+                }
             }
         }
-        deck[41].setCardSuit("Rook");
-        deck[41].setNum(20);
-        deck[41].setCardVal(20);
+        deck[40] = new Card(20, 20, "Rook");
+        add += ", deck created";
     }
     public void shuffle(){
         for(int i = 0; i < 1000; i++){
@@ -93,6 +94,7 @@ public class RookState extends GameState {
             deck[num1] = new Card(deck[num2]);//swaps the cards
             deck[num2] = holderCard;
         }
+        add += ", shuffled";
         //chooses randomly what cards change spots and does it a bunch of times
     }
 
@@ -119,6 +121,7 @@ public class RookState extends GameState {
         if(!bidPhase ||  playerId != action.getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
             return false;
         }
+        add += " bid";
         return true;
     }
 
