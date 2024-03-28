@@ -148,5 +148,9 @@ public class ProxyPlayer implements GamePlayer {
     public GameMainActivity getActivity(){
         return null;
     }
+
+    /** just return a flag value to indicate you shouldn't be calling this method on ProxyPlayer */
+    @Override
+    public int getPlayerNum() { return -9999; }
 }
 

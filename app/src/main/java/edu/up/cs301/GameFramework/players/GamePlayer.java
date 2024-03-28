@@ -36,4 +36,7 @@ public interface GamePlayer {
     //TESTING
     public GameMainActivity getActivity();
 
+    //retrieve the id number of this player
+    public int getPlayerNum();
+
 }// interface GamePlayer

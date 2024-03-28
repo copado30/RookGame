@@ -12,4 +12,5 @@ public class PlayCardAction extends GameAction {
     public PlayCardAction(GamePlayer player) {
         super(player);
     }
+
 }

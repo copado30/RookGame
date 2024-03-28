@@ -104,7 +104,7 @@ public class RookState extends GameState {
      * when player wins nest, they can discard
      */
     public boolean discardCard(DiscardingAction action){
-        if(!bidPhase ||  playerId != action.getPlayerNum() || !bidWinner) {
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || !bidWinner) {
             return false;
         }
 
@@ -118,7 +118,7 @@ public class RookState extends GameState {
      * when its the bidding round and their turn to bid
      */
     public boolean bid(BidAction action){
-        if(!bidPhase ||  playerId != action.getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
             return false;
         }
         add += " bid";
@@ -130,7 +130,7 @@ public class RookState extends GameState {
      * if they want to pass on a bid turn
      */
     public boolean passTurn(PassingAction action){
-        if((!bidPhase) ||  playerId != action.getPlayerNum()){
+        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum()){
             return false;
         }
         return true;
@@ -138,7 +138,7 @@ public class RookState extends GameState {
 
 
     public boolean playCard(PlayCardAction action){
-        if(bidPhase || playerId != action.getPlayerNum()) {
+        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
             return false;
         }
         return true;

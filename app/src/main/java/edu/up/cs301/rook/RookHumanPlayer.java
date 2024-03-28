@@ -90,7 +90,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		firstInstance.createDeck();
 		firstInstance.shuffle();
 
-		//firstInstance.discardCard(new DiscardingAction(this));
+		firstInstance.discardCard(new DiscardingAction(this));
 		testResultsTextView.setText(testResultsTextView.getText() + firstInstance.toString() + " ");
 		//firstInstance.bid(action);
 		//firstInstance.passTurn(action);

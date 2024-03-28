@@ -335,4 +335,9 @@ public abstract class GameComputerPlayer implements GamePlayer, Tickable {
     public GameMainActivity getActivity() {
         return myActivity;
     }
+
+    @Override
+    public int getPlayerNum() {
+        return this.playerNum;
+    }
 }// class GameComputerPlayer
