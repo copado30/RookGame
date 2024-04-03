@@ -12,6 +12,6 @@ public class BidAction extends GameAction {
     public int totalBid = 0;
     public BidAction(GamePlayer player, int increment) {
         super(player);
-        totalBid += increment;
+       totalBid += increment;
     }
 }

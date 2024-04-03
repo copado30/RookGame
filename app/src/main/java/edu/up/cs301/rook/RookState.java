@@ -11,7 +11,7 @@ public class RookState extends GameState {
     private int team1Score;
     private int team2Score;
     private int[] playerScores;
-    private int bidNum;
+    public int bidNum;
     public int playerId;
     public int roundScore;
 
@@ -95,6 +95,7 @@ public class RookState extends GameState {
                     deckNumberToHand++;}
             }
         }
+        add += " ,hands have been dealt";
     }
 
 
@@ -120,6 +121,7 @@ public class RookState extends GameState {
         if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
             return false;
         }
+        bidNum = action.totalBid;
         add += " bid";
         return true;
     }
