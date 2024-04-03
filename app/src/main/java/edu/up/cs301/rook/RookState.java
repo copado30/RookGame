@@ -10,10 +10,7 @@ import java.util.*;
 public class RookState extends GameState {
     private int team1Score;
     private int team2Score;
-    private int player1Score;
-    private int player2Score;
-    private int player3Score;
-    private int player4Score;
+    private int[] playerScores;
     private int bidNum;
     public int playerId;
     public int roundScore;
@@ -22,23 +19,13 @@ public class RookState extends GameState {
     private boolean bidWinner = false;
 
     private String add = "";
-    public Card[] deck = new Card[41];//should be 41
-
-    public Card[] hand1 = new Card[9];
-
-    public Card[] hand2 = new Card[9];
-
-    public Card[] hand3 = new Card[9];
-
-    public Card[] hand4 = new Card[9];
+    public Card[] deck = new Card[41];
+    public Card[][] playerHands = new Card[5][9];
 
     public RookState() {
         team1Score = 0;
         team2Score = 0;
-        player1Score = 0;
-        player2Score = 0;
-        player3Score = 0;
-        player4Score = 0;
+        for(int i =0; i < playerScores.length; i++){playerScores[i] = 0;}
         bidNum = 0;
         playerId = 0;
     }
@@ -50,10 +37,7 @@ public class RookState extends GameState {
     public RookState(RookState gameState) {
         this.team1Score = gameState.team1Score;
         this.team2Score = gameState.team2Score;
-        this.player1Score = gameState.player1Score;
-        this.player2Score = gameState.player2Score;
-        this.player3Score = gameState.player3Score;
-        this.player4Score = gameState.player4Score;
+        for(int i =0; i < playerScores.length; i++){playerScores[i] = gameState.playerScores[i];}
         this.bidNum = gameState.bidNum;
         this.playerId = gameState.playerId;
 
@@ -98,6 +82,19 @@ public class RookState extends GameState {
         }
         add += ", shuffled";
         //chooses randomly what cards change spots and does it a bunch of times
+    }
+    public void dealHands(){
+        //player hands are [4 players ][9 cards per player]
+        int deckNumberToHand = 0;
+        for(int i = 0; i <= 4; i++){//4 players + 1 nest
+            for(int j = 0; j <= 8; j++){
+                if(i == 4 && j > 4){//the nest does not need all 9 cards only 5 last 4 will be null
+                    playerHands[i][j] = null;}
+                else {
+                    playerHands[i][j] = deck[deckNumberToHand];
+                    deckNumberToHand++;}
+            }
+        }
     }
 
 
