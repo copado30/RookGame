@@ -10,40 +10,50 @@ import java.util.*;
 public class RookState extends GameState {
     private int team1Score;
     private int team2Score;
-    private int[] playerScores = new int[4];
     public int bidNum;
     public int playerId;
     public int roundScore;
 
-    private boolean bidPhase = true;
-    private boolean bidWinner = false;
+    private boolean bidPhase;
+    private boolean bidWinner;
 
-    private String add = "";
+    private String add;
+    private int[] playerScores = new int[4];
+    ;
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
 
     public RookState() {
         team1Score = 0;
         team2Score = 0;
-        for(int i =0; i < playerScores.length; i++){playerScores[i] = 0;}
+        roundScore = 0;
+        bidWinner = false;
+        bidPhase = true;
         bidNum = 0;
         playerId = 0;
-        /*
-        createDeck();
-        shuffle();
-        dealHands();
-        not completely sure is we want to do this
-         */
+        add = "";
+        for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
     }
 
     public RookState(RookState gameState) {
-        this.team1Score = gameState.team1Score;
-        this.team2Score = gameState.team2Score;
-        for(int i =0; i < playerScores.length; i++){playerScores[i] = gameState.playerScores[i];}
-        this.bidNum = gameState.bidNum;
-        this.playerId = gameState.playerId;
-        //need to make sure that the card arrays are being deep copied because they are a class
-    }
+        team1Score = gameState.team1Score;
+        team2Score = gameState.team2Score;
+        bidNum = gameState.bidNum;
+        playerId = gameState.playerId;
+        roundScore = gameState.roundScore;
+        bidWinner = gameState.bidWinner;
+        bidPhase = gameState.bidPhase;
+        add = gameState.add;
+
+
+        for(int i = 0; i < playerScores.length; i++) { playerScores[i] = gameState.playerScores[i]; }
+
+        for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
+
+        for(int i = 0; i <= 4; i++) {//4 players + 1 nest
+            for (int j = 0; j <= 8; j++) {playerHands[i][j] = new Card(gameState.playerHands[i][j]);}
+        }
+    }//Deep Copy Constructor
 
     @Override
     public String toString() {
