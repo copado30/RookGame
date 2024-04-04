@@ -15,7 +15,7 @@ public class RookState extends GameState {
     public int roundScore;
 
     private boolean bidPhase;
-    private boolean bidWinner;
+    private int bidWinner;
 
     private String add;
     private int[] playerScores = new int[4];
@@ -27,7 +27,7 @@ public class RookState extends GameState {
         team1Score = 0;
         team2Score = 0;
         roundScore = 0;
-        bidWinner = false;
+        bidWinner = 4;//players are 0-3, 4 means no one has won
         bidPhase = true;
         bidNum = 0;
         playerId = 0;
@@ -121,11 +121,11 @@ public class RookState extends GameState {
      * when player wins nest, they can discard
      */
     public boolean discardCard(DiscardingAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || !bidWinner) {
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
             return false;
         }
 
-        bidPhase = false;
+        bidPhase = false;//ask nux
         return true;
     }
 
@@ -139,7 +139,7 @@ public class RookState extends GameState {
             return false;
         }
         bidNum = action.totalBid;
-        add += " bid";
+        //add += " bid";
         return true;
     }
 

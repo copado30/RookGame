@@ -9,7 +9,6 @@ public class PlayCardAction extends GameAction {
      * constructor for GameAction
      *
      * @param player the player who created the action
-     * @param rook
      */
     public PlayCardAction(GamePlayer player) {
         super(player);

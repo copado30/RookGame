@@ -91,6 +91,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		firstInstance.createDeck();
 		firstInstance.shuffle();
 
+		secondInstance.createDeck();
+		secondInstance.shuffle();
+
+
 		// 1 round of rook play
 
 		if(firstInstance.bid(new BidAction(this, 5))) {
@@ -125,7 +129,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 			testResultsTextView.setText(testResultsTextView.getText() + "The secondCopy string is: " + secondCopy.toString() + " ");
 		}
 
-		testResultsTextView.setText(firstInstance.toString());
+
+		//testResultsTextView.setText(firstCopy.toString());
+		//testResultsTextView.setText(testResultsTextView.getText() + secondCopy.toString());
+
 	}// onClick
 	
 	/**

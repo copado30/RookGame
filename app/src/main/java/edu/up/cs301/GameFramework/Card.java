@@ -11,9 +11,11 @@ public class Card {
         this.cardSuit = cardSuit;
     }
     public Card(Card card){
-        this.cardVal = card.cardVal;
-        this.cardSuit = card.cardSuit;
-        this.num = card.num;
+        if (card != null) {
+            this.cardVal = card.getCardVal();
+            this.cardSuit = card.getCardSuit();
+            this.num = card.getNum();
+        }
     }
 
     public void setNum(int num) {
