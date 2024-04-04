@@ -83,7 +83,7 @@ public class RookMainActivity extends GameMainActivity {
 	 */
 	@Override
 	public LocalGame createLocalGame(GameState state) {
-		if (state == null) state = new RookState(0);
+		if (state == null) state = new RookState();//was RookState(0) zero represented the counter game starting score also in rookLocal game
 		return new RookLocalGame(state);
 	}
 

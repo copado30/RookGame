@@ -45,7 +45,7 @@ public class RookLocalGame extends LocalGame {
 	public RookLocalGame(GameState state) {
 		// initialize the game state, with the counter value starting at 0
 		if (! (state instanceof RookState)) {
-			state = new RookState(0);
+			state = new RookState();//was RookState(0)
 		}
 		this.gameState = (RookState)state;
 		super.state = state;

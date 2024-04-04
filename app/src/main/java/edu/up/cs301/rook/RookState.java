@@ -10,7 +10,7 @@ import java.util.*;
 public class RookState extends GameState {
     private int team1Score;
     private int team2Score;
-    private int[] playerScores;
+    private int[] playerScores = new int[4];
     public int bidNum;
     public int playerId;
     public int roundScore;
@@ -28,10 +28,12 @@ public class RookState extends GameState {
         for(int i =0; i < playerScores.length; i++){playerScores[i] = 0;}
         bidNum = 0;
         playerId = 0;
-    }
-
-    public RookState(int i) {
-
+        /*
+        createDeck();
+        shuffle();
+        dealHands();
+        not completely sure is we want to do this
+         */
     }
 
     public RookState(RookState gameState) {
@@ -40,7 +42,7 @@ public class RookState extends GameState {
         for(int i =0; i < playerScores.length; i++){playerScores[i] = gameState.playerScores[i];}
         this.bidNum = gameState.bidNum;
         this.playerId = gameState.playerId;
-
+        //need to make sure that the card arrays are being deep copied because they are a class
     }
 
     @Override
@@ -57,14 +59,14 @@ public class RookState extends GameState {
     public void createDeck(){
         String[] colors = new String[]{"Black","Green","Yellow","Red"};
             int newColorStart = 0; // where in array the new set of colored cards begins
-        for(int j = 1; j <= colors.length; j++){
+        for(int j = 1; j <= colors.length; j++){//for loop for the suits
             if(j > 1){newColorStart += 10;}
 
-            for(int i = 4; i < 14; i++){
-                if(i == 5){deck[(i-4)+newColorStart] = new Card(5,i,colors[j-1]);}
-                else if(i == 10 || i == 14){deck[(i-4)+newColorStart] = new Card(5,i,colors[j-1]);}
+            for(int i = 5; i < 15; i++){
+                if(i == 5){deck[(i-5)+newColorStart] = new Card(5,i,colors[j-1]);}
+                else if(i == 10 || i == 14){deck[(i-5)+newColorStart] = new Card(5,i,colors[j-1]);}
                 else{
-                    deck[(i-4)+newColorStart] = new Card(0,i,colors[j-1]);
+                    deck[(i-5)+newColorStart] = new Card(0,i,colors[j-1]);
                 }
             }
         }
@@ -96,6 +98,11 @@ public class RookState extends GameState {
             }
         }
         add += " ,hands have been dealt";
+    }
+    public void printDeck(){
+        for(int i =0; i < deck.length; i++ ){
+            add += " ,index:" + i + " ,number:" + deck[i].getNum() + " ,suit:" + deck[i].getCardSuit() + " ,cardVal:" + deck[i].getCardVal() ;
+        }
     }
 
 

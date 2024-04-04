@@ -23,4 +23,7 @@ public class Card {
 
     public void setCardVal(int cardVal) {this.cardVal = cardVal;}
      public int getCardVal(){return cardVal;}
+    public String getCardSuit() {return cardSuit;}
+
+    public int getNum() {return num;}
 }

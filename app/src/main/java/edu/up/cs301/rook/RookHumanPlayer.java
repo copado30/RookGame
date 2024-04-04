@@ -92,6 +92,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		firstInstance.shuffle();
 
 		// 1 round of rook play
+
 		if(firstInstance.bid(new BidAction(this, 5))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 1 just added 5 points to their bid! + ");
 		} if(firstInstance.bid(new BidAction(this, 15))) {
@@ -116,11 +117,15 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		RookState firstCopy = new RookState(firstInstance); // perspective of player 1
 		RookState secondCopy = new RookState(secondInstance);
 
+
+
 		if(firstCopy.toString().equals(secondCopy.toString())) { // comparing firstCopy and secondCopy toString
 			testResultsTextView.setText(testResultsTextView.getText() + "firstCopy and secondCopy are equal to each other. ");
 			testResultsTextView.setText(testResultsTextView.getText() + ". The firstCopy string is: " + firstCopy.toString() + " ");
 			testResultsTextView.setText(testResultsTextView.getText() + "The secondCopy string is: " + secondCopy.toString() + " ");
 		}
+
+		testResultsTextView.setText(firstInstance.toString());
 	}// onClick
 	
 	/**
