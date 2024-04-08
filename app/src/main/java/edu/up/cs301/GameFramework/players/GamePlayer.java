@@ -15,6 +15,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 public interface GamePlayer {
     // sets this player as the GUI player (implemented as final in the
     // major player classes)
+
     public abstract void gameSetAsGui(GameMainActivity activity);
 
     // sets this player as the GUI player (overrideable)
@@ -38,5 +39,8 @@ public interface GamePlayer {
 
     //retrieve the id number of this player
     public int getPlayerNum();
+    public void setCanBid(boolean canBid);
+
+    public boolean getCanBid();
 
 }// interface GamePlayer

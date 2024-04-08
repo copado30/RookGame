@@ -1,6 +1,10 @@
 package edu.up.cs301.rook;
 
+import android.app.Activity;
+
 import edu.up.cs301.GameFramework.Card;
+import edu.up.cs301.GameFramework.Game;
+import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 import java.util.*;
 
@@ -135,7 +139,7 @@ public class RookState extends GameState {
      * when its the bidding round and their turn to bid
      */
     public boolean bid(BidAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum()) {//1 needs to be replaced by the player who's turn it is
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || action.getPlayer().getCanBid() == false){//1 needs to be replaced by the player who's turn it is
             return false;
         }
         bidNum = action.totalBid;
@@ -148,7 +152,7 @@ public class RookState extends GameState {
      * if they want to pass on a bid turn
      */
     public boolean passTurn(PassingAction action){
-        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum()){
+        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || action.getPlayer().getCanBid() == false){
             return false;
         }
         return true;

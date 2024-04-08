@@ -42,14 +42,15 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	private GameMainActivity myActivity;
 	private EditText editText;
 	private Button runTestButton;
-	boolean firstRun = true; // for first press of RunTest button
-
+	boolean firstRun = true;// for first press of RunTest button
 	/**
 	 * constructor
 	 * @param name
 	 * 		the player's name
 	 */
 	public RookHumanPlayer(String name) {super(name);}
+
+
 
 	/**
 	 * Returns the GUI's top view object
@@ -79,6 +80,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	public void onClick(View button) {
 		// if we are not yet connected to a game, ignore
 		if (game == null) return;
+
+		if(button.getId() == R.id.passButton){
+			this.canBid = false;//cannot bid anymore should probably just send a pass action
+		}
 
 		if(firstRun){
 			testResultsTextView.setText("");
