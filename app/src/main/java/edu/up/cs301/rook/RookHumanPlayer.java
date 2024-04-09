@@ -112,13 +112,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 4 passed on their bid! + ");
 		} if(firstInstance.discardCard(new DiscardingAction(this))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 3 won the bid. They chose 5 cards from their deck to discard and exchange with the nest and selected the trump suit as black. + ");
-		} if(firstInstance.playCard(new PlayCardAction(this))) {
+		} if(firstInstance.playCard(new PlayCardAction(this, new Card(10, 10, "Red")))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 1 played a red 14! + ");
-		} if(firstInstance.playCard(new PlayCardAction(this))) {
+		} if(firstInstance.playCard(new PlayCardAction(this, new Card(0, 8, "Red")))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 2 played a red 8 + ");
-		} if(firstInstance.playCard(new PlayCardAction(this))) {
+		} if(firstInstance.playCard(new PlayCardAction(this, new Card(0, 9, "Black")))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 3 played a black 9! + ");
-		} if(firstInstance.playCard(new PlayCardAction(this))) {
+		} if(firstInstance.playCard(new PlayCardAction(this, new Card(0, 12, "Red")))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 4 played a red 12! + ");
 		}
 		testResultsTextView.setText(testResultsTextView.getText() + "Player 3 won the game with a black 9! + ");
