@@ -10,13 +10,14 @@ public class PlayCardAction extends GameAction {
      * constructor for GameAction
      *
      * @param player the player who created the action
+     * @param card the card being played
      */
     public PlayCardAction(GamePlayer player, Card card) {
         super(player);
         this.card = card;
     }
 
-    public Card getCard() {
+    public Card getCard() { //returns card being played
         return card;
     }
 }
