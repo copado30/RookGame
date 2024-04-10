@@ -26,7 +26,7 @@ public class RookLocalGame extends LocalGame {
 
 	// the game's state
 	private RookState gameState;
-	
+
 	/**
 	 * can this player move
 	 * 
@@ -57,7 +57,11 @@ public class RookLocalGame extends LocalGame {
 	@Override
 	protected boolean makeMove(GameAction action) {
 		Log.i("action", action.getClass().toString());
-		
+
+		if(action instanceof BidAction) {
+			gameState.setBidNum(((BidAction) action).getTotalBid());
+		}
+
 		if (action instanceof RookMoveAction) {
 		
 			// cast so that we Java knows it's a CounterMoveAction

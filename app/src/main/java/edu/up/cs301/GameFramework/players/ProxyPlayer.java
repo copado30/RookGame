@@ -24,6 +24,7 @@ public class ProxyPlayer implements GamePlayer {
 
     // the game object
     private Game game;
+    private boolean canBid = true;
 
     // the object that connects us to the network
     private NetworkObjectPasser networkPasser;
@@ -152,5 +153,15 @@ public class ProxyPlayer implements GamePlayer {
     /** just return a flag value to indicate you shouldn't be calling this method on ProxyPlayer */
     @Override
     public int getPlayerNum() { return -9999; }
+
+    @Override
+    public void setCanBid(boolean canBid) {
+        this.canBid = canBid;
+    }
+
+    @Override
+    public boolean getCanBid() {
+        return canBid;
+    }
 }
 

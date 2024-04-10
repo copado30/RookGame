@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
+import org.w3c.dom.Text;
+
 /**
  * A GUI of a counter-player. The GUI displays the current value of the counter,
  * and allows the human player to press the '+' and '-' buttons in order to
@@ -31,17 +33,21 @@ import android.view.View.OnClickListener;
 public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener {
 
 	/* instance variables */
-	
+
 	// The TextView the displays the current counter value
 	private TextView testResultsTextView;
-	
+	private TextView bidText;
+
 	// the most recent game state, as given to us by the CounterLocalGame
-	private RookState state;
-	
+	private RookState rookState;
+
 	// the android activity that we are running
 	private GameMainActivity myActivity;
 	private EditText editText;
 	private Button runTestButton;
+	private Button bidButton;
+	private Button plusButton;
+	private Button minusButton;
 	boolean firstRun = true;// for first press of RunTest button
 	/**
 	 * constructor
@@ -54,14 +60,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
 	/**
 	 * Returns the GUI's top view object
-	 * 
+	 *
 	 * @return
 	 * 		the top object in the GUI's view heirarchy
 	 */
 	public View getTopView() {
-		return myActivity.findViewById(R.id.game_state_test_layout);
-	}
-	
+		return myActivity.findViewById(R.id.main_activity_GUI);}//was game_state_test_layout
+
 	/**
 	 * sets the counter value in the text view
 	 */
@@ -73,7 +78,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	/**
 	 * this method gets called when the user clicks the '+' or '-' button. It
 	 * creates a new CounterMoveAction to return to the parent activity.
-	 * 
+	 *
 	 * @param button
 	 * 		the button that was clicked
 	 */
@@ -82,9 +87,27 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		if (game == null) return;
 
 		if(button.getId() == R.id.passButton){
-			this.canBid = false;//cannot bid anymore should probably just send a pass action
-		}
+			PassingAction passingAction = new PassingAction(this);
+			game.sendAction(passingAction);
+		} else if(button.getId() == R.id.bidButton){
+			int newBidValue = Integer.parseInt(bidText.getText().toString());
+			BidAction bidAction = new BidAction(this, newBidValue);
+			game.sendAction(bidAction);
+		} else if(button.getId() == R.id.plusButton) {
+			int newBidValue = Integer.parseInt(bidText.getText().toString()) + 5;
+			if(newBidValue > 120){
+				/*do nothing*/
+			} else {
+				bidText.setText(newBidValue + "");}
+		} else if(button.getId() == R.id.minusButton) {
+			int newBidValue = Integer.parseInt(bidText.getText().toString()) - 5;
+			if(newBidValue < rookState.getBidNum()) {
+				/*do nothing*/
+			} else {
+				bidText.setText(newBidValue + "");}
+			}
 
+		/*
 		if(firstRun){
 			testResultsTextView.setText("");
 			firstRun = false;
@@ -99,14 +122,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		secondInstance.createDeck();
 		secondInstance.shuffle();
 
-
 		// 1 round of rook play
 
-		if(firstInstance.bid(new BidAction(this, 5))) {
+		if(firstInstance.bid(new BidAction(this))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 1 just added 5 points to their bid! + ");
-		} if(firstInstance.bid(new BidAction(this, 15))) {
+		} if(firstInstance.bid(new BidAction(this))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 2 just added 15 points to their bid! + ");
-		} if(firstInstance.bid(new BidAction(this, 25))) {
+		} if(firstInstance.bid(new BidAction(this))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 3 just added 25 points to their bid! + ");
 		} if(firstInstance.passTurn(new PassingAction(this))) {
 			testResultsTextView.setText(testResultsTextView.getText() + "Player 4 passed on their bid! + ");
@@ -126,8 +148,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		RookState firstCopy = new RookState(firstInstance); // perspective of player 1
 		RookState secondCopy = new RookState(secondInstance);
 
-
-
 		if(firstCopy.toString().equals(secondCopy.toString())) { // comparing firstCopy and secondCopy toString
 			testResultsTextView.setText(testResultsTextView.getText() + "firstCopy and secondCopy are equal to each other. ");
 			testResultsTextView.setText(testResultsTextView.getText() + ". The firstCopy string is: " + firstCopy.toString() + " ");
@@ -135,10 +155,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		}
 
 
-		//testResultsTextView.setText(firstCopy.toString());
-		//testResultsTextView.setText(testResultsTextView.getText() + secondCopy.toString());
+		testResultsTextView.setText(firstCopy.toString());
+		testResultsTextView.setText(testResultsTextView.getText() + secondCopy.toString()); */
 
-	}// onClick
+	} //onClick
 	
 	/**
 	 * callback method when we get a message (e.g., from the game)
@@ -152,7 +172,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		if (!(info instanceof RookState)) return;
 		
 		// update our state; then update the display
-		this.state = (RookState)info;
+		this.rookState = (RookState)info;
 		updateDisplay();
 	}
 	
@@ -169,11 +189,26 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		this.myActivity = activity;
 		
 	    // Load the layout resource for our GUI
-		activity.setContentView(R.layout.unit_test);
-		testResultsTextView = activity.findViewById(R.id.edit_text_results);
+		activity.setContentView(R.layout.activity_main);
+		bidText = activity.findViewById(R.id.betValueTextView);
 
-		runTestButton = activity.findViewById(R.id.run_test_button);
-		runTestButton.setOnClickListener(this);
+		//initialize widget reference member variables
+		this.bidButton = (Button)activity.findViewById(R.id.bidButton);
+		this.plusButton = (Button)activity.findViewById(R.id.plusButton);
+		this.minusButton = (Button)activity.findViewById(R.id.minusButton);
+
+		//listen for button presses
+		bidButton.setOnClickListener(this);
+		plusButton.setOnClickListener(this);
+		minusButton.setOnClickListener(this);
+
+		//TextView bidText = (TextView)activity.findViewById(R.id.betValueTextView);
+		//bidText.setText(String.valueOf(total));
+
+		//testResultsTextView = activity.findViewById(R.id.edit_text_results);
+
+		//runTestButton = activity.findViewById(R.id.run_test_button);
+		//runTestButton.setOnClickListener(this);
 
 	}//setAsGui
 

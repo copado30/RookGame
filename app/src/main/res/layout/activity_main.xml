@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#086737"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/main_activity_GUI">
 
 
     <TextView
@@ -222,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#F3EDED"
-            android:text="BET VALUE"
+            android:text="70"
             android:textAlignment="center" />
 
         <Button

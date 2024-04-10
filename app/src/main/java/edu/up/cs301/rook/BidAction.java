@@ -9,9 +9,15 @@ public class BidAction extends GameAction {
      *
      * @param player the player who created the action
      */
-    public int totalBid = 0;
-    public BidAction(GamePlayer player, int increment) {
+    private int totalBid = 0;
+
+    public BidAction(GamePlayer player, int newValue) {
         super(player);
-       totalBid += increment;
+        this.totalBid = newValue;
     }
+
+    public int getTotalBid() {return totalBid;}
+    public void setTotalBid(int total) {this.totalBid = total;}
 }
+
+
