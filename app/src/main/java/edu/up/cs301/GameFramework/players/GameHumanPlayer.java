@@ -43,7 +43,6 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
      */
     protected Game game; // the game
     protected int playerNum; // my player ID
-    protected boolean canBid;
 
     protected String name; // my player's name
     protected String[] allPlayerNames; // the names of all the player
@@ -63,7 +62,6 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
         // set the name via the argument
 
         this.name = name;
-        this.canBid = true;
 
         // mark game as not being over
         this.gameOver = false;
@@ -379,8 +377,5 @@ public abstract class GameHumanPlayer implements GamePlayer, Tickable {
         return this.playerNum;
     }
 
-    public void setCanBid(boolean canBid){this.canBid = canBid;}
-
-    public boolean getCanBid() {return canBid;}
 }// class GameHumanPlayer
 

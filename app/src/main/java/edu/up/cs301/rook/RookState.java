@@ -23,6 +23,8 @@ public class RookState extends GameState {
 
     private String add;
     private int[] playerScores = new int[4];
+    private boolean[] canBid = new boolean[4];
+
     ;
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
@@ -37,6 +39,8 @@ public class RookState extends GameState {
         playerId = 0;
         add = "";
         for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
+        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+
     }
 
     public RookState(RookState gameState) {
@@ -57,6 +61,8 @@ public class RookState extends GameState {
         for(int i = 0; i <= 4; i++) {//4 players + 1 nest
             for (int j = 0; j <= 8; j++) {playerHands[i][j] = new Card(gameState.playerHands[i][j]);}
         }
+        for(int i = 0; i < canBid.length; i++){this.canBid[i] = gameState.canBid[i];}
+
     }//Deep Copy Constructor
 
     @Override
@@ -139,7 +145,7 @@ public class RookState extends GameState {
      * when its the bidding round and their turn to bid
      */
     public boolean bid(BidAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || action.getPlayer().getCanBid() == false){//1 needs to be replaced by the player who's turn it is
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
             return false;
         }
         //add += " bid";
@@ -151,7 +157,7 @@ public class RookState extends GameState {
      * if they want to pass on a bid turn
      */
     public boolean passTurn(PassingAction action){
-        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || action.getPlayer().getCanBid() == false){
+        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
             return false;
         }
         return true;
@@ -173,5 +179,12 @@ public class RookState extends GameState {
 
     public void setBidNum(int bidNum) {
         this.bidNum = bidNum;
+    }
+
+    public boolean getCanBid(int playerId) {
+        return canBid[playerId];
+    }
+    public void setCanBid(int playerId, boolean canBid) {
+        this.canBid[playerId] = canBid;
     }
 }

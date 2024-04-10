@@ -24,7 +24,6 @@ public class ProxyPlayer implements GamePlayer {
 
     // the game object
     private Game game;
-    private boolean canBid = true;
 
     // the object that connects us to the network
     private NetworkObjectPasser networkPasser;
@@ -154,14 +153,7 @@ public class ProxyPlayer implements GamePlayer {
     @Override
     public int getPlayerNum() { return -9999; }
 
-    @Override
-    public void setCanBid(boolean canBid) {
-        this.canBid = canBid;
-    }
 
-    @Override
-    public boolean getCanBid() {
-        return canBid;
-    }
+
 }
 

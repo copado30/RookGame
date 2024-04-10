@@ -45,6 +45,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 	private GameMainActivity myActivity;
 	private EditText editText;
 	private Button runTestButton;
+	private Button passButton;
 	private Button bidButton;
 	private Button plusButton;
 	private Button minusButton;
@@ -105,7 +106,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 				/*do nothing*/
 			} else {
 				bidText.setText(newBidValue + "");}
-			}
+		} else if(button.getId() == R.id.passButton){
+			PassingAction passingAction = new PassingAction(this);
+			game.sendAction(passingAction);
+		}
 
 		/*
 		if(firstRun){
@@ -196,11 +200,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 		this.bidButton = (Button)activity.findViewById(R.id.bidButton);
 		this.plusButton = (Button)activity.findViewById(R.id.plusButton);
 		this.minusButton = (Button)activity.findViewById(R.id.minusButton);
+		this.passButton = (Button)activity.findViewById(R.id.passButton);
 
 		//listen for button presses
 		bidButton.setOnClickListener(this);
 		plusButton.setOnClickListener(this);
 		minusButton.setOnClickListener(this);
+		passButton.setOnClickListener(this);
 
 		//TextView bidText = (TextView)activity.findViewById(R.id.betValueTextView);
 		//bidText.setText(String.valueOf(total));

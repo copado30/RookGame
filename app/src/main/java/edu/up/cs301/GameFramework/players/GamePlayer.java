@@ -39,8 +39,6 @@ public interface GamePlayer {
 
     //retrieve the id number of this player
     public int getPlayerNum();
-    public void setCanBid(boolean canBid);
 
-    public boolean getCanBid();
 
 }// interface GamePlayer

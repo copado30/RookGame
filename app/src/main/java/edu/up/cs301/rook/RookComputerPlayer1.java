@@ -21,7 +21,6 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
      * @param name
      * 		the player's name
      */
-	private boolean canBid = true;
     public RookComputerPlayer1(String name) {
         // invoke superclass constructor
         super(name);
@@ -43,14 +42,4 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
 		// depends totally on the timer and random numbers.
 	}
 
-
-	@Override
-	public void setCanBid(boolean canBid) {
-			this.canBid = canBid;
-	}
-
-	@Override
-	public boolean getCanBid() {
-		return canBid;
-	}
 }

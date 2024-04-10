@@ -60,6 +60,8 @@ public class RookLocalGame extends LocalGame {
 
 		if(action instanceof BidAction) {
 			gameState.setBidNum(((BidAction) action).getTotalBid());
+		} else if(action instanceof PassingAction) {
+			gameState.setCanBid(action.getPlayer().getPlayerNum(),false);//player can no longer bid
 		}
 
 		if (action instanceof RookMoveAction) {
