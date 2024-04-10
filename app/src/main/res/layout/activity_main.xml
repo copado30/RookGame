@@ -122,8 +122,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton5"
@@ -131,8 +132,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton6"
@@ -140,8 +142,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton7"
@@ -149,8 +152,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton10"
@@ -158,8 +162,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton9"
@@ -167,8 +172,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton12"
@@ -176,8 +182,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton2"
@@ -185,8 +192,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
         <ImageButton
             android:id="@+id/imageButton8"
@@ -194,8 +202,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:adjustViewBounds="true"
+            android:contentDescription="Choose card"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/cover" />
+            android:src="@drawable/cover" />
 
 
     </LinearLayout>
