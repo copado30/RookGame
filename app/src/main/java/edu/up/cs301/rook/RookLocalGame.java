@@ -57,15 +57,30 @@ public class RookLocalGame extends LocalGame {
     @Override
     protected boolean makeMove(GameAction action) {
         Log.i("action", action.getClass().toString());
+        //need to check if the action is a game action  first make a return false if statement
+
+        int playerNum = action.getPlayer().getPlayerNum();
 
         if (action instanceof BidAction) {
-            gameState.setBidNum(((BidAction) action).getTotalBid());
-            return true;
+            BidAction ba = (BidAction)action;
+            if(gameState.bid(ba)){
+                gameState.setBidNum(ba.getTotalBid());
+                return true;
+            }
+            return false;
         } else if (action instanceof PassingAction) {
-            gameState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
-            return true;
+            PassingAction pa = (PassingAction)action;
+            if(gameState.passTurn(pa)){//if they can  pass then do the following
+                gameState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
+                return true;//action was successful
+            }
+            return false;
         } else if (action instanceof PlayCardAction) {
-            if (gameState.playCard((PlayCardAction) action)) {
+            PlayCardAction pca = (PlayCardAction) action;
+            if (gameState.playCard(pca)) {
+                gameState.cardsPlayed[playerNum] = gameState.playerHands[playerNum][pca.getCardIndex()];
+                //put card into cards played array(line above) and then remove from the players hand(line below)
+                gameState.playerHands[playerNum][pca.getCardIndex()] = null;
                 return true;
             }
         }
