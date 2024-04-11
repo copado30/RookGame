@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
@@ -51,8 +52,9 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     private Button plusButton;
     private Button minusButton;
 
-    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
+//    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
 
+    private ImageButton[] cardButtons = new ImageButton[9];
     boolean firstRun = true;// for first press of RunTest button
 
     /**
@@ -80,6 +82,14 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     protected void updateDisplay() {
         // set the text in the appropriate widget
         //	counterValueTextView.setText("" + state.getCounter());
+
+        Card[] myHand = rookState.playerHands[this.playerNum];
+        for (int i = 0; i <= myHand.length; i++) { //fix deck length
+            int resId = getResourceIdForCard(myHand[i]);
+            cardButtons[i].setImageResource(resId);
+        }
+
+        getTopView().invalidate();
     }
 
     /**
@@ -197,6 +207,108 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     } //onClick
 
     /**
+     *
+     */
+    public int getResourceIdForCard(Card c) {
+        if (c.getCardSuit() == "Black") {
+            if (c.getCardVal() == 5) {
+                return R.drawable.five_black;
+            } else if (c.getCardVal() == 6) {
+                return R.drawable.six_black;
+            } else if (c.getCardVal() == 7) {
+                return R.drawable.seven_black;
+            } else if (c.getCardVal() == 8) {
+                return R.drawable.eight_black;
+            } else if (c.getCardVal() == 9) {
+                return R.drawable.nine_black;
+            } else if (c.getCardVal() == 10) {
+                return R.drawable.ten_black;
+            } else if (c.getCardVal() == 11) {
+                return R.drawable.eleven_black;
+            } else if (c.getCardVal() == 12) {
+                return R.drawable.twelve_black;
+            } else if (c.getCardVal() == 13) {
+                return R.drawable.thirteen_black;
+            } else if (c.getCardVal() == 14) {
+                return R.drawable.fourteen_black;
+            }
+        } else if (c.getCardSuit() == "Red") {
+            if (c.getCardVal() == 5) {
+                return R.drawable.five_red;
+            } else if (c.getCardVal() == 6) {
+                return R.drawable.six_red;
+            } else if (c.getCardVal() == 7) {
+                return R.drawable.seven_red;
+            } else if (c.getCardVal() == 8) {
+                return R.drawable.eight_red;
+            } else if (c.getCardVal() == 9) {
+                return R.drawable.nine_red;
+            } else if (c.getCardVal() == 10) {
+                return R.drawable.ten_red;
+            } else if (c.getCardVal() == 11) {
+                return R.drawable.eleven_red;
+            } else if (c.getCardVal() == 12) {
+                return R.drawable.twelve_red;
+            } else if (c.getCardVal() == 13) {
+                return R.drawable.thirteen_red;
+            } else if (c.getCardVal() == 14) {
+                return R.drawable.fourteen_red;
+            }
+        } else if (c.getCardSuit() == "Yellow") {
+            if (c.getCardVal() == 5) {
+                return R.drawable.five_yellow;
+            } else if (c.getCardVal() == 6) {
+                return R.drawable.six_yellow;
+            } else if (c.getCardVal() == 7) {
+                return R.drawable.seven_yellow;
+            } else if (c.getCardVal() == 8) {
+                return R.drawable.eight_yellow;
+            } else if (c.getCardVal() == 9) {
+                return R.drawable.nine_yellow;
+            } else if (c.getCardVal() == 10) {
+                return R.drawable.ten_yellow;
+            } else if (c.getCardVal() == 11) {
+                return R.drawable.eleven_yellow;
+            } else if (c.getCardVal() == 12) {
+                return R.drawable.twelve_yellow;
+            } else if (c.getCardVal() == 13) {
+                return R.drawable.thirteen_yellow;
+            } else if (c.getCardVal() == 14) {
+                return R.drawable.fourteen_yellow;
+            }
+        } else if (c.getCardSuit() == "Green") {
+            if (c.getCardVal() == 5) {
+                return R.drawable.five_green;
+            } else if (c.getCardVal() == 6) {
+                return R.drawable.six_green;
+            } else if (c.getCardVal() == 7) {
+                return R.drawable.seven_green;
+            } else if (c.getCardVal() == 8) {
+                return R.drawable.eight_green;
+            } else if (c.getCardVal() == 9) {
+                return R.drawable.nine_green;
+            } else if (c.getCardVal() == 10) {
+                return R.drawable.ten_green;
+            } else if (c.getCardVal() == 11) {
+                return R.drawable.eleven_green;
+            } else if (c.getCardVal() == 12) {
+                return R.drawable.twelve_green;
+            } else if (c.getCardVal() == 13) {
+                return R.drawable.thirteen_green;
+            } else if (c.getCardVal() == 14) {
+                return R.drawable.fourteen_green;
+            }
+        } else if (c.getCardSuit() == "Rook") {
+            //TODO
+        }
+
+        return -1; //should not happen
+    }
+
+    
+
+
+    /**
      * callback method when we get a message (e.g., from the game)
      *
      * @param info the message
@@ -209,6 +321,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         // update our state; then update the display
         this.rookState = (RookState) info;
         updateDisplay();
+
     }
 
     /**
@@ -231,30 +344,26 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         this.plusButton = (Button) activity.findViewById(R.id.plusButton);
         this.minusButton = (Button) activity.findViewById(R.id.minusButton);
         this.passButton = (Button) activity.findViewById(R.id.passButton);
-        this.card0Button = (ImageButton) activity.findViewById(R.id.cardButton0);
-        this.card1Button = (ImageButton) activity.findViewById(R.id.cardButton1);
-        this.card2Button = (ImageButton) activity.findViewById(R.id.cardButton2);
-        this.card3Button = (ImageButton) activity.findViewById(R.id.cardButton3);
-        this.card4Button = (ImageButton) activity.findViewById(R.id.cardButton4);
-        this.card5Button = (ImageButton) activity.findViewById(R.id.cardButton5);
-        this.card6Button = (ImageButton) activity.findViewById(R.id.cardButton6);
-        this.card7Button = (ImageButton) activity.findViewById(R.id.cardButton7);
-        this.card8Button = (ImageButton) activity.findViewById(R.id.cardButton8);
+
+        this.cardButtons[0] = (ImageButton) activity.findViewById(R.id.cardButton0);
+        this.cardButtons[1] = (ImageButton) activity.findViewById(R.id.cardButton1);
+        this.cardButtons[2] = (ImageButton) activity.findViewById(R.id.cardButton2);
+        this.cardButtons[3] = (ImageButton) activity.findViewById(R.id.cardButton3);
+        this.cardButtons[4] = (ImageButton) activity.findViewById(R.id.cardButton4);
+        this.cardButtons[5] = (ImageButton) activity.findViewById(R.id.cardButton5);
+        this.cardButtons[6] = (ImageButton) activity.findViewById(R.id.cardButton6);
+        this.cardButtons[7] = (ImageButton) activity.findViewById(R.id.cardButton7);
+        this.cardButtons[8] = (ImageButton) activity.findViewById(R.id.cardButton8);
 
         //listen for button presses
         bidButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
         minusButton.setOnClickListener(this);
         passButton.setOnClickListener(this);
-        card0Button.setOnClickListener(this);
-        card1Button.setOnClickListener(this);
-        card2Button.setOnClickListener(this);
-        card3Button.setOnClickListener(this);
-        card4Button.setOnClickListener(this);
-        card5Button.setOnClickListener(this);
-        card6Button.setOnClickListener(this);
-        card7Button.setOnClickListener(this);
-        card8Button.setOnClickListener(this);
+
+        for(int i = 0; i < cardButtons.length; i++) {
+            cardButtons[i].setOnClickListener(this);
+        }
 
         //TextView bidText = (TextView)activity.findViewById(R.id.betValueTextView);
         //bidText.setText(String.valueOf(total));
