@@ -20,11 +20,10 @@ public class RookState extends GameState {
 
     private boolean bidPhase;
     private int bidWinner;
-
-    private String add;
     private int[] playerScores = new int[4];
     private boolean[] canBid = new boolean[4];
 
+    public Card[] cardsPlayed = new Card[4];
     ;
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
@@ -37,9 +36,9 @@ public class RookState extends GameState {
         bidPhase = true;
         bidNum = 70;
         playerId = 0;
-        add = "";
         for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
 
     }
 
@@ -51,7 +50,6 @@ public class RookState extends GameState {
         roundScore = gameState.roundScore;
         bidWinner = gameState.bidWinner;
         bidPhase = gameState.bidPhase;
-        add = gameState.add;
 
 
         for(int i = 0; i < playerScores.length; i++) { playerScores[i] = gameState.playerScores[i]; }
@@ -59,20 +57,22 @@ public class RookState extends GameState {
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
         for(int i = 0; i <= 4; i++) {//4 players + 1 nest
-            for (int j = 0; j <= 8; j++) {playerHands[i][j] = new Card(gameState.playerHands[i][j]);}
+            for (int j = 0; j <= 8; j++) { playerHands[i][j] = new Card(gameState.playerHands[i][j]);}
         }
-        for(int i = 0; i < canBid.length; i++){this.canBid[i] = gameState.canBid[i];}
+        for(int i = 0; i < canBid.length; i++) { this.canBid[i] = gameState.canBid[i];}
+
+        for(int i = 0; i <cardsPlayed.length; i++) { this.cardsPlayed[i] = new Card(gameState.cardsPlayed[i]); }
 
     }//Deep Copy Constructor
 
     @Override
     public String toString() {
         if (team1Score > team2Score) {
-            return "It is player " + playerId + " turn. Team 1 is in the lead with: " + team1Score + " " + add;
+            return "It is player " + playerId + " turn. Team 1 is in the lead with: " + team1Score ;
         } else if (team2Score > team1Score) {
-            return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score + " " + add;
+            return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
         }
-        return "It is player " + playerId + " turn. Teams are tied." + add;
+        return "It is player " + playerId + " turn. Teams are tied.";
     }
 
 
@@ -91,7 +91,6 @@ public class RookState extends GameState {
             }
         }
         deck[40] = new Card(20, 20, "Rook");
-        add += ", deck created";
     }
     public void shuffle(){
         for(int i = 0; i < 1000; i++){
@@ -102,7 +101,7 @@ public class RookState extends GameState {
             deck[num1] = new Card(deck[num2]);//swaps the cards
             deck[num2] = holderCard;
         }
-        add += ", shuffled";
+
         //chooses randomly what cards change spots and does it a bunch of times
     }
     public void dealHands(){
@@ -117,15 +116,7 @@ public class RookState extends GameState {
                     deckNumberToHand++;}
             }
         }
-        add += " ,hands have been dealt";
     }
-    public void printDeck(){
-        for(int i =0; i < deck.length; i++ ){
-            add += " ,index:" + i + " ,number:" + deck[i].getNum() + " ,suit:" + deck[i].getCardSuit() + " ,cardVal:" + deck[i].getCardVal() ;
-        }
-    }
-
-
     /**
      *
      * when player wins nest, they can discard

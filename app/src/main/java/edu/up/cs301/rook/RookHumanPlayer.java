@@ -117,23 +117,23 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
             PassingAction passingAction = new PassingAction(this);
             game.sendAction(passingAction);
         } else if (button.getId() == R.id.cardButton0) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][0]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][0], 0);
         } else if (button.getId() == R.id.cardButton1) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][1]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][1], 1);
         } else if (button.getId() == R.id.cardButton2) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][2]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][2], 2);
         } else if (button.getId() == R.id.cardButton3) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][3]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][3], 3);
         } else if (button.getId() == R.id.cardButton4) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][4]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][4], 4);
         } else if (button.getId() == R.id.cardButton5) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][5]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][5], 5);
         } else if (button.getId() == R.id.cardButton6) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][6]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][6], 6);
         } else if (button.getId() == R.id.cardButton7) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][7]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][7], 7);
         } else if (button.getId() == R.id.cardButton8) {
-            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][8]);
+            PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][8], 8);
         }
 
 
