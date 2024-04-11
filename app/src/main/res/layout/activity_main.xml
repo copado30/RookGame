@@ -51,7 +51,7 @@
                 android:src="@drawable/card_stack" />
 
             <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/player1_played_card"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:layout_marginRight="200dp"
@@ -67,7 +67,7 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/player2_played_card"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:layout_marginBottom="50dp"
@@ -76,7 +76,7 @@
                 android:src="@drawable/seven_black" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/player0_played_card"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:adjustViewBounds="true"
@@ -90,7 +90,7 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/player3_played_card"
                 android:layout_width="125dp"
                 android:layout_height="125dp"
                 android:layout_marginLeft="200dp"

@@ -9,6 +9,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.rook.R;
 
+import android.media.Image;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,7 +47,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     // the android activity that we are running
     private GameMainActivity myActivity;
     private EditText editText;
-    private Button runTestButton;
     private Button passButton;
     private Button bidButton;
     private Button plusButton;
@@ -54,7 +54,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
 //    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
 
-    private ImageButton[] cardButtons = new ImageButton[9];
+    private ImageButton[] cardButtons = new ImageButton[8];
+    private ImageView[] playedCards = new ImageView[3];
     boolean firstRun = true;// for first press of RunTest button
 
     /**
@@ -87,6 +88,12 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         for (int i = 0; i <= myHand.length; i++) { //fix deck length
             int resId = getResourceIdForCard(myHand[i]);
             cardButtons[i].setImageResource(resId);
+        }
+
+        // need to confirm for image views
+        for(int i = 0; i <= rookState.cardsPlayed.length; i++) {
+            int resId = getResourceIdForCard(rookState.cardsPlayed[i]);
+            playedCards[i].setImageResource(resId);
         }
 
         getTopView().invalidate();
@@ -145,13 +152,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         } else if (button.getId() == R.id.cardButton8) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][8], 8);
         }
-
-
-
-
-
-
-
 
 		/*
 		if(firstRun){
@@ -299,9 +299,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
                 return R.drawable.fourteen_green;
             }
         } else if (c.getCardSuit() == "Rook") {
-            //TODO
+            return R.drawable.rook;
         }
-
         return -1; //should not happen
     }
 
@@ -321,7 +320,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         // update our state; then update the display
         this.rookState = (RookState) info;
         updateDisplay();
-
     }
 
     /**
@@ -354,6 +352,12 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         this.cardButtons[6] = (ImageButton) activity.findViewById(R.id.cardButton6);
         this.cardButtons[7] = (ImageButton) activity.findViewById(R.id.cardButton7);
         this.cardButtons[8] = (ImageButton) activity.findViewById(R.id.cardButton8);
+
+        this.playedCards[0] = (ImageView) activity.findViewById(R.id.player0_played_card);
+        this.playedCards[1] = (ImageView) activity.findViewById(R.id.player1_played_card);
+        this.playedCards[2] = (ImageView) activity.findViewById(R.id.player2_played_card);
+        this.playedCards[3] = (ImageView) activity.findViewById(R.id.player3_played_card);
+
 
         //listen for button presses
         bidButton.setOnClickListener(this);
