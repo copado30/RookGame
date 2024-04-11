@@ -108,50 +108,59 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     public void onClick(View button) {
         // if we are not yet connected to a game, ignore
         if (game == null) return;
-
-        if (button.getId() == R.id.passButton) {
-            PassingAction passingAction = new PassingAction(this);
-            game.sendAction(passingAction);
-        } else if (button.getId() == R.id.bidButton) {
-            int newBidValue = Integer.parseInt(bidText.getText().toString());
-            BidAction bidAction = new BidAction(this, newBidValue);
-            game.sendAction(bidAction);
-        } else if (button.getId() == R.id.plusButton) {
-            int newBidValue = Integer.parseInt(bidText.getText().toString()) + 5;
-            if (newBidValue > 120) {
-                /*do nothing*/
-            } else {
-                bidText.setText(newBidValue + "");
+        if(rookState.isBidPhase() && playerNum == rookState.playerId) {//if its bid phase and their turn
+            if (button.getId() == R.id.passButton) {
+                PassingAction passingAction = new PassingAction(this);
+                game.sendAction(passingAction);
+            } else if (button.getId() == R.id.bidButton) {
+                int newBidValue = Integer.parseInt(bidText.getText().toString());
+                BidAction bidAction = new BidAction(this, newBidValue);
+                game.sendAction(bidAction);
+            } else if (button.getId() == R.id.plusButton) {
+                int newBidValue = Integer.parseInt(bidText.getText().toString()) + 5;
+                if (newBidValue > 120) {
+                    /*do nothing*/
+                } else {
+                    bidText.setText(newBidValue + "");
+                }
+            } else if (button.getId() == R.id.minusButton) {
+                int newBidValue = Integer.parseInt(bidText.getText().toString()) - 5;
+                if (newBidValue < rookState.getBidNum()) {
+                    /*do nothing*/
+                } else {
+                    bidText.setText(newBidValue + "");
+                }
             }
-        } else if (button.getId() == R.id.minusButton) {
-            int newBidValue = Integer.parseInt(bidText.getText().toString()) - 5;
-            if (newBidValue < rookState.getBidNum()) {
-                /*do nothing*/
-            } else {
-                bidText.setText(newBidValue + "");
-            }
-        } else if (button.getId() == R.id.passButton) {
-            PassingAction passingAction = new PassingAction(this);
-            game.sendAction(passingAction);
-        } else if (button.getId() == R.id.cardButton0) {
+        }
+        if (button.getId() == R.id.cardButton0) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][0], 0);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton1) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][1], 1);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton2) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][2], 2);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton3) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][3], 3);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton4) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][4], 4);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton5) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][5], 5);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton6) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][6], 6);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton7) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][7], 7);
+            game.sendAction(playCardAction);
         } else if (button.getId() == R.id.cardButton8) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][8], 8);
+            game.sendAction(playCardAction);
         }
+
 
 		/*
 		if(firstRun){
@@ -210,6 +219,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
      *
      */
     public int getResourceIdForCard(Card c) {
+        if(c.getCardSuit() == null) { return R.drawable.null_card; }
+
         if (c.getCardSuit() == "Black") {
             if (c.getNum() == 5) {
                 return R.drawable.five_black;

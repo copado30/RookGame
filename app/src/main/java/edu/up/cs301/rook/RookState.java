@@ -33,7 +33,7 @@ public class RookState extends GameState {
         team2Score = 0;
         roundScore = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
-        bidPhase = true;
+        bidPhase = false;//should start as true
         bidNum = 70;
         playerId = 0;
         for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
@@ -159,11 +159,9 @@ public class RookState extends GameState {
 
 
     public boolean playCard(PlayCardAction action){
-        if(!bidPhase || playerId != action.getPlayer().getPlayerNum()) { //remove ! from bidPhase when developing game
+        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
             return false;
         }
-        //roundScore += card.getCardVal();
-
         return true;
     }
 
@@ -180,5 +178,9 @@ public class RookState extends GameState {
     }
     public void setCanBid(int playerId, boolean canBid) {
         this.canBid[playerId] = canBid;
+    }
+
+    public boolean isBidPhase(){
+        return this.bidPhase;
     }
 }
