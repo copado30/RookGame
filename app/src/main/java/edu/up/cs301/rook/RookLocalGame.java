@@ -60,26 +60,15 @@ public class RookLocalGame extends LocalGame {
 
 		if(action instanceof BidAction) {
 			gameState.setBidNum(((BidAction) action).getTotalBid());
+			return true;
 		} else if(action instanceof PassingAction) {
 			gameState.setCanBid(action.getPlayer().getPlayerNum(),false);//player can no longer bid
-		}
-
-		if (action instanceof RookMoveAction) {
-		
-			// cast so that we Java knows it's a CounterMoveAction
-			RookMoveAction cma = (RookMoveAction)action;
-
-			// Update the counter values based upon the action
-		//	int result = gameState.getCounter() + (cma.isPlus() ? 1 : -1);
-		//	gameState.setCounter(result);
-			
-			// denote that this was a legal/successful move
+			return true;
+		} else if(action instanceof PlayCardAction) {
+			gameState.playCard((PlayCardAction) action.getPlayer());
 			return true;
 		}
-		else {
-			// denote that this was an illegal move
-			return false;
-		}
+		return false;
 	}//makeMove
 	
 	/**
