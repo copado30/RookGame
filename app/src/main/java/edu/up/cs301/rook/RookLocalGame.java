@@ -63,29 +63,38 @@ public class RookLocalGame extends LocalGame {
 
         if (action instanceof BidAction) {
             BidAction ba = (BidAction)action;
-            if(gameState.bid(ba)){
-                gameState.setBidNum(ba.getTotalBid());
+            if(gameState.bid(ba)){//if the action is legal
+                gameState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
+                changePlayerTurn(playerNum);
                 return true;
             }
-            return false;
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
             if(gameState.passTurn(pa)){//if they can  pass then do the following
                 gameState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
+                changePlayerTurn(playerNum);
                 return true;//action was successful
             }
-            return false;
         } else if (action instanceof PlayCardAction) {
             PlayCardAction pca = (PlayCardAction) action;
             if (gameState.playCard(pca)) {
                 gameState.cardsPlayed[playerNum] = gameState.playerHands[playerNum][pca.getCardIndex()];
                 //put card into cards played array(line above) and then remove from the players hand(line below)
                 gameState.playerHands[playerNum][pca.getCardIndex()] = null;
+                changePlayerTurn(playerNum);
                 return true;
             }
         }
         return false;
     }//makeMove
+
+    public void changePlayerTurn(int currentPlayer){
+        if(currentPlayer < 3){
+            gameState.playerId++;//make it the next persons turn
+        } else{
+            gameState.playerId = 0;// make it player zeros turn since it was player 3's turn
+          }
+    }
 
     /**
      * send the updated state to a given player
