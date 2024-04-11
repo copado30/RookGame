@@ -40,6 +40,9 @@ public class RookState extends GameState {
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
 
+        createDeck();
+        shuffle();
+        dealHands();
     }
 
     public RookState(RookState gameState) {
@@ -105,7 +108,7 @@ public class RookState extends GameState {
         //chooses randomly what cards change spots and does it a bunch of times
     }
     public void dealHands(){
-        //player hands are [4 players ][9 cards per player]
+        //player hands are [4 players][9 cards per player]
         int deckNumberToHand = 0;
         for(int i = 0; i <= 4; i++){//4 players + 1 nest
             for(int j = 0; j <= 8; j++){

@@ -1,8 +1,8 @@
 package edu.up.cs301.GameFramework;
 
 public class Card {
-    private int cardVal;
-    private int num;
+    private int cardVal; //point value
+    private int num; //card number
     private String cardSuit; //color of card (red, yellow, black, green)
 
     public Card(int cardVal, int num, String cardSuit){

@@ -54,8 +54,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
 //    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
 
-    private ImageButton[] cardButtons = new ImageButton[8];
-    private ImageView[] playedCards = new ImageView[3];
+    private ImageButton[] cardButtons = new ImageButton[9];
+    private ImageView[] playedCards = new ImageView[4];
     boolean firstRun = true;// for first press of RunTest button
 
     /**
@@ -85,13 +85,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         //	counterValueTextView.setText("" + state.getCounter());
 
         Card[] myHand = rookState.playerHands[this.playerNum];
-        for (int i = 0; i <= myHand.length; i++) { //fix deck length
+        for (int i = 0; i < myHand.length; i++) { //fix deck length
             int resId = getResourceIdForCard(myHand[i]);
             cardButtons[i].setImageResource(resId);
         }
 
         // need to confirm for image views
-        for(int i = 0; i <= rookState.cardsPlayed.length; i++) {
+        for(int i = 0; i < rookState.cardsPlayed.length; i++) {
             int resId = getResourceIdForCard(rookState.cardsPlayed[i]);
             playedCards[i].setImageResource(resId);
         }
@@ -211,91 +211,91 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
      */
     public int getResourceIdForCard(Card c) {
         if (c.getCardSuit() == "Black") {
-            if (c.getCardVal() == 5) {
+            if (c.getNum() == 5) {
                 return R.drawable.five_black;
-            } else if (c.getCardVal() == 6) {
+            } else if (c.getNum() == 6) {
                 return R.drawable.six_black;
-            } else if (c.getCardVal() == 7) {
+            } else if (c.getNum() == 7) {
                 return R.drawable.seven_black;
-            } else if (c.getCardVal() == 8) {
+            } else if (c.getNum() == 8) {
                 return R.drawable.eight_black;
-            } else if (c.getCardVal() == 9) {
+            } else if (c.getNum() == 9) {
                 return R.drawable.nine_black;
-            } else if (c.getCardVal() == 10) {
+            } else if (c.getNum() == 10) {
                 return R.drawable.ten_black;
-            } else if (c.getCardVal() == 11) {
+            } else if (c.getNum() == 11) {
                 return R.drawable.eleven_black;
-            } else if (c.getCardVal() == 12) {
+            } else if (c.getNum() == 12) {
                 return R.drawable.twelve_black;
-            } else if (c.getCardVal() == 13) {
+            } else if (c.getNum() == 13) {
                 return R.drawable.thirteen_black;
-            } else if (c.getCardVal() == 14) {
+            } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_black;
             }
         } else if (c.getCardSuit() == "Red") {
-            if (c.getCardVal() == 5) {
+            if (c.getNum() == 5) {
                 return R.drawable.five_red;
-            } else if (c.getCardVal() == 6) {
+            } else if (c.getNum() == 6) {
                 return R.drawable.six_red;
-            } else if (c.getCardVal() == 7) {
+            } else if (c.getNum() == 7) {
                 return R.drawable.seven_red;
-            } else if (c.getCardVal() == 8) {
+            } else if (c.getNum() == 8) {
                 return R.drawable.eight_red;
-            } else if (c.getCardVal() == 9) {
+            } else if (c.getNum() == 9) {
                 return R.drawable.nine_red;
-            } else if (c.getCardVal() == 10) {
+            } else if (c.getNum() == 10) {
                 return R.drawable.ten_red;
-            } else if (c.getCardVal() == 11) {
+            } else if (c.getNum() == 11) {
                 return R.drawable.eleven_red;
-            } else if (c.getCardVal() == 12) {
+            } else if (c.getNum() == 12) {
                 return R.drawable.twelve_red;
-            } else if (c.getCardVal() == 13) {
+            } else if (c.getNum() == 13) {
                 return R.drawable.thirteen_red;
-            } else if (c.getCardVal() == 14) {
+            } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_red;
             }
         } else if (c.getCardSuit() == "Yellow") {
-            if (c.getCardVal() == 5) {
+            if (c.getNum() == 5) {
                 return R.drawable.five_yellow;
-            } else if (c.getCardVal() == 6) {
+            } else if (c.getNum() == 6) {
                 return R.drawable.six_yellow;
-            } else if (c.getCardVal() == 7) {
+            } else if (c.getNum() == 7) {
                 return R.drawable.seven_yellow;
-            } else if (c.getCardVal() == 8) {
+            } else if (c.getNum() == 8) {
                 return R.drawable.eight_yellow;
-            } else if (c.getCardVal() == 9) {
+            } else if (c.getNum() == 9) {
                 return R.drawable.nine_yellow;
-            } else if (c.getCardVal() == 10) {
+            } else if (c.getNum() == 10) {
                 return R.drawable.ten_yellow;
-            } else if (c.getCardVal() == 11) {
+            } else if (c.getNum() == 11) {
                 return R.drawable.eleven_yellow;
-            } else if (c.getCardVal() == 12) {
+            } else if (c.getNum() == 12) {
                 return R.drawable.twelve_yellow;
-            } else if (c.getCardVal() == 13) {
+            } else if (c.getNum() == 13) {
                 return R.drawable.thirteen_yellow;
-            } else if (c.getCardVal() == 14) {
+            } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_yellow;
             }
         } else if (c.getCardSuit() == "Green") {
-            if (c.getCardVal() == 5) {
+            if (c.getNum() == 5) {
                 return R.drawable.five_green;
-            } else if (c.getCardVal() == 6) {
+            } else if (c.getNum() == 6) {
                 return R.drawable.six_green;
-            } else if (c.getCardVal() == 7) {
+            } else if (c.getNum() == 7) {
                 return R.drawable.seven_green;
-            } else if (c.getCardVal() == 8) {
+            } else if (c.getNum() == 8) {
                 return R.drawable.eight_green;
-            } else if (c.getCardVal() == 9) {
+            } else if (c.getNum() == 9) {
                 return R.drawable.nine_green;
-            } else if (c.getCardVal() == 10) {
+            } else if (c.getNum() == 10) {
                 return R.drawable.ten_green;
-            } else if (c.getCardVal() == 11) {
+            } else if (c.getNum() == 11) {
                 return R.drawable.eleven_green;
-            } else if (c.getCardVal() == 12) {
+            } else if (c.getNum() == 12) {
                 return R.drawable.twelve_green;
-            } else if (c.getCardVal() == 13) {
+            } else if (c.getNum() == 13) {
                 return R.drawable.thirteen_green;
-            } else if (c.getCardVal() == 14) {
+            } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_green;
             }
         } else if (c.getCardSuit() == "Rook") {
