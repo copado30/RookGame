@@ -26,7 +26,7 @@ public class RookLocalGame extends LocalGame {
     public static final int TARGET_MAGNITUDE = 10;
 
     // the game's state
-    private RookState gameState;
+    private RookState rookState;
 
     /**
      * can this player move
@@ -47,7 +47,7 @@ public class RookLocalGame extends LocalGame {
         if (!(state instanceof RookState)) {
             state = new RookState();//was RookState(0)
         }
-        this.gameState = (RookState) state;
+        this.rookState = (RookState) state;
         super.state = state;
     }
 
@@ -63,24 +63,24 @@ public class RookLocalGame extends LocalGame {
 
         if (action instanceof BidAction) {
             BidAction ba = (BidAction)action;
-            if(gameState.bid(ba)){//if the action is legal
-                gameState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
+            if(rookState.bid(ba)){//if the action is legal
+                rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
                 changePlayerTurn(playerNum);
                 return true;
             }
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
-            if(gameState.passTurn(pa)){//if they can  pass then do the following
-                gameState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
+            if(rookState.passTurn(pa)){//if they can  pass then do the following
+                rookState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
                 changePlayerTurn(playerNum);
                 return true;//action was successful
             }
         } else if (action instanceof PlayCardAction) {
             PlayCardAction pca = (PlayCardAction) action;
-            if (gameState.playCard(pca)) {
-                gameState.cardsPlayed[playerNum] = gameState.playerHands[playerNum][pca.getCardIndex()];
+            if (rookState.playCard(pca)) {
+                rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];
                 //put card into cards played array(line above) and then remove from the players hand(line below)
-                gameState.playerHands[playerNum][pca.getCardIndex()] = null;
+                rookState.playerHands[playerNum][pca.getCardIndex()] = null;
                 changePlayerTurn(playerNum);
                 return true;
             }
@@ -90,10 +90,66 @@ public class RookLocalGame extends LocalGame {
 
     public void changePlayerTurn(int currentPlayer){
         if(currentPlayer < 3){
-            gameState.playerId++;//make it the next persons turn
-        } else{
-            gameState.playerId = 0;// make it player zeros turn since it was player 3's turn
-          }
+            rookState.playerId++;//make it the next persons turn
+        } else {
+            rookState.playerId = 0; // Start over with player 0 since it was player 3's turn.
+            scoreCalc(); // Calculate scores at the end of the round.
+            //clearPlayedCards();
+        }
+    }
+
+    public void clearPlayedCards() {
+        for (int i = 0; i < rookState.cardsPlayed.length; i++) {
+            rookState.cardsPlayed[i] = null; // Clear each card.
+        }
+    }
+
+    public void scoreCalc(){
+        //team 1 player 0, player 2
+        //team 2 player 1, 3
+        int scoreForRound = 0;
+
+        for(int i = 0; i < rookState.cardsPlayed.length; i++){
+            scoreForRound += rookState.cardsPlayed[i].getCardVal();
+        }
+        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
+            rookState.team1Score += scoreForRound;
+        }
+        else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
+            rookState.team2Score += scoreForRound;
+        }
+        else{
+            //don't add cause both teams suck
+        }
+    }
+
+    public int winner(){
+        int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0;
+
+
+        for(int i = 0; i < rookState.cardsPlayed.length; i++){
+            if(rookState.cardsPlayed[i].getCardSuit() == "Rook"){
+                return i;
+            } else if (rookState.cardsPlayed[i].getCardSuit().equals(rookState.trumpSuit)) {
+                if(rookState.cardsPlayed[i].getNum() > winningTrumpNum) {
+                    winningTrumpNum = rookState.cardsPlayed[i].getNum();
+                    winningTrumpPlayer = i;
+                }
+            } else if(rookState.cardsPlayed[i].getCardSuit().equals(rookState.leadingSuit)){
+                if(rookState.cardsPlayed[i].getNum() > winningSuitNum) {
+                    winningSuitNum = rookState.cardsPlayed[i].getNum();
+                    winningSuitPlayer = i;
+                }
+            }
+        }
+        if(winningTrumpNum != 0){
+            return winningTrumpPlayer;
+        }
+        else if(winningSuitNum != 0){
+            return winningSuitPlayer;
+        }
+
+        return -7;//no one won
     }
 
     /**
@@ -103,7 +159,7 @@ public class RookLocalGame extends LocalGame {
     protected void sendUpdatedStateTo(GamePlayer p) {
         // this is a perfect-information game, so we'll make a
         // complete copy of the state to send to the player
-        p.sendInfo(new RookState(this.gameState));
+        p.sendInfo(new RookState(this.rookState));
 
     }//sendUpdatedSate
 
@@ -118,7 +174,7 @@ public class RookLocalGame extends LocalGame {
     protected String checkIfGameOver() {
 
         // get the value of the counter
-//		int counterVal = this.gameState.getCounter();
+//		int counterVal = this.rookState.getCounter();
 //
 //		if (counterVal >= TARGET_MAGNITUDE) {
 //			// counter has reached target magnitude, so return message that

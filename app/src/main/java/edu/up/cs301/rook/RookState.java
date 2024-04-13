@@ -12,15 +12,14 @@ import java.util.*;
 
 
 public class RookState extends GameState {
-    private int team1Score;
-    private int team2Score;
+    public int team1Score;
+    public int team2Score;
     public int bidNum;
     public int playerId;
     public int roundScore;
 
     private boolean bidPhase;
     private int bidWinner;
-    private int[] playerScores = new int[4];
     private boolean[] canBid = new boolean[4];
 
     public Card[] cardsPlayed = new Card[4];
@@ -39,9 +38,8 @@ public class RookState extends GameState {
         bidPhase = false;//should start as true
         bidNum = 70;
         playerId = 0;
-        trumpSuit = "";
-        leadingSuit = "";
-        for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
+        trumpSuit = "Red";
+        leadingSuit = "Black";
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
 
@@ -61,8 +59,6 @@ public class RookState extends GameState {
         trumpSuit = gameState.trumpSuit;
         leadingSuit = gameState.leadingSuit;
 
-
-        for(int i = 0; i < playerScores.length; i++) { playerScores[i] = gameState.playerScores[i]; }
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
@@ -94,7 +90,7 @@ public class RookState extends GameState {
 
             for(int i = 5; i < 15; i++){
                 if(i == 5){deck[(i-5)+newColorStart] = new Card(5,i,colors[j-1]);}
-                else if(i == 10 || i == 14){deck[(i-5)+newColorStart] = new Card(5,i,colors[j-1]);}
+                else if(i == 10 || i == 14){deck[(i-5)+newColorStart] = new Card(10,i,colors[j-1]);}
                 else{
                     deck[(i-5)+newColorStart] = new Card(0,i,colors[j-1]);
                 }
@@ -190,4 +186,5 @@ public class RookState extends GameState {
     public boolean isBidPhase(){
         return this.bidPhase;
     }
+
 }

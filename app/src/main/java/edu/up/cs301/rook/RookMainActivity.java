@@ -48,22 +48,24 @@ public class RookMainActivity extends GameMainActivity {
 			}});
 		
 		// a computer player type (player type 2)
-		playerTypes.add(new GamePlayerType("Computer Player (GUI)") {
-			public GamePlayer createPlayer(String name) {
-				return new RookComputerPlayer2(name);
-			}});
+		playerTypes.add(new GamePlayerType("Computer Player 2") {
+			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
+		playerTypes.add(new GamePlayerType("Computer Player 3") {
+			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
 
 		// Create a game configuration class for Counter:
 		// - player types as given above
 		// - from 1 to 2 players
 		// - name of game is "Counter Game"
 		// - port number as defined above
-		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 2, "Counter Game",
+		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 4, "Rook",
 				PORT_NUMBER);
 
 		// Add the default players to the configuration
 		defaultConfig.addPlayer("Human", 0); // player 1: a human player
 		defaultConfig.addPlayer("Computer", 1); // player 2: a computer player
+		defaultConfig.addPlayer("Computer", 2); // player 3: a human player
+		defaultConfig.addPlayer("Computer", 3); // player 4: a computer player
 		
 		// Set the default remote-player setup:
 		// - player name: "Remote Player"

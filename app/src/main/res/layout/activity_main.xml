@@ -8,22 +8,53 @@
     android:orientation="vertical"
     android:id="@+id/main_activity_GUI">
 
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="Team 1 Score:                 "
-        android:textColor="#FFFFFF" />
+        android:layout_gravity="right">
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Team 1 Score: "
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/team1ScoreTextView"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="0"
+            android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="match_parent"
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:text="Team 2 Score:                 "
-        android:textColor="#FFFFFF" />
+        android:layout_gravity="right">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Team 2 Score: "
+            android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/team2ScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:gravity="right"
+            android:text="0"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/stackTop"
