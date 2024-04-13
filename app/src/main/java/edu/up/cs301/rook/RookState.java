@@ -28,6 +28,9 @@ public class RookState extends GameState {
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
 
+    public String trumpSuit, leadingSuit;
+
+
     public RookState() {
         team1Score = 0;
         team2Score = 0;
@@ -36,6 +39,8 @@ public class RookState extends GameState {
         bidPhase = false;//should start as true
         bidNum = 70;
         playerId = 0;
+        trumpSuit = "";
+        leadingSuit = "";
         for(int i = 0; i < playerScores.length; i++){playerScores[i] = 0;}
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
@@ -53,6 +58,8 @@ public class RookState extends GameState {
         roundScore = gameState.roundScore;
         bidWinner = gameState.bidWinner;
         bidPhase = gameState.bidPhase;
+        trumpSuit = gameState.trumpSuit;
+        leadingSuit = gameState.leadingSuit;
 
 
         for(int i = 0; i < playerScores.length; i++) { playerScores[i] = gameState.playerScores[i]; }
