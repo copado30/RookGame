@@ -55,9 +55,11 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 //    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
 
     private ImageButton[] cardButtons = new ImageButton[9];
-    private ImageView[] playedCards = new ImageView[4];
+    public ImageView[] playedCards = new ImageView[4];
     private TextView team1Score;
     private TextView team2Score;
+    private TextView bidWinner;
+    private TextView trickCount;
     boolean firstRun = true;// for first press of RunTest button
 
     /**
@@ -84,7 +86,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
      */
     protected void updateDisplay() {
         // set the text in the appropriate widget
-        //	counterValueTextView.setText("" + state.getCounter());
 
         Card[] myHand = rookState.playerHands[this.playerNum];
         for (int i = 0; i < myHand.length; i++) { //fix deck length
@@ -100,6 +101,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
+        if(rookState.bidWinner != 4) {
+            bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
+        }
+        trickCount.setText("  " + rookState.trickCount + "  ");
 
         getTopView().invalidate();
     }
@@ -283,7 +288,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         // update our state; then update the display
         this.rookState = (RookState) info;
 
-
         updateDisplay();
     }
 
@@ -325,6 +329,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
         this.team1Score = (TextView) activity.findViewById(R.id.team1ScoreTextView);
         this.team2Score = (TextView) activity.findViewById(R.id.team2ScoreTextView);
+        this.bidWinner = (TextView) activity.findViewById(R.id.bidWinner_textView);
+        this.trickCount = (TextView) activity.findViewById(R.id.trickCount_textView);
 
         //listen for button presses
         bidButton.setOnClickListener(this);

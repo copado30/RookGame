@@ -13,6 +13,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right">
+
+        <TextView
+            android:id="@+id/bidWinner_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1"
+            android:background="#F3EBEB"
+            android:gravity="left"
+            android:text="  Bid Winner "
+            android:textColor="#000000" />
+
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
@@ -36,6 +48,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right">
+
+        <TextView
+            android:id="@+id/trickCount_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="50dp"
+            android:layout_weight="1"
+            android:background="#F3EBEB"
+            android:gravity="left"
+            android:text="  Trick Count "
+            android:textColor="#000000" />
 
         <TextView
             android:id="@+id/textView3"

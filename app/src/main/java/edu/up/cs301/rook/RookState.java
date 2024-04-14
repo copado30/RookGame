@@ -12,18 +12,22 @@ import java.util.*;
 
 
 public class RookState extends GameState {
+    public static final int MAX_BID = 120;
+
+    public static final int WINNING_POINTS = 300;
+
     public int team1Score;
     public int team2Score;
     public int bidNum;
     public int playerId;
     public int roundScore;
+    public int trickCount;
 
     private boolean bidPhase;
-    private int bidWinner;
+    public int bidWinner;
     private boolean[] canBid = new boolean[4];
-
+    public boolean[] wonBid = new boolean[4];
     public Card[] cardsPlayed = new Card[4];
-    ;
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
 
@@ -35,12 +39,14 @@ public class RookState extends GameState {
         team2Score = 0;
         roundScore = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
-        bidPhase = false;//should start as true
+        bidPhase = true;//should start as true
         bidNum = 70;
         playerId = 0;
+        trickCount = 0;
         trumpSuit = "Red";
         leadingSuit = "Black";
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
 
         createDeck();
@@ -58,7 +64,7 @@ public class RookState extends GameState {
         bidPhase = gameState.bidPhase;
         trumpSuit = gameState.trumpSuit;
         leadingSuit = gameState.leadingSuit;
-
+        trickCount = gameState.trickCount;
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
@@ -66,6 +72,7 @@ public class RookState extends GameState {
             for (int j = 0; j <= 8; j++) { playerHands[i][j] = new Card(gameState.playerHands[i][j]);}
         }
         for(int i = 0; i < canBid.length; i++) { this.canBid[i] = gameState.canBid[i];}
+        for(int i = 0; i < wonBid.length; i++) { this.wonBid[i] = gameState.wonBid[i];}
 
         for(int i = 0; i <cardsPlayed.length; i++) { this.cardsPlayed[i] = new Card(gameState.cardsPlayed[i]); }
 
@@ -81,10 +88,50 @@ public class RookState extends GameState {
         return "It is player " + playerId + " turn. Teams are tied.";
     }
 
+    /**
+     *
+     * when player wins nest, they can discard
+     */
+    public boolean discardCard(DiscardingAction action){
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
+            return false;
+        }
 
+        bidPhase = false;//ask nux
+        return true;
+    }
+
+
+    /**
+     *
+     * when its the bidding round and their turn to bid
+     */
+    public boolean bid(BidAction action){
+        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
+            return false;
+        }
+        return true;
+    }
+
+    public boolean passTurn(PassingAction action){
+        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
+            return false;
+        }
+        return true;
+    }
+
+
+    public boolean playCard(PlayCardAction action){
+        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
+            return false;
+        }
+        return true;
+    }
+
+    //^^ checking if the actions are legal moves
     public void createDeck(){
         String[] colors = new String[]{"Black","Green","Yellow","Red"};
-            int newColorStart = 0; // where in array the new set of colored cards begins
+        int newColorStart = 0; // where in array the new set of colored cards begins
         for(int j = 1; j <= colors.length; j++){//for loop for the suits
             if(j > 1){newColorStart += 10;}
 
@@ -123,49 +170,41 @@ public class RookState extends GameState {
             }
         }
     }
-    /**
-     *
-     * when player wins nest, they can discard
-     */
-    public boolean discardCard(DiscardingAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
-            return false;
-        }
 
-        bidPhase = false;//ask nux
-        return true;
+    public void resetRound(){
+        /*int nestVal = 0;
+        for(int i = 0; i < 5; i++){
+            nestVal += playerHands[5][i].getCardVal();
+        }*/
+        //code for later adding the nest to the winner of the last trick^^
+
+        shuffle();
+        dealHands();
+        bidPhase = true;
+        trickCount = 0;
+        playerId = 0;
+        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
     }
-
-
-    /**
-     *
-     * when its the bidding round and their turn to bid
-     */
-    public boolean bid(BidAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
-            return false;
+    public boolean isBiddingOver(){
+        int passCount = 0;//how many people have passed
+        for(int i = 0; i < canBid.length; i++){
+            if(canBid[i] == false){
+                passCount++;
+            }
         }
-        //add += " bid";
-        return true;
-    }
-
-    /**
-     *
-     * if they want to pass on a bid turn
-     */
-    public boolean passTurn(PassingAction action){
-        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
-            return false;
+        if(passCount == 3){
+            for(int i = 0; i < canBid.length; i++){
+                if(canBid[i] == true){
+                    bidWinner = i;
+                    wonBid[i] = true;
+                    return true;
+                }
+            }
         }
-        return true;
-    }
 
-
-    public boolean playCard(PlayCardAction action){
-        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     public int getBidNum() {
@@ -179,12 +218,15 @@ public class RookState extends GameState {
     public boolean getCanBid(int playerId) {
         return canBid[playerId];
     }
-    public void setCanBid(int playerId, boolean canBid) {
-        this.canBid[playerId] = canBid;
+    public void setCanBid(int playerNumber, boolean canBid) {
+        this.canBid[playerNumber] = canBid;
     }
 
     public boolean isBidPhase(){
         return this.bidPhase;
+    }
+    public void setBidPhase(boolean bidPhase){
+        this.bidPhase = bidPhase;
     }
 
 }

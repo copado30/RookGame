@@ -19,7 +19,7 @@ import edu.up.cs301.GameFramework.utilities.Tickable;
  * @version September 2013
  */
 public class RookComputerPlayer1 extends GameComputerPlayer {
-	
+
     /**
      * Constructor for objects of class CounterComputerPlayer1
      * 
@@ -49,15 +49,15 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
 
         RookState rookState = new RookState((RookState) info);
 
-        if(rookState.playerId == this.getPlayerNum()){ //if it's the bots turn
+        if(rookState.playerId == playerNum){ //if it's the bots turn
 
             if(rookState.isBidPhase()){
                 PassingAction passingAction = new PassingAction(this);
                 game.sendAction(passingAction);
             }else if(!rookState.isBidPhase()){//if its not the bid phase
                 //what cards can they play
-                ArrayList<Integer> leadingSuitCards =  new ArrayList<Integer>();
-                ArrayList<Integer> trumpSuitCards =  new ArrayList<Integer>();
+                ArrayList<Integer> leadingSuitCards =  new ArrayList<Integer>();//contains indexes of the leadingSuitCards in the players hand
+                ArrayList<Integer> trumpSuitCards =  new ArrayList<Integer>();//
 
                 for(int i = 0; i < 9; i++) {//see where the leading suits and the rook card is if they have one
                     if(rookState.playerHands[playerNum][i].getCardSuit() == null){
@@ -75,21 +75,26 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
                 int cardIndex;
 
                 if(!leadingSuitCards.isEmpty()) {// if they have a leading suit card then play one
-                    cardIndex = leadingSuitCards.get(random.nextInt(leadingSuitCards.size()));
+                    cardIndex = leadingSuitCards.get(random.nextInt(leadingSuitCards.size()));//get a random number from the array and store it
                     PlayCardAction pca = new PlayCardAction(this, rookState.playerHands[playerNum][cardIndex], cardIndex);
                     game.sendAction(pca);
+                    leadingSuitCards.remove((Integer)cardIndex);
                 }else if(!trumpSuitCards.isEmpty()){
                     cardIndex = trumpSuitCards.get(random.nextInt(trumpSuitCards.size()));
                     PlayCardAction pca = new PlayCardAction(this, rookState.playerHands[playerNum][cardIndex], cardIndex);
                     game.sendAction(pca);
+                    trumpSuitCards.remove((Integer)cardIndex);
                 } else {
-                    for(int i = 0; i < rookState.playerHands.length; i++) {
-                        if(rookState.playerHands[playerNum][i].getCardSuit() != null) {
+                    //boolean empty = true;
+                    for(int i = 0; i < 9; i++) {
+                        if(rookState.playerHands[playerNum][i].getCardSuit() != null) {//if the slot is not null
                             PlayCardAction pca = new PlayCardAction(this, rookState.playerHands[playerNum][i], i);
                             game.sendAction(pca);
+                            //empty = false;
                             break;
                         }
                     }
+                    /*if(empty){System.exit(0);}*/
                 }
             }
         }//if its the players turn

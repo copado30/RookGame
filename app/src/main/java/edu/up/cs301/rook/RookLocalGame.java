@@ -40,7 +40,7 @@ public class RookLocalGame extends LocalGame {
     }
 
     /**
-     * This ctor should be called when a new counter game is started
+     * This ctor should be called when a new rook game is started
      */
     public RookLocalGame(GameState state) {
         // initialize the game state, with the counter value starting at 0
@@ -52,7 +52,7 @@ public class RookLocalGame extends LocalGame {
     }
 
     /**
-     * The only type of GameAction that should be sent is CounterMoveAction
+     * Types of GameAction is BidAction, PassingAction, PlayCardAction, and DiscardingAction
      */
     @Override
     protected boolean makeMove(GameAction action) {
@@ -65,35 +65,50 @@ public class RookLocalGame extends LocalGame {
             BidAction ba = (BidAction)action;
             if(rookState.bid(ba)){//if the action is legal
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
-                changePlayerTurn(playerNum);
+                changePlayerTurn(playerNum,false);
+                if(ba.getTotalBid() == 120) {
+                    rookState.wonBid[playerNum] = true;
+                }
                 return true;
             }
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
             if(rookState.passTurn(pa)){//if they can  pass then do the following
                 rookState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
-                changePlayerTurn(playerNum);
+                if(rookState.isBiddingOver()){
+                    rookState.setBidPhase(false);
+                }
+                changePlayerTurn(playerNum,false);
                 return true;//action was successful
             }
         } else if (action instanceof PlayCardAction) {
             PlayCardAction pca = (PlayCardAction) action;
-            if (rookState.playCard(pca)) {
+
+            if(pca.getCard().getCardSuit() == null){
+                //do nothing, will return false at the end
+            }
+            else if (rookState.playCard(pca)) {
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];
                 //put card into cards played array(line above) and then remove from the players hand(line below)
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;
-                changePlayerTurn(playerNum);
+                changePlayerTurn(playerNum, true);
+                if(pca.getPlayer().getPlayerNum() == 3){
+                    rookState.trickCount++;
+                }
                 return true;
             }
         }
         return false;
     }//makeMove
 
-    public void changePlayerTurn(int currentPlayer){
+    public void changePlayerTurn(int currentPlayer, boolean isPlayCard){
         if(currentPlayer < 3){
             rookState.playerId++;//make it the next persons turn
         } else {
             rookState.playerId = 0; // Start over with player 0 since it was player 3's turn.
-            scoreCalc(); // Calculate scores at the end of the round.
+            if(isPlayCard) {
+                scoreCalc(); // Calculate scores at the end of the round.
+            }
             //clearPlayedCards();
         }
     }
@@ -124,7 +139,7 @@ public class RookLocalGame extends LocalGame {
     }
 
     public int winner(){
-        int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0;
+        int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0, randomWin = 0, randomWinPlayer = 0;
 
 
         for(int i = 0; i < rookState.cardsPlayed.length; i++){
@@ -140,6 +155,11 @@ public class RookLocalGame extends LocalGame {
                     winningSuitNum = rookState.cardsPlayed[i].getNum();
                     winningSuitPlayer = i;
                 }
+            } else {
+                if(rookState.cardsPlayed[i].getNum() > randomWin) {
+                    randomWin = rookState.cardsPlayed[i].getNum();
+                    randomWinPlayer = i;
+                }
             }
         }
         if(winningTrumpNum != 0){
@@ -147,10 +167,21 @@ public class RookLocalGame extends LocalGame {
         }
         else if(winningSuitNum != 0){
             return winningSuitPlayer;
+        } else {
+            return randomWinPlayer;
         }
-
-        return -7;//no one won
     }
+  /*  public boolean handsEmpty() {
+        int nullCount = 0;
+        for (int i = 0; i < 9; i++) {
+            if (rookState.playerHands[3][i].getCardSuit() == null) {
+                nullCount++;
+            }
+        }
+        if(nullCount == 9){return true;}
+
+        return false;
+    }*/
 
     /**
      * send the updated state to a given player
@@ -172,31 +203,17 @@ public class RookLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
+        if(rookState.trickCount == 9){
+            rookState.resetRound();
+        }
 
-        // get the value of the counter
-//		int counterVal = this.rookState.getCounter();
-//
-//		if (counterVal >= TARGET_MAGNITUDE) {
-//			// counter has reached target magnitude, so return message that
-//			// player 0 has won.
-//			return playerNames[0]+" has won.";
-//		}
-//		else if (counterVal <= -TARGET_MAGNITUDE) {
-//			// counter has reached negative of target magnitude; if there
-//			// is a second player, return message that this player has won,
-//			// otherwise that the first player has lost
-//			if (playerNames.length >= 2) {
-//				return playerNames[1]+" has won.";
-//			}
-//			else {
-//				return playerNames[0]+" has lost.";
-//			}
-//		}else {
-//			// game is still between the two limit: return null, as the game
-//			// is not yet over
+        if(rookState.team1Score >= 300 && rookState.team1Score > rookState.team2Score) {
+            return "Team 1 has won the game with " + rookState.team1Score + " points";
+        } else if (rookState.team2Score >= 300 && rookState.team1Score < rookState.team2Score) {
+            return "Team 2 has won the game with " + rookState.team2Score + " points";
+        }
+
         return null;
-//		}
-
     }
 
 }// class CounterLocalGame
