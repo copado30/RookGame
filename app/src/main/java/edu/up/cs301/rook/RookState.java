@@ -172,6 +172,7 @@ public class RookState extends GameState {
     }
 
     public void resetRound(){
+        //need to know who won the last round
         /*int nestVal = 0;
         for(int i = 0; i < 5; i++){
             nestVal += playerHands[5][i].getCardVal();
@@ -183,6 +184,7 @@ public class RookState extends GameState {
         bidPhase = true;
         trickCount = 0;
         playerId = 0;
+        bidNum = 70;
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}

@@ -113,6 +113,7 @@ public class RookLocalGame extends LocalGame {
         }
     }
 
+    //method to reset the 4 cards that are displayed in the middle
     public void clearPlayedCards() {
         for (int i = 0; i < rookState.cardsPlayed.length; i++) {
             rookState.cardsPlayed[i] = null; // Clear each card.
