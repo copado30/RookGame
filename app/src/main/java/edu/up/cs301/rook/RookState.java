@@ -170,14 +170,52 @@ public class RookState extends GameState {
             }
         }
     }
+    public int winner(){
+        int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0, randomWin = 0, randomWinPlayer = 0;
+
+
+        for(int i = 0; i < cardsPlayed.length; i++){
+            if(cardsPlayed[i].getCardSuit() == "Rook"){
+                return i;
+            } else if (cardsPlayed[i].getCardSuit().equals(trumpSuit)) {
+                if(cardsPlayed[i].getNum() > winningTrumpNum) {
+                    winningTrumpNum = cardsPlayed[i].getNum();
+                    winningTrumpPlayer = i;
+                }
+            } else if(cardsPlayed[i].getCardSuit().equals(leadingSuit)){
+                if(cardsPlayed[i].getNum() > winningSuitNum) {
+                    winningSuitNum = cardsPlayed[i].getNum();
+                    winningSuitPlayer = i;
+                }
+            } else {
+                if(cardsPlayed[i].getNum() > randomWin) {
+                    randomWin = cardsPlayed[i].getNum();
+                    randomWinPlayer = i;
+                }
+            }
+        }
+        if(winningTrumpNum != 0){
+            return winningTrumpPlayer;
+        }
+        else if(winningSuitNum != 0){
+            return winningSuitPlayer;
+        } else {
+            return randomWinPlayer;
+        }
+    }
 
     public void resetRound(){
-        //need to know who won the last round
-        /*int nestVal = 0;
-        for(int i = 0; i < 5; i++){
-            nestVal += playerHands[5][i].getCardVal();
-        }*/
-        //code for later adding the nest to the winner of the last trick^^
+        //before the thing gets reset add the nest to the winning teams score
+        int nestVal = 0;
+        for(int i = 0; i < 5; i++){nestVal += playerHands[5][i].getCardVal();}
+
+        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
+            team1Score += nestVal;
+        } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
+            team2Score += nestVal;
+        }
+
+        //need to make a method that checks is they hit the amount they bid
 
         shuffle();
         dealHands();

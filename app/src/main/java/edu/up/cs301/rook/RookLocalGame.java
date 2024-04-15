@@ -128,10 +128,10 @@ public class RookLocalGame extends LocalGame {
         for(int i = 0; i < rookState.cardsPlayed.length; i++){
             scoreForRound += rookState.cardsPlayed[i].getCardVal();
         }
-        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
+        if(rookState.winner() == 0 || rookState.winner() == 2){//player 0 or 2 won then add to team 1
             rookState.team1Score += scoreForRound;
         }
-        else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
+        else if(rookState.winner() == 1 || rookState.winner() == 3){//player 1 or 3 then add to team 2
             rookState.team2Score += scoreForRound;
         }
         else{
@@ -139,50 +139,6 @@ public class RookLocalGame extends LocalGame {
         }
     }
 
-    public int winner(){
-        int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0, randomWin = 0, randomWinPlayer = 0;
-
-
-        for(int i = 0; i < rookState.cardsPlayed.length; i++){
-            if(rookState.cardsPlayed[i].getCardSuit() == "Rook"){
-                return i;
-            } else if (rookState.cardsPlayed[i].getCardSuit().equals(rookState.trumpSuit)) {
-                if(rookState.cardsPlayed[i].getNum() > winningTrumpNum) {
-                    winningTrumpNum = rookState.cardsPlayed[i].getNum();
-                    winningTrumpPlayer = i;
-                }
-            } else if(rookState.cardsPlayed[i].getCardSuit().equals(rookState.leadingSuit)){
-                if(rookState.cardsPlayed[i].getNum() > winningSuitNum) {
-                    winningSuitNum = rookState.cardsPlayed[i].getNum();
-                    winningSuitPlayer = i;
-                }
-            } else {
-                if(rookState.cardsPlayed[i].getNum() > randomWin) {
-                    randomWin = rookState.cardsPlayed[i].getNum();
-                    randomWinPlayer = i;
-                }
-            }
-        }
-        if(winningTrumpNum != 0){
-            return winningTrumpPlayer;
-        }
-        else if(winningSuitNum != 0){
-            return winningSuitPlayer;
-        } else {
-            return randomWinPlayer;
-        }
-    }
-  /*  public boolean handsEmpty() {
-        int nullCount = 0;
-        for (int i = 0; i < 9; i++) {
-            if (rookState.playerHands[3][i].getCardSuit() == null) {
-                nullCount++;
-            }
-        }
-        if(nullCount == 9){return true;}
-
-        return false;
-    }*/
 
     /**
      * send the updated state to a given player
