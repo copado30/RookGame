@@ -206,14 +206,14 @@ public class RookState extends GameState {
 
     public void resetRound(){
         //before the thing gets reset add the nest to the winning teams score
-        int nestVal = 0;
+        /*int nestVal = 0;
         for(int i = 0; i < 5; i++){nestVal += playerHands[5][i].getCardVal();}
 
         if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
             team1Score += nestVal;
         } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
             team2Score += nestVal;
-        }
+        }*/
 
         //need to make a method that checks is they hit the amount they bid
 
