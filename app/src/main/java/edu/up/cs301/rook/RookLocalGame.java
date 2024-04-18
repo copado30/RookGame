@@ -66,8 +66,9 @@ public class RookLocalGame extends LocalGame {
             if(rookState.bid(ba)){//if the action is legal
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
                 changePlayerTurn(playerNum,false);
-                if(ba.getTotalBid() == 120) {
+                if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
                     rookState.wonBid[playerNum] = true;
+                    rookState.setBidPhase(false);//since a player won then it is no longer the bidPhase
                 }
                 return true;
             }
@@ -101,6 +102,7 @@ public class RookLocalGame extends LocalGame {
         return false;
     }//makeMove
 
+    //isPlayCard is a boolean that lets us know if it is being called by PlayCardAction
     public void changePlayerTurn(int currentPlayer, boolean isPlayCard){
         if(currentPlayer < 3){
             rookState.playerId++;//make it the next persons turn

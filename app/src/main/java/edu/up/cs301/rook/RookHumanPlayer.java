@@ -59,8 +59,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     private TextView team1Score;
     private TextView team2Score;
     private TextView bidWinner;
-    private TextView trickCount;
-
     private TextView leadingSuit;
     private TextView trumpSuit;
 
@@ -108,7 +106,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         if(rookState.bidWinner != 4) {
             bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
         }
-        trickCount.setText("  " + rookState.trickCount + "  ");
         leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
 
@@ -336,7 +333,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         this.team1Score = (TextView) activity.findViewById(R.id.team1ScoreTextView);
         this.team2Score = (TextView) activity.findViewById(R.id.team2ScoreTextView);
         this.bidWinner = (TextView) activity.findViewById(R.id.bidWinner_textView);
-        this.trickCount = (TextView) activity.findViewById(R.id.trickCount_textView);
         this.leadingSuit = (TextView) activity.findViewById(R.id.leadingSuitTextView);
         this.trumpSuit = (TextView) activity.findViewById(R.id.trumpSuitTextView);
 

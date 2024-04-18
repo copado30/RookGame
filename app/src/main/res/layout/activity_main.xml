@@ -9,93 +9,100 @@
     android:id="@+id/main_activity_GUI">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right">
-
-        <TextView
-            android:id="@+id/leadingSuitTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="900dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:text="  Leading Suit: "
-            android:textColor="#FFFFFF" />
-        <TextView
-            android:id="@+id/bidWinner_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="50dp"
-            android:layout_weight="1"
-            android:background="#F3EBEB"
-            android:gravity="left"
-            android:text="  Bid Winner "
-            android:textColor="#000000" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="Team 1 Score: "
-            android:textColor="#FFFFFF" />
-        <TextView
-            android:id="@+id/team1ScoreTextView"
-            android:layout_marginRight="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="0"
-            android:textColor="#FFFFFF" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right">
+        android:gravity="top">
 
-        <TextView
-            android:id="@+id/trumpSuitTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="900dp"
-            android:layout_weight="1"
-            android:gravity="left"
-            android:text="  Trump Suit: "
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:id="@+id/trickCount_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="50dp"
-            android:layout_weight="1"
-            android:background="#F3EBEB"
-            android:gravity="left"
-            android:text="  Trick Count "
-            android:textColor="#000000" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="Team 2 Score: "
-            android:textColor="#FFFFFF" />
-        <TextView
-            android:id="@+id/team2ScoreTextView"
+        <Button
+            android:id="@+id/resetButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:gravity="right"
-            android:text="0"
-            android:textColor="#FFFFFF" />
+            android:text="Reset Round" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/leadingSuitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="  Leading Suit: "
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/trumpSuitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="785dp"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:text="  Trump Suit: "
+                android:textColor="#FFFFFF" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Team 1 Score: "
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="Team 2 Score: "
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/bidWinner_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#F3EBEB"
+                android:gravity="right"
+                android:text="  Bid Winner "
+                android:textColor="#000000" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/team1ScoreTextView"
+                android:layout_marginRight="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="#FFFFFF" />
+            <TextView
+                android:id="@+id/team2ScoreTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:gravity="right"
+                android:text="0"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+
 
 
     <ImageView
