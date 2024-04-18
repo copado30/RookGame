@@ -51,7 +51,7 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
 
         if(rookState.playerId == playerNum){ //if it's the bots turn
 
-            if(rookState.isBidPhase()){
+            if(rookState.isBidPhase()){//if its the bidPhase then skip
                 PassingAction passingAction = new PassingAction(this);
                 game.sendAction(passingAction);
             }else if(!rookState.isBidPhase()){//if its not the bid phase
@@ -98,7 +98,7 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }//if its the players turn
-        sleep(2);//was 2
+        //sleep(2);
     }
 
 }

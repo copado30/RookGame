@@ -88,10 +88,10 @@ public class RookLocalGame extends LocalGame {
                 //do nothing, will return false at the end
             }
             else if (rookState.playCard(pca)) {
-                rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];
-                //put card into cards played array(line above) and then remove from the players hand(line below)
-                rookState.playerHands[playerNum][pca.getCardIndex()] = null;
+                rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
+                rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum, true);
+                rookState.leadingSuit = rookState.cardsPlayed[0].getCardSuit();//should
                 if(pca.getPlayer().getPlayerNum() == 3){
                     rookState.trickCount++;
                 }
@@ -162,8 +162,8 @@ public class RookLocalGame extends LocalGame {
     protected String checkIfGameOver() {
         if(rookState.trickCount == 9){
             rookState.resetRound();
-        }
 
+        }
         if(rookState.team1Score >= 300 && rookState.team1Score > rookState.team2Score) {
             return "Team 1 has won the game with " + rookState.team1Score + " points";
         } else if (rookState.team2Score >= 300 && rookState.team1Score < rookState.team2Score) {
