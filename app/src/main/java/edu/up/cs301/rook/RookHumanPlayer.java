@@ -52,8 +52,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     private Button plusButton;
     private Button minusButton;
 
-//    private ImageButton card0Button, card1Button, card2Button, card3Button, card4Button, card5Button, card6Button, card7Button, card8Button;
-
     private ImageButton[] cardButtons = new ImageButton[9];
     public ImageView[] playedCards = new ImageView[4];
     private TextView team1Score;
