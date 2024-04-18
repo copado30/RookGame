@@ -98,7 +98,7 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }//if its the players turn
-        //sleep(2);
+        sleep(2);
     }
 
 }
