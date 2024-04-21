@@ -29,7 +29,6 @@
                 android:id="@+id/leadingSuitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="left"
                 android:text="  Leading Suit: "
                 android:textColor="#FFFFFF" />
@@ -37,13 +36,32 @@
                 android:id="@+id/trumpSuitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="785dp"
                 android:layout_weight="1"
                 android:gravity="left"
                 android:text="  Trump Suit: "
                 android:textColor="#FFFFFF" />
 
+
+
         </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+        android:id="@+id/bidWinner_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#F3EBEB"
+        android:layout_gravity="center"
+        android:text="  Bid Winner "
+        android:layout_marginHorizontal="370dp"
+        android:textColor="#000000" />
+
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -64,15 +82,7 @@
                 android:gravity="right"
                 android:text="Team 2 Score: "
                 android:textColor="#FFFFFF" />
-            <TextView
-                android:id="@+id/bidWinner_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="#F3EBEB"
-                android:gravity="right"
-                android:text="  Bid Winner "
-                android:textColor="#000000" />
+
 
         </LinearLayout>
 
@@ -109,7 +119,7 @@
         android:id="@+id/stackTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/card_stack_top" />
+        android:src="@drawable/rook_stack_top" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -128,12 +138,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginRight="100dp"
-                android:src="@drawable/card_stack" />
+                android:src="@drawable/rook_stack_left" />
 
             <ImageView
                 android:id="@+id/player1_played_card"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
                 android:layout_marginRight="200dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -148,8 +158,8 @@
 
             <ImageView
                 android:id="@+id/player2_played_card"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
                 android:layout_marginBottom="50dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -157,8 +167,8 @@
 
             <ImageView
                 android:id="@+id/player0_played_card"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/seven_black" />
@@ -171,8 +181,8 @@
 
             <ImageView
                 android:id="@+id/player3_played_card"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
                 android:layout_marginLeft="200dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
@@ -183,7 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="100dp"
-                android:src="@drawable/card_stack" />
+                android:src="@drawable/rook_stack_right" />
 
         </LinearLayout>
 
