@@ -1,29 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/game_state_test_layout">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#086737"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <EditText
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/edit_text_results"
-            android:layout_weight="10"
-            android:text="write something">
-        </EditText>
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Run Test"
-            android:layout_weight= "0"
-            android:id="@+id/run_test_button">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="As the bid winner, you choose the trump suit!"
+                android:textColor="#FBF9F9"></TextView>
 
-        </Button>
+            <RadioButton
+                android:id="@+id/blackTrumpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Black"
+                android:textSize="40dp" />
+
+            <RadioButton
+                android:id="@+id/redTrumpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Red"
+                android:textColor="#ED0909"
+                android:textSize="40dp" />
+
+            <RadioButton
+                android:id="@+id/yellowTrumpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yellow"
+                android:textColor="#FFEB3B"
+                android:textSize="40dp" />
+
+            <RadioButton
+                android:id="@+id/greenTrumpButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Green"
+                android:textColor="#8BC34A"
+                android:textSize="40dp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Done"
+                android:textSize="20dp" />
+
+        </RadioGroup>
+
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
