@@ -2,12 +2,14 @@ package edu.up.cs301.rook;
 
 import edu.up.cs301.GameFramework.Card;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+
+import java.io.Serializable;
 import java.util.*;
 
 
 
 
-public class RookState extends GameState {
+public class RookState extends GameState implements Serializable {
     public static final int BID_PHASE = 37;  //bidding
     public static final int DISCARD_PHASE = 40;  //bidding
     public static final int PLAY_PHASE = 38; //play cards on trick

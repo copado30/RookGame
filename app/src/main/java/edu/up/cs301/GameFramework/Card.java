@@ -1,6 +1,8 @@
 package edu.up.cs301.GameFramework;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private int cardVal; //point value
     private int num; //card number
     private String cardSuit; //color of card (red, yellow, black, green)
@@ -28,4 +30,9 @@ public class Card {
     public String getCardSuit() {return cardSuit;}
 
     public int getNum() {return num;}
+
+    @Override
+    public String toString() {
+        return num + " of " + cardSuit;
+    }
 }
