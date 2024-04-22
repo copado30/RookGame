@@ -22,10 +22,11 @@ public class RookState extends GameState {
     public int playerId;
     public int roundScore;
     public int trickCount;
-
     private boolean bidPhase;
 
     public int bidWinner;
+
+    public boolean bidEnd;
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
     public Card[] cardsPlayed = new Card[4];
@@ -241,11 +242,11 @@ public class RookState extends GameState {
                 if(canBid[i] == true){
                     bidWinner = i;
                     wonBid[i] = true;
+                    bidEnd = true;
                     return true;
                 }
             }
         }
-
         return false;
     }
 

@@ -78,6 +78,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
      * @return the top object in the GUI's view heirarchy
      */
     public View getTopView() {
+        /*if(!(rookState == null) && rookState.bidEnd) { // Load the layout resource for our GUI
+            if (rookState.bidWinner == playerNum) {
+                return myActivity.findViewById(R.id.trump_suit_selection);
+            } else {
+                return myActivity.findViewById(R.id.main_activity_GUI);
+            }
+        }*/
         return myActivity.findViewById(R.id.main_activity_GUI);
     }//was game_state_test_layout
 
@@ -302,6 +309,18 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
         // remember the activity
         this.myActivity = activity;
+
+        /*if(!(rookState == null) && rookState.bidEnd) { // Load the layout resource for our GUI
+            if (rookState.bidWinner == playerNum) {
+                activity.setContentView(R.layout.trump_suit_selection);
+                rookState.bidEnd = false;
+            } else {
+                activity.setContentView(R.layout.activity_main);
+            }
+        } else {
+            activity.setContentView(R.layout.activity_main);
+        }
+        */
 
         // Load the layout resource for our GUI
         activity.setContentView(R.layout.activity_main);
