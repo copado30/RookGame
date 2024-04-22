@@ -70,7 +70,7 @@ public class RookLocalGame extends LocalGame {
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
                     rookState.setBidPhase(false);//since a player won then it is no longer the bidPhase
-                    rookState.playerId = playerNum;
+                    rookState.playerId = 0;
                 }
                 return true;
             }
