@@ -12,7 +12,7 @@ import java.util.*;
 
 
 public class RookState extends GameState {
-    public static final int MAX_BID = 120;
+    public static final int MAX_BID = 121;
 
     public static final int WINNING_POINTS = 300;
 
@@ -217,6 +217,17 @@ public class RookState extends GameState {
             team2Score += nestVal;
         }
 
+        // if they don't reach the points bid by end of round, remove from their teams score
+        /*if(bidWinner == 0 || bidWinner == 2) {
+            if(team1Score != getBidNum()) {
+                team1Score = team1Score - getBidNum();
+            }
+        } else {
+            if(team2Score != getBidNum()) {
+                team2Score = team2Score - getBidNum();
+            }
+        }*/
+
         //need to make a method that checks is they hit the amount they bid
         shuffle();
         dealHands();
@@ -228,8 +239,8 @@ public class RookState extends GameState {
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
-
     }//resetRound
+
     public boolean isBiddingOver(){
         int passCount = 0;//how many people have passed
         for(int i = 0; i < canBid.length; i++){

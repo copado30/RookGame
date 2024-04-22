@@ -3,11 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/trump_suit_selection">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#086737"
+        android:gravity="center"
         android:orientation="vertical">
 
         <RadioGroup
@@ -15,40 +18,51 @@
             android:layout_height="match_parent"
             android:gravity="center">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="As the bid winner, you choose the trump suit!"
+                android:textColor="#FBF9F9"></TextView>
+
             <RadioButton
                 android:id="@+id/blackTrumpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:text="Black"
-                android:textSize="75dp" />
+                android:textSize="40dp" />
 
             <RadioButton
                 android:id="@+id/redTrumpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Red"
-                android:textSize="75dp" />
+                android:textColor="#ED0909"
+                android:textSize="40dp" />
 
             <RadioButton
                 android:id="@+id/yellowTrumpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yellow"
-                android:textSize="75dp" />
+                android:textColor="#FFEB3B"
+                android:textSize="40dp" />
 
             <RadioButton
                 android:id="@+id/greenTrumpButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Green"
-                android:textSize="75dp" />
+                android:textColor="#8BC34A"
+                android:textSize="40dp" />
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Button" />
+                android:layout_marginTop="20dp"
+                android:text="Done"
+                android:textSize="20dp" />
 
         </RadioGroup>
 

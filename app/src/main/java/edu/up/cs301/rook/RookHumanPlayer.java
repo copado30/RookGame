@@ -108,9 +108,11 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
 
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
+
         if(rookState.bidWinner != 4) {
             bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
         }
+
         leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
 

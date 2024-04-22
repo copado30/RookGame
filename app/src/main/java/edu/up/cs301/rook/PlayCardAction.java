@@ -7,6 +7,7 @@ import edu.up.cs301.GameFramework.players.GamePlayer;
 public class PlayCardAction extends GameAction {
     private final Card card; //card being played
     private int cardIndex;
+
     /**
      * constructor for GameAction
      *

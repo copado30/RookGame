@@ -67,15 +67,17 @@ public class RookLocalGame extends LocalGame {
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
                 changePlayerTurn(playerNum,false);
                 if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
+                    rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
                     rookState.setBidPhase(false);//since a player won then it is no longer the bidPhase
+                    rookState.playerId = playerNum;
                 }
                 return true;
             }
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
             if(rookState.passTurn(pa)){//if they can  pass then do the following
-                rookState.setCanBid(action.getPlayer().getPlayerNum(), false);//player can no longer bid
+                rookState.setCanBid(playerNum, false);//player can no longer bid
                 if(rookState.isBiddingOver()){
                     rookState.setBidPhase(false);
                 }
