@@ -54,7 +54,11 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
             if(rookState.isBidPhase()){//if its the bidPhase then skip
                 PassingAction passingAction = new PassingAction(this);
                 game.sendAction(passingAction);
-            }else if(!rookState.isBidPhase()){//if its not the bid phase
+            }
+            else if (rookState.getPhase() == RookState.ACK_PHASE) {
+                game.sendAction(new AcknowledgeTrick(this));
+            }
+            else if(rookState.getPhase() == RookState.PLAY_PHASE){//if its not the bid phase
                 //what cards can they play
                 ArrayList<Integer> leadingSuitCards =  new ArrayList<Integer>();//contains indexes of the leadingSuitCards in the players hand
                 ArrayList<Integer> trumpSuitCards =  new ArrayList<Integer>();//
@@ -98,7 +102,7 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
                 }
             }
         }//if its the players turn
-        sleep(2);
+        //sleep(2);
     }
 
 }

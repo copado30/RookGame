@@ -65,11 +65,11 @@ public class RookLocalGame extends LocalGame {
             BidAction ba = (BidAction)action;
             if(rookState.bid(ba)){//if the action is legal
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
-                changePlayerTurn(playerNum,false);
+                changePlayerTurn(playerNum);
                 if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
-                    rookState.setBidPhase(false);//since a player won then it is no longer the bidPhase
+                    rookState.setPhase(RookState.PLAY_PHASE);//since a player won then it is no longer the bidPhase
                     rookState.playerId = 0;
                 }
                 return true;
@@ -79,9 +79,9 @@ public class RookLocalGame extends LocalGame {
             if(rookState.passTurn(pa)){//if they can  pass then do the following
                 rookState.setCanBid(playerNum, false);//player can no longer bid
                 if(rookState.isBiddingOver()){
-                    rookState.setBidPhase(false);
+                    rookState.setPhase(RookState.PLAY_PHASE);
                 }
-                changePlayerTurn(playerNum,false);
+                changePlayerTurn(playerNum);
                 return true;//action was successful
             }
         } else if (action instanceof PlayCardAction) {
@@ -93,13 +93,24 @@ public class RookLocalGame extends LocalGame {
             else if (rookState.playCard(pca)) {
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
-                changePlayerTurn(playerNum, true);
-                rookState.leadingSuit = rookState.cardsPlayed[0].getCardSuit();//should
+                changePlayerTurn(playerNum);
+                try {
+                    rookState.leadingSuit = rookState.cardsPlayed[firstPlayerOfTrick()].getCardSuit();//should
+                }catch(NullPointerException npe) {
+                    int wtf = 3;
+                }
                 if(playerNum == lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
                     scoreCalc();
                     rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
+                    rookState.setPhase(RookState.ACK_PHASE);
                 }
+                return true;
+            }
+        } else if (action instanceof AcknowledgeTrick) {
+            if (rookState.getPhase() == RookState.ACK_PHASE) {
+                rookState.ackTrick();
+                changePlayerTurn(playerNum);
                 return true;
             }
         }
@@ -107,18 +118,11 @@ public class RookLocalGame extends LocalGame {
     }//makeMove
 
     //isPlayCard is a boolean that lets us know if it is being called by PlayCardAction
-    public void changePlayerTurn(int currentPlayer, boolean isPlayCard){
+    public void changePlayerTurn(int currentPlayer){
         if(currentPlayer < 3){
             rookState.playerId++;//make it the next persons turn
         } else {
             rookState.playerId = 0; // Start over with player 0 since it was player 3's turn.
-        }
-    }
-
-    //method to reset the 4 cards that are displayed in the middle
-    public void clearPlayedCards() {
-        for (int i = 0; i < rookState.cardsPlayed.length; i++) {
-            rookState.cardsPlayed[i] = null; // Clear each card.
         }
     }
 
@@ -133,7 +137,7 @@ public class RookLocalGame extends LocalGame {
                 return 1;
             }
             else if(rookState.trickWinner[rookState.trickCount -1] == 3){//winner of the last trick
-                return 1;
+                return 2;
             }
         }
         return 3;//default is player 3

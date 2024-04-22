@@ -1,15 +1,9 @@
 package edu.up.cs301.rook;
 
 import edu.up.cs301.GameFramework.Card;
-import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 import edu.up.cs301.GameFramework.GameMainActivity;
-import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
-import edu.up.cs301.GameFramework.players.GamePlayer;
-import edu.up.cs301.rook.R;
-
-import android.media.Image;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View.OnClickListener;
 
-import org.w3c.dom.Text;
 
 /**
  * A GUI of a counter-player. The GUI displays the current value of the counter,
@@ -33,7 +26,7 @@ import org.w3c.dom.Text;
  * @author Andrew M. Nuxoll
  * @version July 2013
  */
-public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener {
+public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
 
     /* instance variables */
 
@@ -100,7 +93,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
             cardButtons[i].setImageResource(resId);
         }
 
-        // need to confirm for image views
+        // display the cards in the trick
         for(int i = 0; i < rookState.cardsPlayed.length; i++) {
             int resId = getResourceIdForCard(rookState.cardsPlayed[i]);
             playedCards[i].setImageResource(resId);
@@ -109,8 +102,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
 
-        if(rookState.bidWinner != 4) {//was bidWinner
-            //bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
+        if (rookState.getPhase() == RookState.ACK_PHASE) {
+            bidWinner.setText("Press any button to continue.");
+        } else if(rookState.bidWinner != 4) {//was bidWinner
+            bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
             bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
 
         }
@@ -118,7 +113,9 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
 
-        getTopView().invalidate();
+
+
+            getTopView().invalidate();
     }
 
     /**
@@ -130,6 +127,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
     public void onClick(View button) {
         // if we are not yet connected to a game, ignore
         if (game == null) return;
+
+        //In Ack phase any button acknowledges
+        if (rookState.getPhase() == RookState.ACK_PHASE) {
+            game.sendAction(new AcknowledgeTrick(this));
+            return;
+        }
+
         if(rookState.isBidPhase() && playerNum == rookState.playerId) {//if its bid phase and their turn
             if (button.getId() == R.id.passButton) {
                 PassingAction passingAction = new PassingAction(this);
@@ -366,6 +370,9 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener 
         for(int i = 0; i < cardButtons.length; i++) {
             cardButtons[i].setOnClickListener(this);
         }
+
+        //listen for touch events (for ack trick)
+
 
     }//setAsGui
 

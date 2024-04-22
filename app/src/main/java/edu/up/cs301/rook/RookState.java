@@ -1,10 +1,6 @@
 package edu.up.cs301.rook;
 
-import android.app.Activity;
-
 import edu.up.cs301.GameFramework.Card;
-import edu.up.cs301.GameFramework.Game;
-import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
 import java.util.*;
 
@@ -12,15 +8,21 @@ import java.util.*;
 
 
 public class RookState extends GameState {
+    public static final int BID_PHASE = 37;  //bidding
+    public static final int DISCARD_PHASE = 40;  //bidding
+    public static final int PLAY_PHASE = 38; //play cards on trick
+    public static final int ACK_PHASE = 39;  //acknowledge completed trick
+
     public int team1Score;
     public int team2Score;
     public int bidNum;
     public int playerId;
     public int roundScore;
     public int trickCount;
-    private boolean bidPhase;
+    private int phase;
     public int bidWinner;
     public boolean bidEnd;
+    public int ackCount;  //how many players have acknowledged the current trick
 
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
@@ -37,12 +39,13 @@ public class RookState extends GameState {
         team2Score = 0;
         roundScore = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
-        bidPhase = true;//should start as true
+        phase = BID_PHASE;
         bidNum = 70;
         playerId = 0;
         trickCount = 0;
         trumpSuit = "Red";
         leadingSuit = null;//can give it a default value if necessary
+        ackCount = 0;
         resetArrays();
 
         createDeck();
@@ -57,10 +60,11 @@ public class RookState extends GameState {
         playerId = gameState.playerId;
         roundScore = gameState.roundScore;
         bidWinner = gameState.bidWinner;
-        bidPhase = gameState.bidPhase;
+        phase = gameState.phase;
         trumpSuit = gameState.trumpSuit;
         leadingSuit = gameState.leadingSuit;
         trickCount = gameState.trickCount;
+        ackCount = gameState.ackCount;
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
@@ -89,11 +93,10 @@ public class RookState extends GameState {
      * when player wins nest, they can discard
      */
     public boolean discardCard(DiscardingAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
+        if( (phase != DISCARD_PHASE) ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
             return false;
         }
 
-        bidPhase = false;//ask nux
         return true;
     }
 
@@ -103,14 +106,14 @@ public class RookState extends GameState {
      * when its the bidding round and their turn to bid
      */
     public boolean bid(BidAction action){
-        if(!bidPhase ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
+        if(phase != BID_PHASE ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
             return false;
         }
         return true;
     }
 
     public boolean passTurn(PassingAction action){
-        if((!bidPhase) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
+        if((phase != BID_PHASE) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
             return false;
         }
         return true;
@@ -118,7 +121,7 @@ public class RookState extends GameState {
 
 
     public boolean playCard(PlayCardAction action){
-        if(bidPhase || playerId != action.getPlayer().getPlayerNum()) {
+        if(phase != PLAY_PHASE || playerId != action.getPlayer().getPlayerNum()) {
             return false;
         }
         return true;
@@ -230,7 +233,7 @@ public class RookState extends GameState {
         }
         shuffle();
         dealHands();
-        bidPhase = true;
+        phase = BID_PHASE;
         trickCount = 0;
         playerId = 0;
         bidNum = 70;
@@ -274,10 +277,34 @@ public class RookState extends GameState {
     }
 
     public boolean isBidPhase(){
-        return this.bidPhase;
+        return (phase == BID_PHASE);
     }
-    public void setBidPhase(boolean bidPhase){
-        this.bidPhase = bidPhase;
+
+    public void setPhase(int newPhase){
+        this.phase = newPhase;
+    }
+
+    public int getPhase() {
+        return this.phase;
+    }
+
+    //method to reset the 4 cards that are displayed in the middle
+    public void clearPlayedCards() {
+        for (int i = 0; i < cardsPlayed.length; i++) {
+            cardsPlayed[i] = null; // Clear each card.
+        }
+    }
+
+
+
+    /** user acknowledges current trick */
+    public void ackTrick() {
+        ackCount++;
+        if (ackCount == 4) {
+            ackCount = 0;
+            clearPlayedCards();
+            phase = PLAY_PHASE;
+        }
     }
 
 }
