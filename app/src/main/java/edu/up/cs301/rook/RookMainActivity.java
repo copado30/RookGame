@@ -48,9 +48,9 @@ public class RookMainActivity extends GameMainActivity {
 			}});
 		
 		// a computer player type (player type 2)
-		playerTypes.add(new GamePlayerType("Computer Player 2") {
+		playerTypes.add(new GamePlayerType("Computer Player") {
 			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
-		playerTypes.add(new GamePlayerType("Computer Player 3") {
+		playerTypes.add(new GamePlayerType("Computer Player") {
 			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
 
 		// Create a game configuration class for Counter:

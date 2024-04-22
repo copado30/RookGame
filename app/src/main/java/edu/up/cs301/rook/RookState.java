@@ -12,10 +12,6 @@ import java.util.*;
 
 
 public class RookState extends GameState {
-    public static final int MAX_BID = 121;
-
-    public static final int WINNING_POINTS = 300;
-
     public int team1Score;
     public int team2Score;
     public int bidNum;
@@ -23,14 +19,14 @@ public class RookState extends GameState {
     public int roundScore;
     public int trickCount;
     private boolean bidPhase;
-
     public int bidWinner;
-
     public boolean bidEnd;
+
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
     public Card[] cardsPlayed = new Card[4];
     public Card[] deck = new Card[41];
+    public int[] trickWinner = new int[9];
     public Card[][] playerHands = new Card[5][9];
 
     public String trumpSuit, leadingSuit;
@@ -208,19 +204,10 @@ public class RookState extends GameState {
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+        for(int i = 0; i < trickWinner.length; i++){trickWinner[i] = 4;}
     }
 
     public void resetRound(){
-        //before the thing gets reset add the nest to the winning teams score
-        int nestVal = 0;
-        for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
-
-        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
-            team1Score += nestVal;
-        } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
-            team2Score += nestVal;
-        }
-
         // if they don't reach the points bid by end of round, remove from their teams score
         /*if(bidWinner == 0 || bidWinner == 2) {
             if(team1Score != getBidNum()) {
@@ -232,7 +219,15 @@ public class RookState extends GameState {
             }
         }*/
 
-        //need to make a method that checks is they hit the amount they bid
+        //before the thing gets reset add the nest to the winning teams score
+        int nestVal = 0;
+        for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
+
+        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
+            team1Score += nestVal;
+        } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
+            team2Score += nestVal;
+        }
         shuffle();
         dealHands();
         bidPhase = true;
