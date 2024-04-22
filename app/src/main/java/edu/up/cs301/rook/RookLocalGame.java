@@ -132,15 +132,22 @@ public class RookLocalGame extends LocalGame {
         for(int i = 0; i < rookState.cardsPlayed.length; i++){
             scoreForRound += rookState.cardsPlayed[i].getCardVal();
         }
-        if(rookState.winner() == 0 || rookState.winner() == 2){//player 0 or 2 won then add to team 1
+
+        if(rookState.winner() == 0){
             rookState.team1Score += scoreForRound;
         }
-        else if(rookState.winner() == 1 || rookState.winner() == 3){//player 1 or 3 then add to team 2
+        else if( rookState.winner() == 2){//player 0 or 2 won then add to team 1
+            rookState.team1Score += scoreForRound;
+        }
+        //team 2 below
+        else if( rookState.winner() == 3){//player 0 or 2 won then add to team 1
+            rookState.team2Score += scoreForRound;
+
+        }
+        else if(rookState.winner() == 1 ){//player 1 or 3 then add to team 2
             rookState.team2Score += scoreForRound;
         }
-        else{
-            //don't add cause both teams suck
-        }
+
     }
 
 

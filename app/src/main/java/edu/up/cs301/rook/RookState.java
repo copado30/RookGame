@@ -47,9 +47,7 @@ public class RookState extends GameState {
         trickCount = 0;
         trumpSuit = "Red";
         leadingSuit = null;//can give it a default value if necessary
-        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
-        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
-        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+        resetArrays();
 
         createDeck();
         shuffle();
@@ -206,6 +204,12 @@ public class RookState extends GameState {
         }
     }
 
+    public void resetArrays(){
+        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
+        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+    }
+
     public void resetRound(){
         //before the thing gets reset add the nest to the winning teams score
         int nestVal = 0;
@@ -236,11 +240,9 @@ public class RookState extends GameState {
         playerId = 0;
         bidNum = 70;
         leadingSuit = null;
-        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
-        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
-        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
-    }//resetRound
+        resetArrays();
 
+    }//resetRound
     public boolean isBiddingOver(){
         int passCount = 0;//how many people have passed
         for(int i = 0; i < canBid.length; i++){
