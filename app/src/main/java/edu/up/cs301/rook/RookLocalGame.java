@@ -141,6 +141,7 @@ public class RookLocalGame extends LocalGame {
 
     //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
     public int firstPlayerOfTrick(){
+        //timing seems to be off, probably because of trick count.
 
         if(lastPlayerOfTrick() == 0){
             return 1;
