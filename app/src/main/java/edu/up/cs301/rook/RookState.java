@@ -29,6 +29,7 @@ public class RookState extends GameState {
     public boolean bidEnd;
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
+    public boolean[] wonTrick = new boolean[4];
     public Card[] cardsPlayed = new Card[4];
     public Card[] deck = new Card[41];
     public Card[][] playerHands = new Card[5][9];
@@ -47,9 +48,7 @@ public class RookState extends GameState {
         trickCount = 0;
         trumpSuit = "Red";
         leadingSuit = null;//can give it a default value if necessary
-        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
-        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
-        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+        resetArrays();
 
         createDeck();
         shuffle();
@@ -75,7 +74,6 @@ public class RookState extends GameState {
         }
         for(int i = 0; i < canBid.length; i++) { this.canBid[i] = gameState.canBid[i];}
         for(int i = 0; i < wonBid.length; i++) { this.wonBid[i] = gameState.wonBid[i];}
-
         for(int i = 0; i <cardsPlayed.length; i++) { this.cardsPlayed[i] = new Card(gameState.cardsPlayed[i]); }
 
     }//Deep Copy Constructor
@@ -172,6 +170,7 @@ public class RookState extends GameState {
             }
         }
     }
+
     public int winner(){
         int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0, randomWin = 0, randomWinPlayer = 0;
 
@@ -206,6 +205,12 @@ public class RookState extends GameState {
         }
     }
 
+    public void resetArrays(){
+        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
+        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+    }
+
     public void resetRound(){
         //before the thing gets reset add the nest to the winning teams score
         int nestVal = 0;
@@ -225,9 +230,7 @@ public class RookState extends GameState {
         playerId = 0;
         bidNum = 70;
         leadingSuit = null;
-        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
-        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
-        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
+        resetArrays();
 
     }//resetRound
     public boolean isBiddingOver(){
