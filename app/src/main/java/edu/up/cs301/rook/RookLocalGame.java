@@ -98,6 +98,8 @@ public class RookLocalGame extends LocalGame {
 
                 if(playerNum == rookState.lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
+                    rookState.scoreCalc();
+                    rookState.playerId = rookState.firstPlayerOfTrick();//make the winner of the bid the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);//each player does
                 }
                 return true;
@@ -123,7 +125,6 @@ public class RookLocalGame extends LocalGame {
 
     //The lastPlayerOfTrick method returns the player id of the last player to play a card in the trick
     //used to check when the trick is over in the PCA
-
 
 
     /**
