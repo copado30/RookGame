@@ -94,7 +94,10 @@ public class RookLocalGame extends LocalGame {
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum);
-                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//should
+
+                if (rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit() != null) {
+                    rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//should
+                }
 
                 if(playerNum == rookState.lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;

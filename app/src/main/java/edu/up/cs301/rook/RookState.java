@@ -246,21 +246,21 @@ public class RookState extends GameState implements Serializable {
 
         if(winner() == 0){
             team1Score += scoreForRound;
-            trickWinner[trickCount] = 0;
+            trickWinner[trickCount - 1] = 0;
         }
         else if( winner() == 2){//player 0 or 2 won then add to team 1
             team1Score += scoreForRound;
-            trickWinner[trickCount] = 2;
+            trickWinner[trickCount - 1] = 2;
 
         }
         //team 2 below
         else if( winner() == 3){//player 0 or 2 won then add to team 1
             team2Score += scoreForRound;
-            trickWinner[trickCount] = 3;
+            trickWinner[trickCount - 1] = 3;
 
         }
         else if(winner() == 1 ){//player 1 or 3 then add to team 2
-            trickWinner[trickCount] = 1;
+            trickWinner[trickCount - 1] = 1;
             team2Score += scoreForRound;
         }
 
