@@ -56,6 +56,8 @@ public class RookLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
+
+
         Log.i("action", action.getClass().toString());
         //need to check if the action is a game action  first make a return false if statement
 
@@ -91,13 +93,24 @@ public class RookLocalGame extends LocalGame {
                 //do nothing, will return false at the end
             }
             else if (rookState.playCard(pca)) {
+                if (playerNum == rookState.firstPlayerOfTrick()){
+                    rookState.leadingSuit = pca.getCard().getCardSuit();
+                }
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum);
 
-                if (rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit() != null) {
-                    rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//should
+                //TODO REMOVE DEBUG
+                int fpot = rookState.firstPlayerOfTrick();
+                if (rookState.cardsPlayed[fpot] == null
+                        || rookState.cardsPlayed[fpot].getCardSuit() == null) {
+                    Log.i("wtf", "CardSuit is NUll");
                 }
+
+                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();
+
+
+
 
                 if(playerNum == rookState.lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
