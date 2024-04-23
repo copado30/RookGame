@@ -263,6 +263,81 @@ public class RookState extends GameState implements Serializable {
         return false;
     }
 
+    public int lastPlayerOfTrick(){
+        if(trickCount != 0){//if its not the zero trick
+            //if the zero player wins then do nothing nothing cause that is the default
+            if(trickWinner[trickCount -1] == 1){//winner of the last trick
+                return 0;
+            } else if(trickWinner[trickCount -1] == 2){//winner of the last trick
+                return 1;
+            }
+            else if(trickWinner[trickCount -1] == 3){//winner of the last trick
+                return 2;
+            }
+        }
+        return 3;//default is player 3
+    }
+
+    //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
+    public int firstPlayerOfTrick(){
+        //timing seems to be off, probably because of trick count.
+        if(trickCount != 0){
+            return trickWinner[trickCount -1];//returning 4 which means its not being changed
+        }
+        return 0;//default the zero player goes first
+    }
+
+    public void scoreCalc(){
+        //team 1 player 0, player 2
+        //team 2 player 1, 3
+        int scoreForRound = 0;
+
+        for(int i = 0; i < cardsPlayed.length; i++){
+            scoreForRound += cardsPlayed[i].getCardVal();
+        }
+
+        if(winner() == 0){
+            team1Score += scoreForRound;
+            trickWinner[trickCount] = 0;
+        }
+        else if( winner() == 2){//player 0 or 2 won then add to team 1
+            team1Score += scoreForRound;
+            trickWinner[trickCount] = 2;
+
+        }
+        //team 2 below
+        else if( winner() == 3){//player 0 or 2 won then add to team 1
+            team2Score += scoreForRound;
+            trickWinner[trickCount] = 3;
+
+        }
+        else if(winner() == 1 ){//player 1 or 3 then add to team 2
+            trickWinner[trickCount] = 1;
+            team2Score += scoreForRound;
+        }
+
+    }
+
+    //method to reset the 4 cards that are displayed in the middle
+    public void clearPlayedCards() {
+        for (int i = 0; i < cardsPlayed.length; i++) {
+            cardsPlayed[i] = null; // Clear each card.
+        }
+    }
+
+
+
+    /** user acknowledges current trick */
+    public void ackTrick() {
+        ackCount++;
+        playerId = firstPlayerOfTrick();
+        if (ackCount == 4) {
+            scoreCalc();
+            ackCount = 0;
+            clearPlayedCards();
+            phase = PLAY_PHASE;
+        }
+    }
     public int getBidNum() {
         return this.bidNum;
     }
@@ -290,23 +365,6 @@ public class RookState extends GameState implements Serializable {
         return this.phase;
     }
 
-    //method to reset the 4 cards that are displayed in the middle
-    public void clearPlayedCards() {
-        for (int i = 0; i < cardsPlayed.length; i++) {
-            cardsPlayed[i] = null; // Clear each card.
-        }
-    }
 
-
-
-    /** user acknowledges current trick */
-    public void ackTrick() {
-        ackCount++;
-        if (ackCount == 4) {
-            ackCount = 0;
-            clearPlayedCards();
-            phase = PLAY_PHASE;
-        }
-    }
 
 }

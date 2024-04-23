@@ -94,16 +94,11 @@ public class RookLocalGame extends LocalGame {
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum);
-                try {
-                    rookState.leadingSuit = rookState.cardsPlayed[firstPlayerOfTrick()].getCardSuit();//should
-                }catch(NullPointerException npe) {
-                    int wtf = 3;
-                }
-                if(playerNum == lastPlayerOfTrick()){//if its the player that should go last
+                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//should
+
+                if(playerNum == rookState.lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
-                    scoreCalc();
-                    rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
-                    rookState.setPhase(RookState.ACK_PHASE);
+                    rookState.setPhase(RookState.ACK_PHASE);//each player does
                 }
                 return true;
             }
@@ -128,66 +123,7 @@ public class RookLocalGame extends LocalGame {
 
     //The lastPlayerOfTrick method returns the player id of the last player to play a card in the trick
     //used to check when the trick is over in the PCA
-    public int lastPlayerOfTrick(){
-        if(rookState.trickCount != 0){//if its not the zero trick
-            //if the zero player wins then do nothing nothing cause that is the default
-            if(rookState.trickWinner[rookState.trickCount -1] == 1){//winner of the last trick
-                return 0;
-            } else if(rookState.trickWinner[rookState.trickCount -1] == 2){//winner of the last trick
-                return 1;
-            }
-            else if(rookState.trickWinner[rookState.trickCount -1] == 3){//winner of the last trick
-                return 2;
-            }
-        }
-        return 3;//default is player 3
-    }
 
-    //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
-    public int firstPlayerOfTrick(){
-        //timing seems to be off, probably because of trick count.
-
-        if(lastPlayerOfTrick() == 0){
-            return 1;
-        } else if (lastPlayerOfTrick() == 1) {
-            return 2;
-        }else if (lastPlayerOfTrick() == 2) {
-            return 3;
-        }
-
-        return 0;//if player 3 went last then player zero went first
-    }
-
-    public void scoreCalc(){
-        //team 1 player 0, player 2
-        //team 2 player 1, 3
-        int scoreForRound = 0;
-
-        for(int i = 0; i < rookState.cardsPlayed.length; i++){
-            scoreForRound += rookState.cardsPlayed[i].getCardVal();
-        }
-
-        if(rookState.winner() == 0){
-            rookState.team1Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount] = 0;
-        }
-        else if( rookState.winner() == 2){//player 0 or 2 won then add to team 1
-            rookState.team1Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount] = 2;
-
-        }
-        //team 2 below
-        else if( rookState.winner() == 3){//player 0 or 2 won then add to team 1
-            rookState.team2Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount] = 3;
-
-        }
-        else if(rookState.winner() == 1 ){//player 1 or 3 then add to team 2
-            rookState.trickWinner[rookState.trickCount] = 1;
-            rookState.team2Score += scoreForRound;
-        }
-
-    }
 
 
     /**

@@ -1,10 +1,12 @@
 package edu.up.cs301.rook;
 
+import java.io.Serializable;
+
 import edu.up.cs301.GameFramework.Card;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.players.GamePlayer;
 
-public class PlayCardAction extends GameAction {
+public class PlayCardAction extends GameAction implements Serializable {
     private final Card card; //card being played
     private int cardIndex;
 
