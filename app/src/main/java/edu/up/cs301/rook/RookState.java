@@ -49,7 +49,6 @@ public class RookState extends GameState implements Serializable {
         leadingSuit = null;//can give it a default value if necessary
         ackCount = 0;
         resetArrays();
-
         createDeck();
         shuffle();
         dealHands();
@@ -88,6 +87,17 @@ public class RookState extends GameState implements Serializable {
             return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
         }
         return "It is player " + playerId + " turn. Teams are tied.";
+    }
+    public String cardsPlayedToString(){
+        String cardsPlayedString = "";
+        for(int i =0; i < cardsPlayed.length; i++) {
+            if(cardsPlayed[i].getCardSuit() == null) {
+                cardsPlayedString += "index: " + i +" is null, " ;
+            } else{
+                cardsPlayedString += "index: " + i + cardsPlayed[i].toString();
+            }
+        }
+        return cardsPlayedString;
     }
 
     /**
