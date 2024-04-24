@@ -44,6 +44,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
     private Button bidButton;
     private Button plusButton;
     private Button minusButton;
+    private Button resetButton;
 
     private ImageButton[] cardButtons = new ImageButton[9];
     public ImageView[] playedCards = new ImageView[4];
@@ -339,6 +340,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
         this.plusButton = (Button) activity.findViewById(R.id.plusButton);
         this.minusButton = (Button) activity.findViewById(R.id.minusButton);
         this.passButton = (Button) activity.findViewById(R.id.passButton);
+        this.resetButton = (Button) activity.findViewById(R.id.resetButton);
 
         this.cardButtons[0] = (ImageButton) activity.findViewById(R.id.cardButton0);
         this.cardButtons[1] = (ImageButton) activity.findViewById(R.id.cardButton1);
@@ -363,6 +365,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
 
         //listen for button presses
         bidButton.setOnClickListener(this);
+        resetButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
         minusButton.setOnClickListener(this);
         passButton.setOnClickListener(this);

@@ -11,9 +11,10 @@ import java.util.*;
 
 public class RookState extends GameState implements Serializable {
     public static final int BID_PHASE = 37;  //bidding
-    public static final int DISCARD_PHASE = 40;  //bidding
     public static final int PLAY_PHASE = 38; //play cards on trick
     public static final int ACK_PHASE = 39;  //acknowledge completed trick
+    public static final int DISCARD_PHASE = 40;  //bidding
+
 
     public int team1Score;
     public int team2Score;
@@ -309,6 +310,7 @@ public class RookState extends GameState implements Serializable {
         phase = BID_PHASE;
         trickCount = 0;
         playerId = 0;
+        ackCount = 0;
         bidNum = 70;
         leadingSuit = null;
         resetArrays();
