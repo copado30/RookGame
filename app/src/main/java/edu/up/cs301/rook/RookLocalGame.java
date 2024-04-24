@@ -107,16 +107,13 @@ public class RookLocalGame extends LocalGame {
                     Log.i("wtf", "CardSuit is NUll");
                 }
 
-                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();
+                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//set the card suit to the first card played
 
-
-
-
-                if(playerNum == rookState.lastPlayerOfTrick()){//if its the player that should go last
+                if(playerNum == rookState.lastPlayerOfTrick()){//if its the player who plays last
                     rookState.trickCount++;
                     rookState.scoreCalc();
-                    rookState.playerId = rookState.firstPlayerOfTrick();//make the winner of the bid the player that goes first
-                    rookState.setPhase(RookState.ACK_PHASE);//each player does
+                    rookState.playerId = rookState.firstPlayerOfTrick();//make the winner of the last trick the player that goes first
+                    rookState.setPhase(RookState.ACK_PHASE);
                 }
                 return true;
             }
