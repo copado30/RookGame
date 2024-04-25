@@ -73,8 +73,6 @@ public class RookLocalGame extends LocalGame {
                     rookState.wonBid[playerNum] = true;
                     if(rookState.bidWinner == 0) {
                         rookState.setPhase(RookState.TRUMP_PHASE);
-                    } else {
-                        rookState.setPhase(RookState.PLAY_PHASE);
                     }
                     rookState.playerId = 0;
                 }
@@ -126,7 +124,7 @@ public class RookLocalGame extends LocalGame {
             }
         } else if (action instanceof TrumpSelection) {
             try {
-                rookState.trumpSuit = rookState.playerHands[0][((TrumpSelection) action).index].getCardSuit();//should
+                rookState.trumpSuit = rookState.playerHands[0][((TrumpSelection) action).index].getCardSuit();
             }catch(NullPointerException npe) {
                 int wtf = 3;
             }

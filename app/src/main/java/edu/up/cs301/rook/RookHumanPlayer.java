@@ -39,6 +39,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     private TextView bidWinner;
     private TextView leadingSuit;
     private TextView trumpSuit;
+    private TextView currPhase;
+    private TextView playerTurn;
 
     boolean firstRun = true;// for first press of RunTest button
 
@@ -82,24 +84,34 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
 
-        /*if(rookState.bidEnd) { // Load the layout resource for our GUI
-            if (rookState.bidWinner == playerNum) {
-                bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
-                rookState.bidEnd = false;
-            }
-        }*/
+        //currPhase.setText("");
 
-        if (rookState.getPhase() == RookState.ACK_PHASE) {
+
+        if (rookState.getPhase() == rookState.ACK_PHASE) {
+            currPhase.setText(" Phase: Acknowledge");
             bidWinner.setText("Press any button to continue.");
-        } else if (rookState.getPhase() == RookState.TRUMP_PHASE) {
+        } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
             bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
+            currPhase.setText(" Phase: Trump");
         } else if(rookState.bidWinner != 4) {//was bidWinner
             bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
             //bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
         }
+         if (rookState.getPhase() == rookState.BID_PHASE){
+            currPhase.setText(" Phase: Bid");
+        } else if (rookState.getPhase() == rookState.PLAY_PHASE){
+            currPhase.setText(" Phase: Play");
+        } else if (rookState.getPhase() == rookState.DISCARD_PHASE){
+            currPhase.setText(" Phase: Discard");
+        }
+
 
         leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
+
+
+        playerTurn.setText("Player:" + (rookState.playerId + 1) + " turn");
+
 
         getTopView().invalidate();
     }
@@ -363,7 +375,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         this.bidWinner = (TextView) activity.findViewById(R.id.bidWinner_textView);
         this.leadingSuit = (TextView) activity.findViewById(R.id.leadingSuitTextView);
         this.trumpSuit = (TextView) activity.findViewById(R.id.trumpSuitTextView);
-
+        this.currPhase = (TextView) activity.findViewById(R.id.phase_textView);
+        this.playerTurn = (TextView) activity.findViewById(R.id.playerTurn_textView);
         //listen for button presses
         bidButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
