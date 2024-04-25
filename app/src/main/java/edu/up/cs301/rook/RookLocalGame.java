@@ -112,6 +112,11 @@ public class RookLocalGame extends LocalGame {
                 }
                 if(rookState.trickCount == 9){
                     rookState.addNest();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     rookState.resetRound();
                 }
                 return true;

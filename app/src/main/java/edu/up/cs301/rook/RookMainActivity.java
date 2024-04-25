@@ -7,6 +7,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.LocalGame;
 import edu.up.cs301.GameFramework.gameConfiguration.*;
+import edu.up.cs301.GameFramework.players.ProxyPlayer;
 
 /**
  * this is the primary activity for Counter game
@@ -41,24 +42,17 @@ public class RookMainActivity extends GameMainActivity {
 				return new RookHumanPlayer(name);
 			}});
 		
-		// a computer player type (player type 1)
-		playerTypes.add(new GamePlayerType("Computer Player") {
-			public GamePlayer createPlayer(String name) {
-				return new RookComputerPlayer1(name);
-			}});
-		
-		// a computer player type (player type 2)
 		playerTypes.add(new GamePlayerType("Computer Player") {
 			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
-		playerTypes.add(new GamePlayerType("Computer Player") {
-			public GamePlayer createPlayer(String name) {return new RookComputerPlayer1(name);}});
+		playerTypes.add(new GamePlayerType("Smart Computer Player") {
+			public GamePlayer createPlayer(String name) {return new SmartComputerPlayer(name);}});
 
 		// Create a game configuration class for Counter:
 		// - player types as given above
 		// - from 1 to 2 players
 		// - name of game is "Counter Game"
 		// - port number as defined above
-		GameConfig defaultConfig = new GameConfig(playerTypes, 1, 4, "Rook",
+		GameConfig defaultConfig = new GameConfig(playerTypes, 4, 4, "Rook",
 				PORT_NUMBER);
 
 		// Add the default players to the configuration
