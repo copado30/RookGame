@@ -21,7 +21,7 @@ import edu.up.cs301.GameFramework.utilities.Tickable;
 public class RookComputerPlayer1 extends GameComputerPlayer {
 
     /**
-     * Constructor for objects of class CounterComputerPlayer1
+     * Constructor for objects of class RookComputerPlayer1
      * 
      * @param name
      * 		the player's name
