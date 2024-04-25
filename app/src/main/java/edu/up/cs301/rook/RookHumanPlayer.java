@@ -31,7 +31,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
     /* instance variables */
 
     // The TextView the displays the current counter value
-    private TextView testResultsTextView;
     private TextView bidText;
 
     // the most recent game state, as given to us by the CounterLocalGame
