@@ -221,7 +221,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     public int getResourceIdForCard(Card c) {
         if(c.getCardSuit() == null) { return R.drawable.null_card; }
 
-        if (c.getCardSuit() == "Black") {
+        if (c.getCardSuit().equals("Black")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_black;
             } else if (c.getNum() == 6) {
@@ -243,7 +243,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_black;
             }
-        } else if (c.getCardSuit() == "Red") {
+        } else if (c.getCardSuit().equals("Red")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_red;
             } else if (c.getNum() == 6) {
@@ -265,7 +265,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_red;
             }
-        } else if (c.getCardSuit() == "Yellow") {
+        } else if (c.getCardSuit().equals("Yellow")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_yellow;
             } else if (c.getNum() == 6) {
@@ -287,7 +287,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_yellow;
             }
-        } else if (c.getCardSuit() == "Green") {
+        } else if (c.getCardSuit().equals("Green")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_green;
             } else if (c.getNum() == 6) {
@@ -309,7 +309,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_green;
             }
-        } else if (c.getCardSuit() == "Rook") {
+        } else if (c.getCardSuit().equals("Rook")) {
             return R.drawable.rook;
         }
         return -1; //should not happen

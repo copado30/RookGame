@@ -189,7 +189,8 @@ public class RookLocalGame extends LocalGame {
     protected void sendUpdatedStateTo(GamePlayer p) {
         // this is a perfect-information game, so we'll make a
         // complete copy of the state to send to the player
-        p.sendInfo(new RookState(this.rookState));
+        RookState state = new RookState(this.rookState);
+        p.sendInfo(state);
 
     }//sendUpdatedSate
 
