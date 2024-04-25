@@ -84,8 +84,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
 
-        //currPhase.setText("");
-
 
         if (rookState.getPhase() == rookState.ACK_PHASE) {
             currPhase.setText(" Phase: Acknowledge");
@@ -93,9 +91,12 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
             bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
             currPhase.setText(" Phase: Trump");
-        } else if(rookState.bidWinner != 4) {//was bidWinner
-            bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
-            //bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
+        } else {
+            if(rookState.bidWinner  == 4){
+                bidWinner.setText("No player has won bid is: " + rookState.getBidNum() + "  ");
+            }else {
+                bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
+            }
         }
          if (rookState.getPhase() == rookState.BID_PHASE){
             currPhase.setText(" Phase: Bid");
@@ -158,9 +159,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
 
 
-        /*if(rookState != null && rookState.bidEnd && rookState.bidWinner == playerNum) {
-            rookState.trumpSuit = rookState.playerHands[playerNum][0].getCardSuit();
-        } else {*/
 
         if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
             if (button.getId() == R.id.cardButton0) {
