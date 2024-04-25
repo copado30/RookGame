@@ -1,5 +1,7 @@
 package edu.up.cs301.rook;
 
+import android.app.Activity;
+import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +17,6 @@ import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
     /* instance variables */
-    int temp;
 
     // The TextView the displays the current counter value
     private TextView testResultsTextView;
@@ -23,14 +24,14 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
 
     // the most recent game state, as given to us by the CounterLocalGame
     private RookState rookState;
-
     // the android activity that we are running
     private GameMainActivity myActivity;
-    private EditText editText;
     private Button passButton;
     private Button bidButton;
     private Button plusButton;
     private Button minusButton;
+
+    MediaPlayer mp;
 
     private ImageButton[] cardButtons = new ImageButton[9];
     public ImageView[] playedCards = new ImageView[4];
@@ -41,8 +42,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     private TextView trumpSuit;
     private TextView currPhase;
     private TextView playerTurn;
-
-    boolean firstRun = true;// for first press of RunTest button
 
     /**
      * constructor
@@ -115,6 +114,8 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         playerTurn.setText("Player:" + (rookState.playerId + 1) + " turn");
 
 
+
+
         getTopView().invalidate();
     }
 
@@ -168,26 +169,26 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
 
             int index = -1;
 
-                if (button.getId() == R.id.cardButton0) {
-                    index = 0;
-                } else if (button.getId() == R.id.cardButton1) {
-                    index = 1;
-                } else if (button.getId() == R.id.cardButton2) {
-                    index = 2;
-                } else if (button.getId() == R.id.cardButton3) {
-                    index = 3;
-                } else if (button.getId() == R.id.cardButton4) {
-                    index = 4;
-                } else if (button.getId() == R.id.cardButton5) {
-                    index = 5;
-                } else if (button.getId() == R.id.cardButton6) {
-                    index = 6;
-                } else if (button.getId() == R.id.cardButton7) {
-                    index = 7;
-                } else if (button.getId() == R.id.cardButton8) {
-                    index = 8;
-                }
-                game.sendAction(new DiscardingAction(this, index));
+            if (button.getId() == R.id.cardButton0) {
+                index = 0;
+            } else if (button.getId() == R.id.cardButton1) {
+                index = 1;
+            } else if (button.getId() == R.id.cardButton2) {
+                index = 2;
+            } else if (button.getId() == R.id.cardButton3) {
+                index = 3;
+            } else if (button.getId() == R.id.cardButton4) {
+                index = 4;
+            } else if (button.getId() == R.id.cardButton5) {
+                index = 5;
+            } else if (button.getId() == R.id.cardButton6) {
+                index = 6;
+            } else if (button.getId() == R.id.cardButton7) {
+                index = 7;
+            } else if (button.getId() == R.id.cardButton8) {
+                index = 8;
+            }
+            game.sendAction(new DiscardingAction(this, index));
 
         }
 
@@ -360,6 +361,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         // update our state; then update the display
         this.rookState = (RookState) info;
 
+
         updateDisplay();
     }
 
@@ -373,6 +375,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
 
         // remember the activity
         this.myActivity = activity;
+
+        mp = MediaPlayer.create(this.myActivity,R.raw.jazz);
+        mp.start();
+        mp.setLooping(true);
 
         // Load the layout resource for our GUI
         activity.setContentView(R.layout.activity_main);
@@ -415,8 +421,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         for(int i = 0; i < cardButtons.length; i++) {
             cardButtons[i].setOnClickListener(this);
         }
-
-        //listen for touch events (for ack trick)
 
 
     }//setAsGui
