@@ -20,6 +20,7 @@ import edu.up.cs301.rook.TrumpSelection;
 public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
     /* instance variables */
+    int temp;
 
     // The TextView the displays the current counter value
     private TextView testResultsTextView;
