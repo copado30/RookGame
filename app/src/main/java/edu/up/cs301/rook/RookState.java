@@ -11,15 +11,17 @@ import java.util.*;
 
 public class RookState extends GameState implements Serializable {
     public static final int BID_PHASE = 37;  //bidding
-    public static final int PLAY_PHASE = 38; //play cards on trick
-    public static final int ACK_PHASE = 39;  //acknowledge completed trick
     public static final int DISCARD_PHASE = 40;  //bidding
+    public static final int PLAY_PHASE = 38; //play cards on trick
+    public static final int TRUMP_PHASE = 41; //trump suit selection
+    public static final int ACK_PHASE = 39;  //acknowledge completed trick
+    public int trumpSuitIndex;
 
     public int team1Score;
     public int team2Score;
     public int bidNum;
     public int playerId;
-    public int roundScoreTeam1, roundScoreTeam2;
+    public int roundScore;
     public int trickCount;
     private int phase;
     public int bidWinner;
@@ -28,6 +30,7 @@ public class RookState extends GameState implements Serializable {
 
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
+    public int[] bids = new int[4];
     public Card[] cardsPlayed = new Card[4];
     public Card[] deck = new Card[41];
     public int[] trickWinner = new int[9];
@@ -39,17 +42,16 @@ public class RookState extends GameState implements Serializable {
     public RookState() {
         team1Score = 0;
         team2Score = 0;
-        roundScoreTeam1 = 0;
-        roundScoreTeam2 = 0;
+        roundScore = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
         bidNum = 70;
         playerId = 0;
         trickCount = 0;
-        trumpSuit = "Red";
+        trumpSuit = null;
         leadingSuit = null;//can give it a default value if necessary
-        ackCount = 0;
         resetArrays();
+
         createDeck();
         shuffle();
         dealHands();
@@ -60,14 +62,14 @@ public class RookState extends GameState implements Serializable {
         team2Score = gameState.team2Score;
         bidNum = gameState.bidNum;
         playerId = gameState.playerId;
-        roundScoreTeam1 = gameState.roundScoreTeam1;
-        roundScoreTeam2 = gameState.roundScoreTeam2;
+        roundScore = gameState.roundScore;
         bidWinner = gameState.bidWinner;
         phase = gameState.phase;
         trumpSuit = gameState.trumpSuit;
         leadingSuit = gameState.leadingSuit;
         trickCount = gameState.trickCount;
         ackCount = gameState.ackCount;
+        trumpSuitIndex = gameState.trumpSuitIndex;
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
@@ -206,99 +208,6 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
-    public int lastPlayerOfTrick(){
-        if(trickCount != 0){//if its not the zero trick
-            //if the zero player wins then do nothing nothing cause that is the default
-            if(trickWinner[trickCount -1] == 1){//winner of the last trick
-                return 0;
-            } else if(trickWinner[trickCount -1] == 2){//winner of the last trick
-                return 1;
-            }
-            else if(trickWinner[trickCount -1] == 3){//winner of the last trick
-                return 2;
-            }
-        }
-        return 3;//default is player 3
-    }
-
-    //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
-    public int firstPlayerOfTrick(){
-        //timing seems to be off, probably because of trick count.
-
-        if(lastPlayerOfTrick() == 0){
-            return 1;
-        } else if (lastPlayerOfTrick() == 1) {
-            return 2;
-        }else if (lastPlayerOfTrick() == 2) {
-            return 3;
-        }
-
-        return 0;//if player 3 went last then player zero went first
-    }
-
-    public void scoreCalc(){
-        //team 1 player 0, player 2
-        //team 2 player 1, 3
-        int scoreForRound = 0;
-
-        for(int i = 0; i < cardsPlayed.length; i++){
-            scoreForRound += cardsPlayed[i].getCardVal();
-        }
-
-        if(winner() == 0){
-            team1Score += scoreForRound;//add it to the teams total
-            roundScoreTeam1 += scoreForRound;//add it to the teams score for the round
-            trickWinner[trickCount - 1] = 0;
-        }
-        else if( winner() == 2){//player 0 or 2 won then add to team 1
-            team1Score += scoreForRound;
-            roundScoreTeam1 += scoreForRound;//add it to the teams score for the round
-            trickWinner[trickCount - 1] = 2;
-
-        }
-        //team 2 below
-        else if( winner() == 3){//player 0 or 2 won then add to team 1
-            team2Score += scoreForRound;
-            roundScoreTeam2 += scoreForRound;//add it to the teams score for the round
-            trickWinner[trickCount - 1] = 3;
-
-        }
-        else if(winner() == 1 ){//player 1 or 3 then add to team 2
-            trickWinner[trickCount - 1] = 1;
-            roundScoreTeam2 += scoreForRound;//add it to the teams score for the round
-            team2Score += scoreForRound;
-        }
-
-    }
-
-    //Method to check if the team that won the bid reached it
-   /* public void reachedBidAmount(){
-        if(bidWinner == 0 || bidWinner == 2){//if team1 won the bid
-            if(roundScoreTeam1 >= bidNum){
-                //do nothing they reached the bid
-            }else{
-                team1Score = team1Score - (bidNum + roundScoreTeam1);
-            }
-        }else if(bidWinner == 1 || bidWinner == 3){
-            if(roundScoreTeam2 >= bidNum){
-                //do nothing they reached the bid
-            }else{
-                team2Score -= (bidNum + roundScoreTeam1);
-            }
-        }
-    }*/
-
-    public int addNest(){
-        int nestVal = 0;
-        for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
-
-        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
-            team1Score += nestVal;
-        } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
-            team2Score += nestVal;
-        }
-        return nestVal;
-    }
     public void resetArrays(){
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
@@ -307,16 +216,31 @@ public class RookState extends GameState implements Serializable {
     }
 
     public void resetRound(){
-        //reachedBidAmount();//check if the team that won the bid reached that amount
-        addNest();
+        // if they don't reach the points bid by end of round, remove from their teams score
+        /*if(bidWinner == 0 || bidWinner == 2) {
+            if(team1Score != getBidNum()) {
+                team1Score = team1Score - getBidNum();
+            }
+        } else {
+            if(team2Score != getBidNum()) {
+                team2Score = team2Score - getBidNum();
+            }
+        }*/
+
+        //before the thing gets reset add the nest to the winning teams score
+        int nestVal = 0;
+        for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
+
+        if(winner() == 0 || winner() == 2){//player 0 or 2 won then add to team 1
+            team1Score += nestVal;
+        } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
+            team2Score += nestVal;
+        }
         shuffle();
         dealHands();
         phase = BID_PHASE;
         trickCount = 0;
         playerId = 0;
-        roundScoreTeam1 = 0;
-        roundScoreTeam2 = 0;
-        ackCount = 0;
         bidNum = 70;
         leadingSuit = null;
         resetArrays();
@@ -361,6 +285,10 @@ public class RookState extends GameState implements Serializable {
         return (phase == BID_PHASE);
     }
 
+    public boolean isSelectionPhase() {
+        return (phase == TRUMP_PHASE);
+    }
+
     public void setPhase(int newPhase){
         this.phase = newPhase;
     }
@@ -387,5 +315,4 @@ public class RookState extends GameState implements Serializable {
             phase = PLAY_PHASE;
         }
     }
-
 }
