@@ -115,6 +115,10 @@ public class RookLocalGame extends LocalGame {
                     rookState.playerId = rookState.firstPlayerOfTrick();//make the winner of the last trick the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);
                 }
+                if(rookState.trickCount == 9){
+                    rookState.addNest();
+                    rookState.resetRound();
+                }
                 return true;
             }
         } else if (action instanceof AcknowledgeTrick) {
@@ -160,10 +164,6 @@ public class RookLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
-        if(rookState.trickCount == 9){
-            rookState.resetRound();
-
-        }
         if(rookState.team1Score >= 300 && rookState.team1Score > rookState.team2Score) {
             return "Team 1 has won the game with " + rookState.team1Score + " points";
         } else if (rookState.team2Score >= 300 && rookState.team1Score < rookState.team2Score) {

@@ -15,12 +15,11 @@ public class RookState extends GameState implements Serializable {
     public static final int ACK_PHASE = 39;  //acknowledge completed trick
     public static final int DISCARD_PHASE = 40;  //bidding
 
-
     public int team1Score;
     public int team2Score;
     public int bidNum;
     public int playerId;
-    public int roundScore;
+    public int roundScoreTeam1, roundScoreTeam2;
     public int trickCount;
     private int phase;
     public int bidWinner;
@@ -40,7 +39,8 @@ public class RookState extends GameState implements Serializable {
     public RookState() {
         team1Score = 0;
         team2Score = 0;
-        roundScore = 0;
+        roundScoreTeam1 = 0;
+        roundScoreTeam2 = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
         bidNum = 70;
@@ -60,7 +60,8 @@ public class RookState extends GameState implements Serializable {
         team2Score = gameState.team2Score;
         bidNum = gameState.bidNum;
         playerId = gameState.playerId;
-        roundScore = gameState.roundScore;
+        roundScoreTeam1 = gameState.roundScoreTeam1;
+        roundScoreTeam2 = gameState.roundScoreTeam2;
         bidWinner = gameState.bidWinner;
         phase = gameState.phase;
         trumpSuit = gameState.trumpSuit;
@@ -88,17 +89,6 @@ public class RookState extends GameState implements Serializable {
             return "It is player " + playerId + " turn. Team 2 is in the lead with: " + team2Score;
         }
         return "It is player " + playerId + " turn. Teams are tied.";
-    }
-    public String cardsPlayedToString(){
-        String cardsPlayedString = "";
-        for(int i =0; i < cardsPlayed.length; i++) {
-            if(cardsPlayed[i].getCardSuit() == null) {
-                cardsPlayedString += "index: " + i +" is null, " ;
-            } else{
-                cardsPlayedString += "index: " + i + cardsPlayed[i].toString();
-            }
-        }
-        return cardsPlayedString;
     }
 
     /**
@@ -256,47 +246,49 @@ public class RookState extends GameState implements Serializable {
         }
 
         if(winner() == 0){
-            team1Score += scoreForRound;
+            team1Score += scoreForRound;//add it to the teams total
+            roundScoreTeam1 += scoreForRound;//add it to the teams score for the round
             trickWinner[trickCount - 1] = 0;
         }
         else if( winner() == 2){//player 0 or 2 won then add to team 1
             team1Score += scoreForRound;
+            roundScoreTeam1 += scoreForRound;//add it to the teams score for the round
             trickWinner[trickCount - 1] = 2;
 
         }
         //team 2 below
         else if( winner() == 3){//player 0 or 2 won then add to team 1
             team2Score += scoreForRound;
+            roundScoreTeam2 += scoreForRound;//add it to the teams score for the round
             trickWinner[trickCount - 1] = 3;
 
         }
         else if(winner() == 1 ){//player 1 or 3 then add to team 2
             trickWinner[trickCount - 1] = 1;
+            roundScoreTeam2 += scoreForRound;//add it to the teams score for the round
             team2Score += scoreForRound;
         }
 
     }
 
-    public void resetArrays(){
-        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
-        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
-        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
-        for(int i = 0; i < trickWinner.length; i++){trickWinner[i] = 4;}
-    }
-
-    public void resetRound(){
-        // if they don't reach the points bid by end of round, remove from their teams score
-        /*if(bidWinner == 0 || bidWinner == 2) {
-            if(team1Score != getBidNum()) {
-                team1Score = team1Score - getBidNum();
+    //Method to check if the team that won the bid reached it
+   /* public void reachedBidAmount(){
+        if(bidWinner == 0 || bidWinner == 2){//if team1 won the bid
+            if(roundScoreTeam1 >= bidNum){
+                //do nothing they reached the bid
+            }else{
+                team1Score = team1Score - (bidNum + roundScoreTeam1);
             }
-        } else {
-            if(team2Score != getBidNum()) {
-                team2Score = team2Score - getBidNum();
+        }else if(bidWinner == 1 || bidWinner == 3){
+            if(roundScoreTeam2 >= bidNum){
+                //do nothing they reached the bid
+            }else{
+                team2Score -= (bidNum + roundScoreTeam1);
             }
-        }*/
+        }
+    }*/
 
-        //before the thing gets reset add the nest to the winning teams score
+    public int addNest(){
         int nestVal = 0;
         for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
 
@@ -305,11 +297,25 @@ public class RookState extends GameState implements Serializable {
         } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
             team2Score += nestVal;
         }
+        return nestVal;
+    }
+    public void resetArrays(){
+        for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
+        for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
+        for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
+        for(int i = 0; i < trickWinner.length; i++){trickWinner[i] = 4;}
+    }
+
+    public void resetRound(){
+        //reachedBidAmount();//check if the team that won the bid reached that amount
+        addNest();
         shuffle();
         dealHands();
         phase = BID_PHASE;
         trickCount = 0;
         playerId = 0;
+        roundScoreTeam1 = 0;
+        roundScoreTeam2 = 0;
         ackCount = 0;
         bidNum = 70;
         leadingSuit = null;
