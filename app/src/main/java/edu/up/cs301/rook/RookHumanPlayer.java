@@ -1,36 +1,28 @@
-package edu.up.cs301.rook;
-
-import edu.up.cs301.GameFramework.Card;
-import edu.up.cs301.GameFramework.players.GameHumanPlayer;
-import edu.up.cs301.GameFramework.GameMainActivity;
-import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.view.View.OnClickListener;
 
+import edu.up.cs301.GameFramework.Card;
+import edu.up.cs301.GameFramework.GameMainActivity;
+import edu.up.cs301.GameFramework.infoMessage.GameInfo;
+import edu.up.cs301.GameFramework.players.GameHumanPlayer;
+import edu.up.cs301.rook.AcknowledgeTrick;
+import edu.up.cs301.rook.BidAction;
+import edu.up.cs301.rook.PassingAction;
+import edu.up.cs301.rook.PlayCardAction;
+import edu.up.cs301.rook.R;
+import edu.up.cs301.rook.RookState;
+import edu.up.cs301.rook.TrumpSelection;
 
-/**
- * A GUI of a counter-player. The GUI displays the current value of the counter,
- * and allows the human player to press the '+' and '-' buttons in order to
- * send moves to the game.
- * <p>
- * Just for fun, the GUI is implemented so that if the player presses either button
- * when the counter-value is zero, the screen flashes briefly, with the flash-color
- * being dependent on whether the player is player 0 or player 1.
- *
- * @author Steven R. Vegdahl
- * @author Andrew M. Nuxoll
- * @version July 2013
- */
-public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
+public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
     /* instance variables */
 
     // The TextView the displays the current counter value
+    private TextView testResultsTextView;
     private TextView bidText;
 
     // the most recent game state, as given to us by the CounterLocalGame
@@ -43,7 +35,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
     private Button bidButton;
     private Button plusButton;
     private Button minusButton;
-    private Button resetButton;
 
     private ImageButton[] cardButtons = new ImageButton[9];
     public ImageView[] playedCards = new ImageView[4];
@@ -71,13 +62,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
      * @return the top object in the GUI's view heirarchy
      */
     public View getTopView() {
-        /*if(!(rookState == null) && rookState.bidEnd) { // Load the layout resource for our GUI
-            if (rookState.bidWinner == playerNum) {
-                return myActivity.findViewById(R.id.trump_suit_selection);
-            } else {
-                return myActivity.findViewById(R.id.main_activity_GUI);
-            }
-        }*/
         return myActivity.findViewById(R.id.main_activity_GUI);
     }//was game_state_test_layout
 
@@ -102,18 +86,24 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
 
+        /*if(rookState.bidEnd) { // Load the layout resource for our GUI
+            if (rookState.bidWinner == playerNum) {
+                bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
+                rookState.bidEnd = false;
+            }
+        }*/
+
         if (rookState.getPhase() == RookState.ACK_PHASE) {
             bidWinner.setText("Press any button to continue.");
+        } else if (rookState.getPhase() == RookState.TRUMP_PHASE) {
+            bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
         } else if(rookState.bidWinner != 4) {//was bidWinner
             bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
-            bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
-
+            //bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
         }
 
         leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
-
-
 
         getTopView().invalidate();
     }
@@ -158,6 +148,35 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
                 }
             }
         }
+
+
+        /*if(rookState != null && rookState.bidEnd && rookState.bidWinner == playerNum) {
+            rookState.trumpSuit = rookState.playerHands[playerNum][0].getCardSuit();
+        } else {*/
+
+        if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
+            if (button.getId() == R.id.cardButton0) {
+                rookState.trumpSuitIndex = 0;
+            } else if (button.getId() == R.id.cardButton1) {
+                rookState.trumpSuitIndex = 1;
+            } else if (button.getId() == R.id.cardButton2) {
+                rookState.trumpSuitIndex = 2;
+            } else if (button.getId() == R.id.cardButton3) {
+                rookState.trumpSuitIndex = 3;
+            } else if (button.getId() == R.id.cardButton4) {
+                rookState.trumpSuitIndex = 4;
+            } else if (button.getId() == R.id.cardButton5) {
+                rookState.trumpSuitIndex = 5;
+            } else if (button.getId() == R.id.cardButton6) {
+                rookState.trumpSuitIndex = 6;
+            } else if (button.getId() == R.id.cardButton7) {
+                rookState.trumpSuitIndex = 7;
+            } else if (button.getId() == R.id.cardButton8) {
+                rookState.trumpSuitIndex = 8;
+            }
+            game.sendAction(new TrumpSelection(this, rookState.trumpSuitIndex));
+        }
+
         if (button.getId() == R.id.cardButton0) {
             PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][0], 0);
             game.sendAction(playCardAction);
@@ -318,18 +337,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
         // remember the activity
         this.myActivity = activity;
 
-        /*if(!(rookState == null) && rookState.bidEnd) { // Load the layout resource for our GUI
-            if (rookState.bidWinner == playerNum) {
-                activity.setContentView(R.layout.trump_suit_selection);
-                rookState.bidEnd = false;
-            } else {
-                activity.setContentView(R.layout.activity_main);
-            }
-        } else {
-            activity.setContentView(R.layout.activity_main);
-        }
-        */
-
         // Load the layout resource for our GUI
         activity.setContentView(R.layout.activity_main);
         bidText = activity.findViewById(R.id.betValueTextView);
@@ -339,7 +346,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
         this.plusButton = (Button) activity.findViewById(R.id.plusButton);
         this.minusButton = (Button) activity.findViewById(R.id.minusButton);
         this.passButton = (Button) activity.findViewById(R.id.passButton);
-        this.resetButton = (Button) activity.findViewById(R.id.resetButton);
 
         this.cardButtons[0] = (ImageButton) activity.findViewById(R.id.cardButton0);
         this.cardButtons[1] = (ImageButton) activity.findViewById(R.id.cardButton1);
@@ -364,7 +370,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
 
         //listen for button presses
         bidButton.setOnClickListener(this);
-        resetButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
         minusButton.setOnClickListener(this);
         passButton.setOnClickListener(this);
@@ -379,3 +384,4 @@ public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
     }//setAsGui
 
 }// class CounterHumanPlayer
+

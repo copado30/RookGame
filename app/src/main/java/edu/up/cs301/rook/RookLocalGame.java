@@ -56,8 +56,6 @@ public class RookLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-
-
         Log.i("action", action.getClass().toString());
         //need to check if the action is a game action  first make a return false if statement
 
@@ -68,10 +66,15 @@ public class RookLocalGame extends LocalGame {
             if(rookState.bid(ba)){//if the action is legal
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
                 changePlayerTurn(playerNum);
+
                 if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
-                    rookState.setPhase(RookState.PLAY_PHASE);//since a player won then it is no longer the bidPhase
+                    if(rookState.bidWinner == 0) {
+                        rookState.setPhase(RookState.TRUMP_PHASE);
+                    } else {
+                        rookState.setPhase(RookState.PLAY_PHASE);
+                    }
                     rookState.playerId = 0;
                 }
                 return true;
@@ -81,7 +84,7 @@ public class RookLocalGame extends LocalGame {
             if(rookState.passTurn(pa)){//if they can  pass then do the following
                 rookState.setCanBid(playerNum, false);//player can no longer bid
                 if(rookState.isBiddingOver()){
-                    rookState.setPhase(RookState.PLAY_PHASE);
+                    rookState.setPhase(RookState.TRUMP_PHASE);
                 }
                 changePlayerTurn(playerNum);
                 return true;//action was successful
@@ -92,32 +95,21 @@ public class RookLocalGame extends LocalGame {
             if(pca.getCard().getCardSuit() == null){
                 //do nothing, will return false at the end
             }
+
             else if (rookState.playCard(pca)) {
-                if (playerNum == rookState.firstPlayerOfTrick()){
-                    rookState.leadingSuit = pca.getCard().getCardSuit();
-                }
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum);
-
-                //TODO REMOVE DEBUG
-                int fpot = rookState.firstPlayerOfTrick();
-                if (rookState.cardsPlayed[fpot] == null
-                        || rookState.cardsPlayed[fpot].getCardSuit() == null) {
-                    Log.i("wtf", "CardSuit is NUll");
+                try {
+                    rookState.leadingSuit = rookState.cardsPlayed[firstPlayerOfTrick()].getCardSuit();
+                }catch(NullPointerException npe) {
+                    int wtf = 3;
                 }
-
-                rookState.leadingSuit = rookState.cardsPlayed[rookState.firstPlayerOfTrick()].getCardSuit();//set the card suit to the first card played
-
-                if(playerNum == rookState.lastPlayerOfTrick()){//if its the player who plays last
+                if(playerNum == lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
-                    rookState.scoreCalc();
-                    rookState.playerId = rookState.firstPlayerOfTrick();//make the winner of the last trick the player that goes first
+                    scoreCalc();
+                    rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);
-                }
-                if(rookState.trickCount == 9){
-                    rookState.addNest();
-                    rookState.resetRound();
                 }
                 return true;
             }
@@ -127,9 +119,18 @@ public class RookLocalGame extends LocalGame {
                 changePlayerTurn(playerNum);
                 return true;
             }
+        } else if (action instanceof TrumpSelection) {
+            try {
+                rookState.trumpSuit = rookState.playerHands[0][((TrumpSelection) action).index].getCardSuit();//should
+            }catch(NullPointerException npe) {
+                int wtf = 3;
+            }
+            rookState.setPhase(RookState.PLAY_PHASE);
         }
+
         return false;
     }//makeMove
+
 
     //isPlayCard is a boolean that lets us know if it is being called by PlayCardAction
     public void changePlayerTurn(int currentPlayer){
@@ -142,6 +143,66 @@ public class RookLocalGame extends LocalGame {
 
     //The lastPlayerOfTrick method returns the player id of the last player to play a card in the trick
     //used to check when the trick is over in the PCA
+    public int lastPlayerOfTrick(){
+        if(rookState.trickCount != 0){//if its not the zero trick
+            //if the zero player wins then do nothing nothing cause that is the default
+            if(rookState.trickWinner[rookState.trickCount -1] == 1){//winner of the last trick
+                return 0;
+            } else if(rookState.trickWinner[rookState.trickCount -1] == 2){//winner of the last trick
+                return 1;
+            }
+            else if(rookState.trickWinner[rookState.trickCount -1] == 3){//winner of the last trick
+                return 2;
+            }
+        }
+        return 3;//default is player 3
+    }
+
+    //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
+    public int firstPlayerOfTrick(){
+        //timing seems to be off, probably because of trick count.
+
+        if(lastPlayerOfTrick() == 0){
+            return 1;
+        } else if (lastPlayerOfTrick() == 1) {
+            return 2;
+        }else if (lastPlayerOfTrick() == 2) {
+            return 3;
+        }
+
+        return 0;//if player 3 went last then player zero went first
+    }
+
+    public void scoreCalc(){
+        //team 1 player 0, player 2
+        //team 2 player 1, 3
+        int scoreForRound = 0;
+
+        for(int i = 0; i < rookState.cardsPlayed.length; i++){
+            scoreForRound += rookState.cardsPlayed[i].getCardVal();
+        }
+
+        if(rookState.winner() == 0){
+            rookState.team1Score += scoreForRound;
+            rookState.trickWinner[rookState.trickCount - 1] = 0;
+        }
+        else if( rookState.winner() == 2){//player 0 or 2 won then add to team 1
+            rookState.team1Score += scoreForRound;
+            rookState.trickWinner[rookState.trickCount - 1] = 2;
+
+        }
+        //team 2 below
+        else if( rookState.winner() == 3){//player 0 or 2 won then add to team 1
+            rookState.team2Score += scoreForRound;
+            rookState.trickWinner[rookState.trickCount - 1] = 3;
+
+        }
+        else if(rookState.winner() == 1 ){//player 1 or 3 then add to team 2
+            rookState.trickWinner[rookState.trickCount - 1] = 1;
+            rookState.team2Score += scoreForRound;
+        }
+
+    }
 
 
     /**
@@ -164,6 +225,10 @@ public class RookLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
+        if(rookState.trickCount == 9){
+            rookState.resetRound();
+
+        }
         if(rookState.team1Score >= 300 && rookState.team1Score > rookState.team2Score) {
             return "Team 1 has won the game with " + rookState.team1Score + " points";
         } else if (rookState.team2Score >= 300 && rookState.team1Score < rookState.team2Score) {
