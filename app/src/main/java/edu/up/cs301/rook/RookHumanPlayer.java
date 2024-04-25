@@ -84,8 +84,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
 
-        //currPhase.setText("");
-
 
         if (rookState.getPhase() == rookState.ACK_PHASE) {
             currPhase.setText(" Phase: Acknowledge");
@@ -93,9 +91,12 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
             bidWinner.setText("Now select the trump suit by selecting one of the cards in your hand.");
             currPhase.setText(" Phase: Trump");
-        } else if(rookState.bidWinner != 4) {//was bidWinner
-            bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
-            //bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
+        } else {
+            if(rookState.bidWinner  == 4){
+                bidWinner.setText("No player has won bid is: " + rookState.getBidNum() + "  ");
+            }else {
+                bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
+            }
         }
          if (rookState.getPhase() == rookState.BID_PHASE){
              currPhase.setText(" Phase: Bid");
@@ -159,9 +160,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
 
 
-        /*if(rookState != null && rookState.bidEnd && rookState.bidWinner == playerNum) {
-            rookState.trumpSuit = rookState.playerHands[playerNum][0].getCardSuit();
-        } else {*/
 
         if (rookState.getPhase() == rookState.DISCARD_PHASE && rookState.bidWinner == playerNum) {
             if (button.getId() == R.id.passButton) {
@@ -252,7 +250,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     public int getResourceIdForCard(Card c) {
         if(c.getCardSuit() == null) { return R.drawable.null_card; }
 
-        if (c.getCardSuit() == "Black") {
+        if (c.getCardSuit().equals("Black")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_black;
             } else if (c.getNum() == 6) {
@@ -274,7 +272,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_black;
             }
-        } else if (c.getCardSuit() == "Red") {
+        } else if (c.getCardSuit().equals("Red")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_red;
             } else if (c.getNum() == 6) {
@@ -296,7 +294,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_red;
             }
-        } else if (c.getCardSuit() == "Yellow") {
+        } else if (c.getCardSuit().equals("Yellow")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_yellow;
             } else if (c.getNum() == 6) {
@@ -318,7 +316,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_yellow;
             }
-        } else if (c.getCardSuit() == "Green") {
+        } else if (c.getCardSuit().equals("Green")) {
             if (c.getNum() == 5) {
                 return R.drawable.five_green;
             } else if (c.getNum() == 6) {
@@ -340,7 +338,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             } else if (c.getNum() == 14) {
                 return R.drawable.fourteen_green;
             }
-        } else if (c.getCardSuit() == "Rook") {
+        } else if (c.getCardSuit().equals("Rook")) {
             return R.drawable.rook;
         }
         return -1; //should not happen
