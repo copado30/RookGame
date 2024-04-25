@@ -16,8 +16,7 @@ public class RookState extends GameState implements Serializable {
     public static final int TRUMP_PHASE = 41; //trump suit selection
     public static final int ACK_PHASE = 39;  //acknowledge completed trick
     public int trumpSuitIndex;
-
-    int temp;
+    int discardCount;
     public int team1Score;
     public int team2Score;
     public int bidNum;
@@ -35,10 +34,10 @@ public class RookState extends GameState implements Serializable {
     public boolean[] wonBid = new boolean[4];
     public int[] bids = new int[4];
     public Card[] cardsPlayed = new Card[4];
+    public Card[] discardedCards = new Card[5];
     public Card[] deck = new Card[41];
     public int[] trickWinner = new int[9];
     public Card[][] playerHands = new Card[5][9];
-    public int[][] roundScores = new int[2][50];
 
     public String trumpSuit, leadingSuit;
 
@@ -51,6 +50,7 @@ public class RookState extends GameState implements Serializable {
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
         bidNum = 70;
+        discardCount = 0;
         playerId = 0;
         trickCount = 0;
         roundsPlayed = 0;
@@ -68,6 +68,7 @@ public class RookState extends GameState implements Serializable {
         team2Score = gameState.team2Score;
         bidNum = gameState.bidNum;
         playerId = gameState.playerId;
+        discardCount = gameState.discardCount;
         roundScoreTeam1 = gameState.roundScoreTeam1;
         roundScoreTeam2 = gameState.roundScoreTeam2;
         bidWinner = gameState.bidWinner;
@@ -78,6 +79,8 @@ public class RookState extends GameState implements Serializable {
         ackCount = gameState.ackCount;
         roundsPlayed = gameState.roundsPlayed;
         trumpSuitIndex = gameState.trumpSuitIndex;
+
+        for(int i = 0; i < discardedCards.length; i++) { discardedCards[i] = new Card (gameState.discardedCards[i]); }
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
 
@@ -221,6 +224,7 @@ public class RookState extends GameState implements Serializable {
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
         for(int i = 0; i < cardsPlayed.length; i++){cardsPlayed[i] = null;}
         for(int i = 0; i < trickWinner.length; i++){trickWinner[i] = 4;}
+        for(int i = 0; i < discardedCards.length; i++){discardedCards[i] = null;}
     }
 
     public void addNest(){
@@ -256,6 +260,7 @@ public class RookState extends GameState implements Serializable {
         phase = BID_PHASE;
         trickCount = 0;
         ackCount = 0;
+        discardCount = 0;
         playerId = 0;
         bidNum = 70;
         leadingSuit = null;
@@ -365,6 +370,13 @@ public class RookState extends GameState implements Serializable {
             ackCount = 0;
             clearPlayedCards();
             phase = PLAY_PHASE;
+        }
+    }
+    public void discardCardCount() {
+        discardCount++;
+        if (discardCount == 5) {
+            discardCount = 0;
+            phase = TRUMP_PHASE;
         }
     }
 }

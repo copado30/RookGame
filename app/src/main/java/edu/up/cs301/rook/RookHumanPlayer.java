@@ -91,18 +91,19 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             currPhase.setText(" Phase: Acknowledge");
             bidWinner.setText("Press any button to continue.");
         } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
-            bidWinner.setText("You won the bid! Select the trump suit by selecting one of the cards in your hand.");
+            bidWinner.setText("Now select the trump suit by selecting one of the cards in your hand.");
             currPhase.setText(" Phase: Trump");
         } else if(rookState.bidWinner != 4) {//was bidWinner
             bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
             //bidWinner.setText("  It is Player " +  ": " + rookState.playerId+  " turn");//displays the trick count instead of the bid amount
         }
          if (rookState.getPhase() == rookState.BID_PHASE){
-            currPhase.setText(" Phase: Bid");
+             currPhase.setText(" Phase: Bid");
         } else if (rookState.getPhase() == rookState.PLAY_PHASE){
-            currPhase.setText(" Phase: Play");
+             currPhase.setText(" Phase: Play");
         } else if (rookState.getPhase() == rookState.DISCARD_PHASE){
-            currPhase.setText(" Phase: Discard");
+             bidWinner.setText("You won the bid! Select up to 5 cards to trade with the nest. Press pass when you are done trading cards.");
+             currPhase.setText(" Phase: Discard");
         }
 
 
@@ -161,6 +162,36 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         /*if(rookState != null && rookState.bidEnd && rookState.bidWinner == playerNum) {
             rookState.trumpSuit = rookState.playerHands[playerNum][0].getCardSuit();
         } else {*/
+
+        if (rookState.getPhase() == rookState.DISCARD_PHASE && rookState.bidWinner == playerNum) {
+            if (button.getId() == R.id.passButton) {
+                game.sendAction(new DiscardingAction(this, -1));
+            }
+
+            int index = -1;
+
+                if (button.getId() == R.id.cardButton0) {
+                    index = 0;
+                } else if (button.getId() == R.id.cardButton1) {
+                    index = 1;
+                } else if (button.getId() == R.id.cardButton2) {
+                    index = 2;
+                } else if (button.getId() == R.id.cardButton3) {
+                    index = 3;
+                } else if (button.getId() == R.id.cardButton4) {
+                    index = 4;
+                } else if (button.getId() == R.id.cardButton5) {
+                    index = 5;
+                } else if (button.getId() == R.id.cardButton6) {
+                    index = 6;
+                } else if (button.getId() == R.id.cardButton7) {
+                    index = 7;
+                } else if (button.getId() == R.id.cardButton8) {
+                    index = 8;
+                }
+                game.sendAction(new DiscardingAction(this, index));
+
+        }
 
         if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
             if (button.getId() == R.id.cardButton0) {

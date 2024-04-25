@@ -72,7 +72,8 @@ public class RookLocalGame extends LocalGame {
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
                     if(rookState.bidWinner == 0) {
-                        rookState.setPhase(RookState.TRUMP_PHASE);
+                        rookState.setPhase(RookState.DISCARD_PHASE);
+                        /*rookState.setPhase(RookState.TRUMP_PHASE);*/
                     }
                     rookState.playerId = 0;
                 }
@@ -83,7 +84,7 @@ public class RookLocalGame extends LocalGame {
             if(rookState.passTurn(pa)){//if they can  pass then do the following
                 rookState.setCanBid(playerNum, false);//player can no longer bid
                 if(rookState.isBiddingOver()){
-                    rookState.setPhase(RookState.TRUMP_PHASE);
+                    rookState.setPhase(RookState.DISCARD_PHASE);
                 }
                 changePlayerTurn(playerNum);
                 return true;//action was successful
@@ -127,15 +128,26 @@ public class RookLocalGame extends LocalGame {
                 changePlayerTurn(playerNum);
                 return true;
             }
+        } else if (action instanceof DiscardingAction) {
+            DiscardingAction discardingAction = (DiscardingAction) action;
+            if(rookState.discardCard(discardingAction)) {
+                int index = ((DiscardingAction) action).getDiscardedIndex();
+                if(index == -1) {
+                    rookState.setPhase(rookState.TRUMP_PHASE);
+                    return true;
+                }
+                rookState.playerHands[playerNum][index] = rookState.playerHands[4][rookState.discardCount];
+                rookState.discardCardCount();
+                return true;
+            }
         } else if (action instanceof TrumpSelection) {
             try {
-                rookState.trumpSuit = rookState.playerHands[0][((TrumpSelection) action).index].getCardSuit();
+                rookState.trumpSuit = rookState.playerHands[playerNum][((TrumpSelection) action).index].getCardSuit();
             }catch(NullPointerException npe) {
                 int wtf = 3;
             }
             rookState.setPhase(RookState.PLAY_PHASE);
         }
-
         return false;
     }//makeMove
 

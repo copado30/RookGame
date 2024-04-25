@@ -11,7 +11,16 @@ public class DiscardingAction extends GameAction implements Serializable {
      *
      * @param player the player who created the action
      */
-    public DiscardingAction(GamePlayer player) {
+
+    public int index;
+
+    public DiscardingAction(GamePlayer player, int index) {
         super(player);
+        this.index = index;
     }
+
+    public int getDiscardedIndex() {
+        return index;
+    }
+
 }
