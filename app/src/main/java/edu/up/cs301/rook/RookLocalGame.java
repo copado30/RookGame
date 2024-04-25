@@ -24,6 +24,7 @@ public class RookLocalGame extends LocalGame {
     // remaining players are neither winners nor losers, but can interfere by
     // modifying the counter.
     public static final int TARGET_MAGNITUDE = 10;
+    int temp;
 
     // the game's state
     private RookState rookState;

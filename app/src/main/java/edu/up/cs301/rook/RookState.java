@@ -15,6 +15,7 @@ public class RookState extends GameState implements Serializable {
     public static final int ACK_PHASE = 39;  //acknowledge completed trick
     public static final int DISCARD_PHASE = 40;  //bidding
 
+    int temp;
     public int team1Score;
     public int team2Score;
     public int bidNum;

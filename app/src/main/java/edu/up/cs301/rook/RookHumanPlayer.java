@@ -29,6 +29,7 @@ import android.view.View.OnClickListener;
 public class RookHumanPlayer extends GameHumanPlayer implements OnClickListener{
 
     /* instance variables */
+    int temp;
 
     // The TextView the displays the current counter value
     private TextView bidText;
