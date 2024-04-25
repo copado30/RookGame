@@ -16,7 +16,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_weight=".25">
 
 
             <TextView
@@ -47,14 +48,14 @@
                 android:id="@+id/phase_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  Phase:"
+                android:text="Phase: "
                 android:textColor="#FFFFFFFF"/>
 
             <TextView
                 android:id="@+id/playerTurn_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  Player Turn:"
+                android:text="Player Turn: "
                 android:textColor="#FFFFFFFF"/>
 
         </LinearLayout>
@@ -63,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_weight="7"
+            android:layout_weight="4"
             android:orientation="vertical">
 
             <TextView
@@ -71,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#F3EBEB"
-                android:text="  Bid Winner "
+                android:text=" Bid Winner "
                 android:textColor="#000000" />
 
         </LinearLayout>
@@ -80,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:orientation="vertical">
 
             <TextView
@@ -109,7 +110,7 @@
 
             <TextView
                 android:id="@+id/team1ScoreTextView"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="3dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -118,7 +119,7 @@
                 android:id="@+id/team2ScoreTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="3dp"
                 android:text="0"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
