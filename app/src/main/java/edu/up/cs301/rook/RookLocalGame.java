@@ -112,6 +112,10 @@ public class RookLocalGame extends LocalGame {
                     rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);
                 }
+                if(rookState.trickCount == 9){
+                    rookState.addNest();
+                    rookState.resetRound();
+                }
                 return true;
             }
         } else if (action instanceof AcknowledgeTrick) {

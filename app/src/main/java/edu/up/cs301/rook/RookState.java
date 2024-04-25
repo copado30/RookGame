@@ -216,19 +216,7 @@ public class RookState extends GameState implements Serializable {
         for(int i = 0; i < trickWinner.length; i++){trickWinner[i] = 4;}
     }
 
-    public void resetRound(){
-        // if they don't reach the points bid by end of round, remove from their teams score
-        /*if(bidWinner == 0 || bidWinner == 2) {
-            if(team1Score != getBidNum()) {
-                team1Score = team1Score - getBidNum();
-            }
-        } else {
-            if(team2Score != getBidNum()) {
-                team2Score = team2Score - getBidNum();
-            }
-        }*/
-
-        //before the thing gets reset add the nest to the winning teams score
+    public void addNest(){
         int nestVal = 0;
         for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
 
@@ -237,10 +225,15 @@ public class RookState extends GameState implements Serializable {
         } else if(winner() == 1 || winner() == 3){//player 1 or 3 then add to team 2
             team2Score += nestVal;
         }
+    }
+
+    public void resetRound(){
+        //before the thing gets reset add the nest to the winning teams score
         shuffle();
         dealHands();
         phase = BID_PHASE;
         trickCount = 0;
+        ackCount = 0;
         playerId = 0;
         bidNum = 70;
         leadingSuit = null;

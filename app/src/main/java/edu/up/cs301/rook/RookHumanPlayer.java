@@ -1,3 +1,5 @@
+package edu.up.cs301.rook;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,13 +11,6 @@ import edu.up.cs301.GameFramework.Card;
 import edu.up.cs301.GameFramework.GameMainActivity;
 import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.players.GameHumanPlayer;
-import edu.up.cs301.rook.AcknowledgeTrick;
-import edu.up.cs301.rook.BidAction;
-import edu.up.cs301.rook.PassingAction;
-import edu.up.cs301.rook.PlayCardAction;
-import edu.up.cs301.rook.R;
-import edu.up.cs301.rook.RookState;
-import edu.up.cs301.rook.TrumpSelection;
 
 public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
