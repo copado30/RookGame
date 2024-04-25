@@ -108,7 +108,7 @@ public class RookLocalGame extends LocalGame {
                 }
                 if(playerNum == lastPlayerOfTrick()){//if its the player that should go last
                     rookState.trickCount++;
-                    scoreCalc();
+                    rookState.scoreCalc();
                     rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);
                 }
@@ -176,37 +176,6 @@ public class RookLocalGame extends LocalGame {
         }
 
         return 0;//if player 3 went last then player zero went first
-    }
-
-    public void scoreCalc(){
-        //team 1 player 0, player 2
-        //team 2 player 1, 3
-        int scoreForRound = 0;
-
-        for(int i = 0; i < rookState.cardsPlayed.length; i++){
-            scoreForRound += rookState.cardsPlayed[i].getCardVal();
-        }
-
-        if(rookState.winner() == 0){
-            rookState.team1Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount - 1] = 0;
-        }
-        else if( rookState.winner() == 2){//player 0 or 2 won then add to team 1
-            rookState.team1Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount - 1] = 2;
-
-        }
-        //team 2 below
-        else if( rookState.winner() == 3){//player 0 or 2 won then add to team 1
-            rookState.team2Score += scoreForRound;
-            rookState.trickWinner[rookState.trickCount - 1] = 3;
-
-        }
-        else if(rookState.winner() == 1 ){//player 1 or 3 then add to team 2
-            rookState.trickWinner[rookState.trickCount - 1] = 1;
-            rookState.team2Score += scoreForRound;
-        }
-
     }
 
 

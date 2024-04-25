@@ -22,11 +22,13 @@ public class RookState extends GameState implements Serializable {
     public int team2Score;
     public int bidNum;
     public int playerId;
-    public int roundScore;
+    public int roundScoreTeam1;
+    public int roundScoreTeam2;
     public int trickCount;
     private int phase;
     public int bidWinner;
     public boolean bidEnd;
+    public int roundsPlayed;
     public int ackCount;  //how many players have acknowledged the current trick
 
     private boolean[] canBid = new boolean[4];
@@ -36,6 +38,7 @@ public class RookState extends GameState implements Serializable {
     public Card[] deck = new Card[41];
     public int[] trickWinner = new int[9];
     public Card[][] playerHands = new Card[5][9];
+    public int[][] roundScores = new int[2][50];
 
     public String trumpSuit, leadingSuit;
 
@@ -43,12 +46,14 @@ public class RookState extends GameState implements Serializable {
     public RookState() {
         team1Score = 0;
         team2Score = 0;
-        roundScore = 0;
+        roundScoreTeam1 = 0;
+        roundScoreTeam2 = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
         bidNum = 70;
         playerId = 0;
         trickCount = 0;
+        roundsPlayed = 0;
         trumpSuit = null;
         leadingSuit = null;//can give it a default value if necessary
         resetArrays();
@@ -63,13 +68,15 @@ public class RookState extends GameState implements Serializable {
         team2Score = gameState.team2Score;
         bidNum = gameState.bidNum;
         playerId = gameState.playerId;
-        roundScore = gameState.roundScore;
+        roundScoreTeam1 = gameState.roundScoreTeam1;
+        roundScoreTeam2 = gameState.roundScoreTeam2;
         bidWinner = gameState.bidWinner;
         phase = gameState.phase;
         trumpSuit = gameState.trumpSuit;
         leadingSuit = gameState.leadingSuit;
         trickCount = gameState.trickCount;
         ackCount = gameState.ackCount;
+        roundsPlayed = gameState.roundsPlayed;
         trumpSuitIndex = gameState.trumpSuitIndex;
 
         for(int i = 0; i < deck.length; i++) { deck[i] = new Card (gameState.deck[i]); }
@@ -227,7 +234,22 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
+    public void removeBidScore() {
+        // if they don't reach the points bid by end of round, remove from their teams score
+        if (bidWinner == 0 || bidWinner == 2) {
+            if (roundScoreTeam1 < bidNum) {
+                team1Score = team1Score - roundScoreTeam1 - bidNum;
+            } else {
+                if (roundScoreTeam2 < bidNum) {
+                    team2Score = team2Score - roundScoreTeam1 - bidNum;
+                }
+            }
+        }
+    }
+
     public void resetRound(){
+        removeBidScore();
+
         //before the thing gets reset add the nest to the winning teams score
         shuffle();
         dealHands();
@@ -237,6 +259,9 @@ public class RookState extends GameState implements Serializable {
         playerId = 0;
         bidNum = 70;
         leadingSuit = null;
+        roundScoreTeam1 = 0;
+        roundScoreTeam2 = 0;
+
         resetArrays();
 
     }//resetRound
@@ -298,6 +323,39 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
+    public void scoreCalc(){
+        //team 1 player 0, player 2
+        //team 2 player 1, 3
+        int scoreForRound = 0;
+
+        for(int i = 0; i < cardsPlayed.length; i++){
+            scoreForRound += cardsPlayed[i].getCardVal();
+        }
+
+        if(winner() == 0){
+            team1Score += scoreForRound;
+            roundScoreTeam1 += scoreForRound;
+            trickWinner[trickCount - 1] = 0;
+        }
+        else if(winner() == 2){//player 0 or 2 won then add to team 1
+            team1Score += scoreForRound;
+            roundScoreTeam1 += scoreForRound;
+            trickWinner[trickCount - 1] = 2;
+        }
+        //team 2 below
+        else if(winner() == 3){//player 0 or 2 won then add to team 1
+            team2Score += scoreForRound;
+            roundScoreTeam2 += scoreForRound;
+            trickWinner[trickCount - 1] = 3;
+
+        }
+        else if(winner() == 1 ){//player 1 or 3 then add to team 2
+            trickWinner[trickCount - 1] = 1;
+            roundScoreTeam2 += scoreForRound;
+            team2Score += scoreForRound;
+        }
+
+    }
 
 
     /** user acknowledges current trick */
