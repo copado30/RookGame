@@ -1,7 +1,9 @@
 package edu.up.cs301.rook;
 
 import edu.up.cs301.GameFramework.Card;
+import edu.up.cs301.GameFramework.actionMessage.GameAction;
 import edu.up.cs301.GameFramework.infoMessage.GameState;
+import edu.up.cs301.GameFramework.players.GamePlayer;
 
 import java.io.Serializable;
 import java.util.*;
@@ -379,4 +381,6 @@ public class RookState extends GameState implements Serializable {
             phase = TRUMP_PHASE;
         }
     }
+
+
 }

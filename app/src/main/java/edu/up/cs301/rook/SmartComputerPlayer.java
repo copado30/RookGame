@@ -193,4 +193,9 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         }//for
         return goodCardCount;
     }
+
+    @Override
+    public void setPlayerNum(int playerNum) {
+        //ignore
+    }
 }

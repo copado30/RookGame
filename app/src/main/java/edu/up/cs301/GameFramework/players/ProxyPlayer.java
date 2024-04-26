@@ -24,6 +24,7 @@ public class ProxyPlayer implements GamePlayer {
 
     // the game object
     private Game game;
+    private int myPlayerNum = -9999;
 
     // the object that connects us to the network
     private NetworkObjectPasser networkPasser;
@@ -151,9 +152,12 @@ public class ProxyPlayer implements GamePlayer {
 
     /** just return a flag value to indicate you shouldn't be calling this method on ProxyPlayer */
     @Override
-    public int getPlayerNum() { return -9999; }
+    public int getPlayerNum() { return myPlayerNum; }
 
-
+    @Override
+    public void setPlayerNum(int playerNum) {
+        this.myPlayerNum = playerNum;
+    }
 
 }
 

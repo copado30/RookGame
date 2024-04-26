@@ -425,5 +425,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
 
     }//setAsGui
 
+    @Override
+    public void setPlayerNum(int playerNum) {
+        //ignore
+    }
+
 }// class CounterHumanPlayer
 

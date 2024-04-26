@@ -62,6 +62,18 @@ public class RookLocalGame extends LocalGame {
 
         int playerNum = action.getPlayer().getPlayerNum();
 
+        //Nuxoll doesn't understand why proxyplayer doesn't know its id number
+        if (playerNum == -9999) {
+            playerNum = 0;
+            for(GamePlayer gp : this.players) {
+                if (gp.equals(action.getPlayer())) {
+                    break;
+                }
+                playerNum++;
+                gp.setPlayerNum(playerNum);
+            }
+        }
+
         if (action instanceof BidAction) {
             BidAction ba = (BidAction)action;
             if(rookState.bid(ba)){//if the action is legal

@@ -104,4 +104,9 @@ public class RookComputerPlayer1 extends GameComputerPlayer {
         //sleep(0.5);
     }
 
+    @Override
+    public void setPlayerNum(int playerNum) {
+        //ignore
+    }
+
 }

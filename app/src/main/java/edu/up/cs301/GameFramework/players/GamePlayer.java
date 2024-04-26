@@ -40,5 +40,7 @@ public interface GamePlayer {
     //retrieve the id number of this player
     public int getPlayerNum();
 
+    public void setPlayerNum(int playerNum);
+
 
 }// interface GamePlayer
