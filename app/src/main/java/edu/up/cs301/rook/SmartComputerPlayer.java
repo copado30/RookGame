@@ -46,8 +46,8 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         if(rookState.playerId == playerNum){ //if it's the bots turn
 
             if(rookState.isBidPhase()){
-                if(rookState.bidNum >= bidAmountCalc(rookState)){
-                    //have they out bid us?
+                int myBid = bidAmountCalc(rookState);
+                if(rookState.bidNum >= myBid){ // have they out bid us?
                     PassingAction passingAction = new PassingAction(this);
                     game.sendAction(passingAction);
                 }
