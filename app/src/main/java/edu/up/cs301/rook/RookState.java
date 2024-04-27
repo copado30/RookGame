@@ -51,7 +51,7 @@ public class RookState extends GameState implements Serializable {
         roundScoreTeam2 = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
-        bidNum = 70;
+        bidNum = 69;
         discardCount = 0;
         playerId = 0;
         trickCount = 0;
@@ -124,7 +124,12 @@ public class RookState extends GameState implements Serializable {
      * when its the bidding round and their turn to bid
      */
     public boolean bid(BidAction action){
-        if(phase != BID_PHASE ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){//1 needs to be replaced by the player who's turn it is
+        boolean bidIsLegal;
+        if(bidNum >= action.getTotalBid() ){
+           bidIsLegal = false;
+        } else { bidIsLegal = true; }
+
+        if(phase != BID_PHASE ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false || !bidIsLegal){//1 needs to be replaced by the player who's turn it is
             return false;
         }
         return true;
@@ -264,7 +269,7 @@ public class RookState extends GameState implements Serializable {
         ackCount = 0;
         discardCount = 0;
         playerId = 0;
-        bidNum = 70;
+        bidNum = 69;
         leadingSuit = null;
         roundScoreTeam1 = 0;
         roundScoreTeam2 = 0;
