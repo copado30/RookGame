@@ -103,7 +103,10 @@ public class RookState extends GameState implements Serializable {
 
     /**
      *
-     * when player wins nest, they can discard
+     * when player wins nest, they can discard up to 5 cards
+     * makes sure the discarding action is legal, used in the RookLocalPLayer
+     * @param action - the discarding action it is checking
+     *@return whether the move was legal or not
      */
     public boolean discardCard(DiscardingAction action){
         if( (phase != DISCARD_PHASE) ||  playerId != action.getPlayer().getPlayerNum() || bidWinner == 4) {
@@ -115,8 +118,10 @@ public class RookState extends GameState implements Serializable {
 
 
     /**
-     *
-     * when its the bidding round and their turn to bid
+     * During the Bid Phase the players will send bid actions this method
+     * makes sure that the bid action is legal
+     * @param action - the discarding action it is checking
+     * @return whether the move was legal or not
      */
     public boolean bid(BidAction action){
         boolean bidIsLegal;
@@ -130,6 +135,12 @@ public class RookState extends GameState implements Serializable {
         return true;
     }
 
+    /**
+     * Passes the turn during the bidding phase
+     *
+     * @param action
+     * @return True if the pass is lega, false otherwise
+     */
     public boolean passTurn(PassingAction action){
         if((phase != BID_PHASE) ||  playerId != action.getPlayer().getPlayerNum() || canBid[playerId] == false){
             return false;
@@ -137,7 +148,12 @@ public class RookState extends GameState implements Serializable {
         return true;
     }
 
-
+    /**
+     * Plays a card during the play phase
+     *
+     * @param action
+     * @return True if the action is legal and the card can be played, false otherwise
+     */
     public boolean playCard(PlayCardAction action){
         if(phase != PLAY_PHASE || playerId != action.getPlayer().getPlayerNum()) {
             return false;
@@ -145,7 +161,10 @@ public class RookState extends GameState implements Serializable {
         return true;
     }
 
-    //^^ checking if the actions are legal moves
+
+    /**
+     * creates the deck of cards for the game
+     */
     public void createDeck(){
         String[] colors = new String[]{"Black","Green","Yellow","Red"};
         int newColorStart = 0; // where in array the new set of colored cards begins
@@ -162,6 +181,10 @@ public class RookState extends GameState implements Serializable {
         }
         deck[40] = new Card(20, 20, "Rook");
     }
+
+    /**
+     *  Shuffles the deck of cards
+     */
     public void shuffle(){
         for(int i = 0; i < 1000; i++){
             Random spot = new Random();
@@ -174,6 +197,10 @@ public class RookState extends GameState implements Serializable {
 
         //chooses randomly what cards change spots and does it a bunch of times
     }
+
+    /**
+     * Deals hands to players and the nest
+     */
     public void dealHands(){
         //player hands are [4 players][9 cards per player]
         int deckNumberToHand = 0;
@@ -187,6 +214,11 @@ public class RookState extends GameState implements Serializable {
             }
         }
     }
+
+    /**
+     * Determines the winner of a trick based on the cards played.
+     * @return The index of the winning player
+     */
     public int winner(){
         int winningSuitPlayer = 0, winningTrumpPlayer = 0, winningSuitNum = 0, winningTrumpNum = 0, randomWin = 0, randomWinPlayer = 0;
 
@@ -221,6 +253,9 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
+    /**
+     * Resets arrays used to track game state.
+     */
     public void resetArrays(){
         for(int i = 0; i < canBid.length; i++){canBid[i] = true;}
         for(int i = 0; i < wonBid.length; i++){wonBid[i] = false;}
@@ -229,6 +264,9 @@ public class RookState extends GameState implements Serializable {
         for(int i = 0; i < discardedCards.length; i++){discardedCards[i] = null;}
     }
 
+    /**
+     * Adds points from the nest to the winning team's score
+     */
     public void addNest(){
         int nestVal = 0;
         for(int i = 0; i < 5; i++){nestVal += playerHands[4][i].getCardVal();}
@@ -240,6 +278,9 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
+    /**
+     * Removes bid score from team's score if not reached.
+     */
     public void removeBidScore() {
         // if they don't reach the points bid by end of round, remove from their teams score
         if (bidWinner == 0 || bidWinner == 2) {
@@ -253,6 +294,9 @@ public class RookState extends GameState implements Serializable {
         }
     }
 
+    /**
+     * Resets the game state for a new round.
+     */
     public void resetRound(){
         removeBidScore();
 
@@ -272,6 +316,11 @@ public class RookState extends GameState implements Serializable {
         resetArrays();
 
     }//resetRound
+
+    /**
+     * Chccks if the bidding phase is over and determines the bid winner.
+     * @return True if the bidding phase is over, false otherwise.
+     */
     public boolean isBiddingOver(){
         int passCount = 0;//how many people have passed
         for(int i = 0; i < canBid.length; i++){
@@ -292,28 +341,54 @@ public class RookState extends GameState implements Serializable {
         return false;
     }
 
+    /**
+     * Gets the current bid number.
+     * @return The current bid number
+     */
     public int getBidNum() {
         return this.bidNum;
     }
 
+    /**
+     * Sets the bid number to the given value.
+     * @param bidNum The new bid number to set.
+     */
     public void setBidNum(int bidNum) {
         this.bidNum = bidNum;
     }
 
+    /**
+     * Gets whether the given player can bid.
+     *
+     * @param playerId The ID of the player
+     * @return True if the player can bid, false otherwise.
+     */
     public boolean getCanBid(int playerId) {
         return canBid[playerId];
     }
+
+    /**
+     * Sets whether the given player can bid.
+     * @param playerNumber
+     * @param canBid
+     */
     public void setCanBid(int playerNumber, boolean canBid) {
         this.canBid[playerNumber] = canBid;
     }
 
+    /**
+     * Checks if it's the bidding phase.
+     * @return True if it's the bidding phase, false otherwise
+     */
     public boolean isBidPhase(){
         return (phase == BID_PHASE);
     }
 
+
     public void setPhase(int newPhase){
         this.phase = newPhase;
     }
+
 
     public int getPhase() {
         return this.phase;
@@ -370,6 +445,10 @@ public class RookState extends GameState implements Serializable {
             phase = PLAY_PHASE;
         }
     }
+
+    /**
+     * Counts discarded cards and moves to the next phase if necessary.
+     */
     public void discardCardCount() {
         discardCount++;
         if (discardCount == 5) {
