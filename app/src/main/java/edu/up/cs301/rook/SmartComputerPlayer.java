@@ -10,7 +10,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Tickable;
 
 /**
- * BASE CODE: A computer-version of a counter-player.  Since this is such a simple game,
+ * A computer-version of a counter-player.  Since this is such a simple game,
  * it just sends "+" and "-" commands with equal probability, at an average
  * rate of one per second.
  *
@@ -19,17 +19,20 @@ import edu.up.cs301.GameFramework.utilities.Tickable;
  *
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
+ * @author Rafael Copado
+ * @author Shubu Aryal
+ * @author Carolyn Sousa
  * @version September 2013
  */
 public class SmartComputerPlayer extends GameComputerPlayer {
-    String[] colors = new String[]{"Black","Green","Yellow","Red"};
 
     /**
-     * Constructor for objects of SmartComputerPlayer
+     * Constructor for objects of class CounterComputerPlayer1
      *
      * @param name
      * 		the player's name
      */
+    String[] colors = new String[]{"Black","Green","Yellow","Red"};
     public SmartComputerPlayer(String name) {super(name);}
 
     /**
@@ -56,12 +59,13 @@ public class SmartComputerPlayer extends GameComputerPlayer {
                     BidAction bidAction = new BidAction(this,bidAmountCalc(rookState));
                     game.sendAction(bidAction);
                 }
+            } else if(rookState.getPhase() == rookState.DISCARD_PHASE) {
+                // will pass rather than trade with nest
+                game.sendAction(new DiscardingAction(this, -1));
             } else if(rookState.getPhase() == rookState.TRUMP_PHASE) {
-                // since the trumpSelection expects and index
-                // hard coded the trump suit,phase change and player turn
-                rookState.trumpSuit = selectTrumpSuit(rookState);
-                rookState.setPhase(RookState.PLAY_PHASE);
-                rookState.playerId = 0;
+                // since the trumpSelection expects an index
+                game.sendAction(new TrumpSelection(this, selectTrumpSuit(rookState)));
+
             } else if (rookState.getPhase() == RookState.ACK_PHASE) {
                 game.sendAction(new AcknowledgeTrick(this));
             } else if(rookState.getPhase() == RookState.PLAY_PHASE){//if its not the bid phase
@@ -104,13 +108,7 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         } // if its the players turn
     }
 
-    /**
-     * Should return the index of the card that has the highest cardNum of the searchColor
-     *
-     * @param rookState
-     * @param searchColor
-     * */
-    public int highestOfColor(RookState rookState, String searchColor){
+    public int highestOfColor(RookState rookState,String searchColor){
         // should return the index of the card that has the
         // highest cardNum of the searchColor
         int indexOfCardToPlay = -1;
@@ -126,12 +124,9 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         return indexOfCardToPlay;
     }
 
-    /**
-     * Will calculate how much they can bid based on their hand
-     *
-     * @param rookState
-     */
     public int bidAmountCalc(RookState rookState){
+        // this method will calculate how much they can bid
+        // based on their hand
         if(handQuality(rookState) <= 3 ) {
             return 75; // do not bid high because they have a bad hand
         } else if(handQuality(rookState) <= 5) {
@@ -143,45 +138,42 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         //bidding anything over 90 is hard to reach
     }
 
-    /**
-     * Has them select trump suit based on the most colors they have in their hand
-     *
-     * @param rookState
-     */
-    public String selectTrumpSuit(RookState rookState){
-        int dummy = -100;
+    public int selectTrumpSuit(RookState rookState){
+        int colorCompare = -100;
+
         int arrayCountOfColor[] = new int[4];
         String returnString = "";
-
         for(int i = 0; i < 9; i++){
             if(rookState.playerHands[playerNum][i].getCardSuit() == null){
                 // don't do anything card is empty(should not happen)
-            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[0])) {
+            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[0])) {
                 arrayCountOfColor[0]++;
-            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[1])) {
+            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[1])) {
                 arrayCountOfColor[1]++;
-            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[2])) {
+            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[2])) {
                 arrayCountOfColor[2]++;
-            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[3])) {
+            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[3])) {
                 arrayCountOfColor[3]++;
             }
         }
         // see which color they have the most of
         for(int i = 0; i < arrayCountOfColor.length; i++){
-            if(arrayCountOfColor[i] > dummy){
+            if(arrayCountOfColor[i] > colorCompare){
                 returnString = colors[i];
-                dummy = arrayCountOfColor[i];
+                colorCompare = arrayCountOfColor[i];
             }
         }
-        return returnString;
-    }
+        for(int i = 0; i < rookState.playerHands[playerNum].length; i++){
+            if(rookState.playerHands[playerNum][i].getCardSuit().equals(returnString)){
+                return i;
+            }
+        }
 
-    /**
-     * Will return number between 0 and 9 depending on how many good cards they have. Good =
-     * cards that are worth points and a higher number than 9
-     *
-     * @param rookState
-     */
+        return -1;//should not happen
+    }
+    // will return a number between 0 and nine
+    // depending on how many good cards they have
+    // good = cards that are worth points && cards with a higher number than 9
     public int handQuality(RookState rookState){
         int goodCardCount = 0;
         for(int i = 0; i < 9; i++) {
@@ -196,9 +188,6 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         return goodCardCount;
     }
 
-    /***
-     * @param playerNum
-     */
     @Override
     public void setPlayerNum(int playerNum) {
         //ignore

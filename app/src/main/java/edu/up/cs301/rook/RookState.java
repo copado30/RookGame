@@ -308,7 +308,7 @@ public class RookState extends GameState implements Serializable {
         ackCount = 0;
         discardCount = 0;
         playerId = 0;
-        bidNum = 69;
+        bidNum = 0;
         leadingSuit = null;
         roundScoreTeam1 = 0;
         roundScoreTeam2 = 0;

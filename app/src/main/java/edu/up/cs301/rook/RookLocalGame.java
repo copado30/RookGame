@@ -18,6 +18,9 @@ import android.util.Log;
  *
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
+ * @author Rafael Copado
+ * @author Shubu Aryal
+ * @author Carolyn Sousa
  * @version July 2013
  */
 public class RookLocalGame extends LocalGame {
@@ -79,7 +82,7 @@ public class RookLocalGame extends LocalGame {
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
 
-            if(rookState.passTurn(pa)){ // if they can  pass then do the following
+            if(rookState.passTurn(pa)){ // if they can pass then do the following
                 rookState.setCanBid(playerNum, false); // player can no longer bid
                 if(rookState.isBiddingOver()){
                     rookState.setPhase(RookState.DISCARD_PHASE);
