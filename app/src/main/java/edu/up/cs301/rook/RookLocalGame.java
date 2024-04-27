@@ -9,26 +9,19 @@ import edu.up.cs301.GameFramework.players.ProxyPlayer;
 import android.util.Log;
 
 /**
- * A class that represents the state of a game. In our counter game, the only
+ * BASE CODE: A class that represents the state of a game. In our game, the only
  * relevant piece of information is the value of the game's counter. The
  * CounterState object is therefore very simple.
+ *
+ * ROOK: Sends all actions: bidAction, PlayCardAction, PassingAction, DiscardingAction, and TrumpSelection
+ * Includes helper methods for makeMove method responding to these actions
  *
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
  * @version July 2013
  */
 public class RookLocalGame extends LocalGame {
-
-    // When a counter game is played, any number of players. The first player
-    // is trying to get the counter value to TARGET_MAGNITUDE; the second player,
-    // if present, is trying to get the counter to -TARGET_MAGNITUDE. The
-    // remaining players are neither winners nor losers, but can interfere by
-    // modifying the counter.
-    public static final int TARGET_MAGNITUDE = 10;
-    int temp;
-
-    // the game's state
-    private RookState rookState;
+    private RookState rookState; // the game's state
 
     /**
      * can this player move
@@ -54,12 +47,14 @@ public class RookLocalGame extends LocalGame {
     }
 
     /**
-     * Types of GameAction is BidAction, PassingAction, PlayCardAction, and DiscardingAction
+     * Types of GameAction is BidAction, PassingAction, PlayCardAction, DiscardingAction,
+     * and TrumpSelection
      */
     @Override
     protected boolean makeMove(GameAction action) {
         Log.i("action", action.getClass().toString());
-        //need to check if the action is a game action  first make a return false if statement
+
+        // need to check if the action is a game action first make a return false if statement
         if(rookState.trickCount == 0 && rookState.playerId == 0){
             correctPlayerID();
         }

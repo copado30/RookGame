@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.*;
 
 
-
-
 public class RookState extends GameState implements Serializable {
     public static final int BID_PHASE = 37;  //bidding
     public static final int DISCARD_PHASE = 40;  //bidding
@@ -51,7 +49,7 @@ public class RookState extends GameState implements Serializable {
         roundScoreTeam2 = 0;
         bidWinner = 4;//players are 0-3, 4 means no one has won
         phase = BID_PHASE;
-        bidNum = 69;
+        bidNum = 0;
         discardCount = 0;
         playerId = 0;
         trickCount = 0;

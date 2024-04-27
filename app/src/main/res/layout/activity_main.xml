@@ -11,52 +11,32 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.05"
         android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight=".25">
+            android:layout_weight="1">
 
 
             <TextView
                 android:id="@+id/leadingSuitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  Leading Suit: "
+                android:text="  Leading: "
+                android:textSize="20dp"
                 android:textColor="#FFFFFF" />
             <TextView
                 android:id="@+id/trumpSuitTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="  Trump Suit: "
+                android:textSize="20dp"
+                android:text="  Trump: "
                 android:textColor="#FFFFFF"
                 android:layout_marginRight="30dp"/>
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight=".25">
-
-            <TextView
-                android:id="@+id/phase_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Phase: "
-                android:textColor="#FFFFFFFF"/>
-
-            <TextView
-                android:id="@+id/playerTurn_textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Player Turn: "
-                android:textColor="#FFFFFFFF"/>
 
         </LinearLayout>
 
@@ -73,7 +53,10 @@
                 android:layout_height="wrap_content"
                 android:background="#F3EBEB"
                 android:text=" Bid Winner "
-                android:textColor="#000000" />
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="#000000">
+            </TextView>
 
         </LinearLayout>
 
@@ -81,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -89,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Team 1 Score: "
+                android:textSize="20dp"
                 android:textColor="#FFFFFF" />
 
             <TextView
@@ -96,6 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Team 2 Score: "
+                android:textSize="20dp"
                 android:textColor="#FFFFFF" />
 
 
@@ -114,6 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
+                android:textSize="20dp"
                 android:textColor="#FFFFFF" />
             <TextView
                 android:id="@+id/team2ScoreTextView"
@@ -121,20 +107,45 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="3dp"
                 android:text="0"
+                android:textSize="20dp"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 
 
     </LinearLayout>
 
-
-
-
-    <ImageView
-        android:id="@+id/stackTop"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/rook_stack_top" />
+        android:layout_weight="0.05"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight=".25">
+
+            <TextView
+                android:id="@+id/phase_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  Phase: "
+                android:textSize="20dp"
+                android:textColor="#FFFFFFFF"/>
+
+            <TextView
+                android:id="@+id/playerTurn_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="  Player Turn: "
+                android:textColor="#FFFFFFFF"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -149,17 +160,10 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:id="@+id/stackLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="100dp"
-                android:src="@drawable/rook_stack_left" />
-
-            <ImageView
                 android:id="@+id/player1_played_card"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
-                android:layout_marginRight="200dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="50dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/seven_black" />
@@ -173,19 +177,20 @@
 
             <ImageView
                 android:id="@+id/player2_played_card"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
-                android:layout_marginBottom="50dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginBottom="150dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/seven_black" />
 
             <ImageView
                 android:id="@+id/player0_played_card"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
+                android:layout_marginTop="150dp"
                 android:src="@drawable/seven_black" />
         </LinearLayout>
 
@@ -196,19 +201,12 @@
 
             <ImageView
                 android:id="@+id/player3_played_card"
-                android:layout_width="105dp"
-                android:layout_height="105dp"
-                android:layout_marginLeft="200dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginHorizontal="50dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/seven_black" />
-
-            <ImageView
-                android:id="@+id/stackRight"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="100dp"
-                android:src="@drawable/rook_stack_right" />
 
         </LinearLayout>
 
@@ -323,13 +321,15 @@
             android:id="@+id/plusButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+" />
+            android:text="+"
+            android:textSize="20dp"/>
 
         <Button
             android:id="@+id/minusButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="-" />
+            android:text="-"
+            android:textSize="20dp"/>
 
         <TextView
             android:id="@+id/betValueTextView"
@@ -338,6 +338,7 @@
             android:layout_weight="1"
             android:background="#F3EDED"
             android:text="70"
+            android:textSize="20dp"
             android:textAlignment="center" />
 
         <Button
@@ -345,14 +346,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BID" />
+            android:text="BID"
+            android:textSize="20dp"/>
 
         <Button
             android:id="@+id/passButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="PASS" />
+            android:text="PASS"
+            android:textSize="20dp"/>
 
     </LinearLayout>
 </LinearLayout>
