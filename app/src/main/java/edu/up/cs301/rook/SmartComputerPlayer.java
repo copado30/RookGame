@@ -111,13 +111,15 @@ public class SmartComputerPlayer extends GameComputerPlayer {
     public int highestOfColor(RookState rookState,String searchColor){
         // should return the index of the card that has the
         // highest cardNum of the searchColor
-        int indexOfCardToPlay = -1;
+        int indexOfCardToPlay = 0;
+        int cardNum = 0;
         for(int i = 0; i < 9;i++){
             if(rookState.playerHands[playerNum][i].getCardSuit() == null){
                 // do nothing we don't want a null card
             } else {
-                if(rookState.playerHands[playerNum][i].getCardSuit().equals(searchColor)){
+                if(rookState.playerHands[playerNum][i].getCardSuit().equals(searchColor) && rookState.playerHands[playerNum][i].getNum() > cardNum){
                     indexOfCardToPlay = i;
+                    cardNum = rookState.playerHands[playerNum][i].getNum();
                 }
             }
         }

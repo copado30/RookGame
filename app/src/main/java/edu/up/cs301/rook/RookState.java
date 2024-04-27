@@ -285,10 +285,10 @@ public class RookState extends GameState implements Serializable {
         // if they don't reach the points bid by end of round, remove from their teams score
         if (bidWinner == 0 || bidWinner == 2) {
             if (roundScoreTeam1 < bidNum) {
-                team1Score = team1Score - roundScoreTeam1 - bidNum;
+                team1Score = team1Score - bidNum;
             } else {
                 if (roundScoreTeam2 < bidNum) {
-                    team2Score = team2Score - roundScoreTeam1 - bidNum;
+                    team2Score = team2Score - bidNum;
                 }
             }
         }

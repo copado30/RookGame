@@ -175,7 +175,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             }
         } else if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
             sendAction(TRUMP, button.getId());
-        } else {//assume its the play phase
+        } else if (rookState.getPhase() == rookState.PLAY_PHASE) {//assume its the play phase
             sendAction(PLAY,button.getId());
         }
     } //onClick
@@ -288,7 +288,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      * @param buttonId the button that was clicked
      */
     public void sendAction(int actionType, int buttonId){
-        int indexOfButtonClicked = -1;//should get changed if a button was clicked
+        int indexOfButtonClicked = 0;//should get changed if a button was clicked
         int index = 0;
 
         for(int i = 0; i < cardButtons.length; i++){

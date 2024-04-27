@@ -116,7 +116,7 @@ public class RookLocalGame extends LocalGame {
                 if(rookState.trickCount == 9){ // if last winner of round, add Nest to their score and reset
                     rookState.addNest();
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(800);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
