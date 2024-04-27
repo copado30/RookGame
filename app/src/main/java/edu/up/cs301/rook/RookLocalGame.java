@@ -4,6 +4,7 @@ import edu.up.cs301.GameFramework.infoMessage.GameState;
 import edu.up.cs301.GameFramework.players.GamePlayer;
 import edu.up.cs301.GameFramework.LocalGame;
 import edu.up.cs301.GameFramework.actionMessage.GameAction;
+import edu.up.cs301.GameFramework.players.ProxyPlayer;
 
 import android.util.Log;
 
@@ -50,6 +51,7 @@ public class RookLocalGame extends LocalGame {
         }
         this.rookState = (RookState) state;
         super.state = state;
+
     }
 
     /**
@@ -59,35 +61,21 @@ public class RookLocalGame extends LocalGame {
     protected boolean makeMove(GameAction action) {
         Log.i("action", action.getClass().toString());
         //need to check if the action is a game action  first make a return false if statement
-
-        int playerNum = action.getPlayer().getPlayerNum();
-
-        //Nuxoll doesn't understand why proxyplayer doesn't know its id number
-        if (playerNum == -9999) {
-            playerNum = 0;
-            for(GamePlayer gp : this.players) {
-                if (gp.equals(action.getPlayer())) {
-                    break;
-                }
-                playerNum++;
-                gp.setPlayerNum(playerNum);
-            }
+        if(rookState.trickCount == 0 && rookState.playerId == 0){
+            correctPlayerID();
         }
+        int playerNum = action.getPlayer().getPlayerNum();
 
         if (action instanceof BidAction) {
             BidAction ba = (BidAction)action;
             if(rookState.bid(ba)){//if the action is legal
                 rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
-                changePlayerTurn(playerNum);
+                nextBidderID(playerNum);
 
                 if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
-                    if(rookState.bidWinner == 0) {
-                        rookState.setPhase(RookState.DISCARD_PHASE);
-                        /*rookState.setPhase(RookState.TRUMP_PHASE);*/
-                    }
-                    rookState.playerId = 0;
+                    rookState.setPhase(RookState.DISCARD_PHASE);
                 }
                 return true;
             }
@@ -98,7 +86,7 @@ public class RookLocalGame extends LocalGame {
                 if(rookState.isBiddingOver()){
                     rookState.setPhase(RookState.DISCARD_PHASE);
                 }
-                changePlayerTurn(playerNum);
+                nextBidderID(playerNum);
                 return true;//action was successful
             }
         } else if (action instanceof PlayCardAction) {
@@ -106,9 +94,7 @@ public class RookLocalGame extends LocalGame {
 
             if(pca.getCard().getCardSuit() == null){
                 //do nothing, will return false at the end
-            }
-
-            else if (rookState.playCard(pca)) {
+            } else if (rookState.playCard(pca)) {
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
                 rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
                 changePlayerTurn(playerNum);
@@ -153,15 +139,21 @@ public class RookLocalGame extends LocalGame {
                 return true;
             }
         } else if (action instanceof TrumpSelection) {
-            try {
-                rookState.trumpSuit = rookState.playerHands[playerNum][((TrumpSelection) action).index].getCardSuit();
-            }catch(NullPointerException npe) {
-                int wtf = 3;
-            }
+            rookState.trumpSuit = rookState.playerHands[playerNum][((TrumpSelection) action).index].getCardSuit();
             rookState.setPhase(RookState.PLAY_PHASE);
+            rookState.playerId = 0;
+            return true;
         }
         return false;
     }//makeMove
+
+    public void correctPlayerID(){
+        for(int i = 0; i < players.length; i++) {
+            if (players[i].getPlayerNum() == -9999) {//if they are a proxy players
+                players[i].setPlayerNum(i);//set the proxy players number to their index in the array
+            }
+        }//first for loop
+    }
 
 
     //isPlayCard is a boolean that lets us know if it is being called by PlayCardAction
@@ -170,6 +162,24 @@ public class RookLocalGame extends LocalGame {
             rookState.playerId++;//make it the next persons turn
         } else {
             rookState.playerId = 0; // Start over with player 0 since it was player 3's turn.
+        }
+    }
+
+    public void nextBidderID(int currentPlayer){
+        //will return the player id of the next bidder
+        if(currentPlayer == 3) {
+            for (int i = 0; i < players.length; i++){
+                if(rookState.getCanBid(i)){
+                    rookState.playerId = i;
+                    return;
+                }
+            }
+        }
+        for (int i = currentPlayer + 1; i < players.length; i++){
+            if(rookState.getCanBid(i)){
+                rookState.playerId = i;
+                return;
+            }
         }
     }
 
