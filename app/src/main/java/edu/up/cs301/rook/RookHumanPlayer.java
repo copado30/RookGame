@@ -17,9 +17,13 @@ import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
     /* instance variables */
-    private RookState rookState; // the most recent game state, as given to us by the RookLocalGame
+    public static final int DISCARD = 1;
+    public static final int TRUMP = 2;
+    public static final int PLAY = 3;
 
+    private RookState rookState; // the most recent game state, as given to us by the RookLocalGame
     private GameMainActivity myActivity; // the android activity that we are running
+
     private Button passButton;
     private Button bidButton;
     private Button plusButton;
@@ -165,84 +169,13 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         if (rookState.getPhase() == rookState.DISCARD_PHASE && rookState.bidWinner == playerNum) {
             if (button.getId() == R.id.passButton) { // done trading
                 game.sendAction(new DiscardingAction(this, -1));
+            }else{
+                sendAction(DISCARD, button.getId());
             }
-
-            int index = -1;
-
-            if (button.getId() == R.id.cardButton0) {
-                index = 0;
-            } else if (button.getId() == R.id.cardButton1) {
-                index = 1;
-            } else if (button.getId() == R.id.cardButton2) {
-                index = 2;
-            } else if (button.getId() == R.id.cardButton3) {
-                index = 3;
-            } else if (button.getId() == R.id.cardButton4) {
-                index = 4;
-            } else if (button.getId() == R.id.cardButton5) {
-                index = 5;
-            } else if (button.getId() == R.id.cardButton6) {
-                index = 6;
-            } else if (button.getId() == R.id.cardButton7) {
-                index = 7;
-            } else if (button.getId() == R.id.cardButton8) {
-                index = 8;
-            }
-            game.sendAction(new DiscardingAction(this, index));
-        }
-
-        // if trump phase and human player is bidWinner, send card they press to TrumpSelection action
-        else if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
-            if (button.getId() == R.id.cardButton0) {
-                rookState.trumpSuitIndex = 0;
-            } else if (button.getId() == R.id.cardButton1) {
-                rookState.trumpSuitIndex = 1;
-            } else if (button.getId() == R.id.cardButton2) {
-                rookState.trumpSuitIndex = 2;
-            } else if (button.getId() == R.id.cardButton3) {
-                rookState.trumpSuitIndex = 3;
-            } else if (button.getId() == R.id.cardButton4) {
-                rookState.trumpSuitIndex = 4;
-            } else if (button.getId() == R.id.cardButton5) {
-                rookState.trumpSuitIndex = 5;
-            } else if (button.getId() == R.id.cardButton6) {
-                rookState.trumpSuitIndex = 6;
-            } else if (button.getId() == R.id.cardButton7) {
-                rookState.trumpSuitIndex = 7;
-            } else if (button.getId() == R.id.cardButton8) {
-                rookState.trumpSuitIndex = 8;
-            }
-            game.sendAction(new TrumpSelection(this, rookState.trumpSuitIndex));
-        }
-        else { // assume its the play phase
-            if (button.getId() == R.id.cardButton0) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][0], 0);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton1) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][1], 1);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton2) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][2], 2);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton3) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][3], 3);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton4) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][4], 4);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton5) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][5], 5);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton6) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][6], 6);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton7) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][7], 7);
-                game.sendAction(playCardAction);
-            } else if (button.getId() == R.id.cardButton8) {
-                PlayCardAction playCardAction = new PlayCardAction(this, rookState.playerHands[playerNum][8], 8);
-                game.sendAction(playCardAction);
-            }
+        } else if(rookState.getPhase() == rookState.TRUMP_PHASE && (rookState.bidWinner == playerNum)) {
+            sendAction(TRUMP, button.getId());
+        } else {//assume its the play phase
+            sendAction(PLAY,button.getId());
         }
     } //onClick
 
@@ -253,6 +186,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      * assisted in writing by Prof Nuxoll
      */
     public int getResourceIdForCard(Card c) {
+        //Nuxol said this is fine, no other way to do it
         if(c.getCardSuit() == null) { return R.drawable.null_card; }
 
         if (c.getCardSuit().equals("Black")) {
@@ -348,6 +282,31 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
         return -1; //should not happen
     }
+    //has two params the type of action
+    //bid, trump, or discard
+    //and the buttont that was clicked
+
+    public void sendAction(int actionType, int buttonId){
+        int indexOfButtonClicked = -1;//should get changed if a button was clicked
+        int index = 0;
+        for(int i = 0; i < cardButtons.length; i++){
+            int cardId = cardButtons[i].getId();
+            if(cardId == buttonId){
+                indexOfButtonClicked = i;
+                index = i;
+                break;
+            }
+        }
+        if(actionType == DISCARD){
+            game.sendAction(new DiscardingAction(this, indexOfButtonClicked));
+        }
+        if(actionType == TRUMP){
+            game.sendAction(new TrumpSelection(this, indexOfButtonClicked));
+        }
+        if(actionType == PLAY){
+            game.sendAction(new PlayCardAction(this,rookState.playerHands[playerNum][index], indexOfButtonClicked));
+        }
+    }
 
     /**
      * callback method when we get a message (e.g., from the game)
@@ -358,7 +317,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     public void receiveInfo(GameInfo info) {
         // ignore the message if it's not a CounterState message
         if (!(info instanceof RookState)) return;
-
         // update our state; then update the display
         this.rookState = (RookState) info;
 
