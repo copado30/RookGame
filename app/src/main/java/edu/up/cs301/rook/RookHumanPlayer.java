@@ -17,23 +17,24 @@ import edu.up.cs301.GameFramework.players.GameHumanPlayer;
 public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickListener {
 
     /* instance variables */
+    private TextView bidText;
     public static final int DISCARD = 1;
     public static final int TRUMP = 2;
     public static final int PLAY = 3;
 
-    private RookState rookState; // the most recent game state, as given to us by the RookLocalGame
-    private GameMainActivity myActivity; // the android activity that we are running
 
+    // the most recent game state, as given to us by the CounterLocalGame
+    private RookState rookState;
+    // the android activity that we are running
+    private GameMainActivity myActivity;
     private Button passButton;
     private Button bidButton;
     private Button plusButton;
     private Button minusButton;
 
     MediaPlayer mp;
-
     private ImageButton[] cardButtons = new ImageButton[9];
     public ImageView[] playedCards = new ImageView[4];
-    private TextView bidText; //displays center top text view, most often the bid amount and winner
     private TextView team1Score;
     private TextView team2Score;
     private TextView bidWinner;
@@ -51,6 +52,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         super(name);
     }
 
+
     /**
      * Returns the GUI's top view object
      *
@@ -58,73 +60,73 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      */
     public View getTopView() {
         return myActivity.findViewById(R.id.main_activity_GUI);
-    } //was game_state_test_layout
+    }//was game_state_test_layout
 
     /**
-     * sets the card drawable to card image buttons
-     * sets text displayed to user: team scores, phase, player turn, and round instructions
+     * sets the counter value in the text view
      */
     protected void updateDisplay() {
-        // assign images to card buttons
+        // set the text in the appropriate widget
+
         Card[] myHand = rookState.playerHands[this.playerNum];
         for (int i = 0; i < myHand.length; i++) { //fix deck length
             int resId = getResourceIdForCard(myHand[i]);
             cardButtons[i].setImageResource(resId);
         }
 
-        // display the center cards in the trick
+        // display the cards in the trick
         for(int i = 0; i < rookState.cardsPlayed.length; i++) {
             int resId = getResourceIdForCard(rookState.cardsPlayed[i]);
             playedCards[i].setImageResource(resId);
         }
 
-        // changes instructions/stats in GUI based on phases of game
         team1Score.setText(rookState.team1Score + "");
         team2Score.setText(rookState.team2Score + "");
+
 
         if (rookState.getPhase() == rookState.ACK_PHASE) {
             currPhase.setText("  Phase: Acknowledge");
             bidWinner.setText("Press any button to continue.");
         } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
-            bidWinner.setText("Select the trump suit by selecting one of the\n" +
-                              "cards in your hand.");
+            bidWinner.setText("Select the trump suit by selecting one of the cards in your hand.");
             currPhase.setText("  Phase: Trump");
         } else {
-            if(rookState.bidWinner == 4){
-                bidWinner.setText("No player has won, bid is: " + rookState.getBidNum() + "  ");
+            if(rookState.bidWinner  == 4){
+                bidWinner.setText("No player has won bid is: " + rookState.getBidNum() + "  ");
             }else {
                 bidWinner.setText("  Player " + (rookState.bidWinner + 1) + ": " + rookState.getBidNum() + "  ");
             }
         }
-
-        // changes instructions/stats in GUI based on phases of game
-        if (rookState.getPhase() == rookState.BID_PHASE){
+         if (rookState.getPhase() == rookState.BID_PHASE){
              currPhase.setText("  Phase: Bid");
         } else if (rookState.getPhase() == rookState.PLAY_PHASE){
              currPhase.setText("  Phase: Play");
         } else if (rookState.getPhase() == rookState.DISCARD_PHASE){
              if(rookState.bidWinner == playerNum) {
-                 bidWinner.setText("You won the bid! Select up to 5 cards to trade\n" +
-                                   "with the nest. Press pass when you are\n" +
-                                   "done trading cards.");
+                 bidWinner.setText("You won the bid! Select up to 5 cards to trade with the nest.\n" +
+                         "Press pass when you are done trading cards.");
              } else {
-                 bidWinner.setText("Please wait for the bid winner to complete" +
-                                   "collecting their prize.");
+                 bidWinner.setText("Please wait for the bid winner to complete collecting their prize.");
              }
              currPhase.setText("  Phase: Discard");
         }
 
+
         leadingSuit.setText("  Leading: " + rookState.leadingSuit);
         trumpSuit.setText("  Trump: " + rookState.trumpSuit);
 
+
         playerTurn.setText("  Player:" + (rookState.playerId + 1) + " turn");
+
+
+
 
         getTopView().invalidate();
     }
 
     /**
-     * this method gets called when the user clicks the '+','-','pass','bid', or any of the
-     * card image buttons. It creates a new RookMoveAction to return to the parent activity.
+     * this method gets called when the user clicks the '+' or '-' button. It
+     * creates a new CounterMoveAction to return to the parent activity.
      *
      * @param button the button that was clicked
      */
@@ -138,8 +140,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             return;
         }
 
-        // if its bid phase and their turn, they can interact with lower level buttons
-        if(rookState.isBidPhase() && playerNum == rookState.playerId) {
+        if(rookState.isBidPhase() && playerNum == rookState.playerId) {//if its bid phase and their turn
             if (button.getId() == R.id.passButton) {
                 PassingAction passingAction = new PassingAction(this);
                 game.sendAction(passingAction);
@@ -149,14 +150,14 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
                 game.sendAction(bidAction);
             } else if (button.getId() == R.id.plusButton) {
                 int newBidValue = Integer.parseInt(bidText.getText().toString()) + 5;
-                if (newBidValue > 120) { // cannot bid over 120
+                if (newBidValue > 120) {
                     /*do nothing*/
                 } else {
                     bidText.setText(newBidValue + "");
                 }
             } else if (button.getId() == R.id.minusButton) {
                 int newBidValue = Integer.parseInt(bidText.getText().toString()) - 5;
-                if (newBidValue < rookState.getBidNum()) { // cannot bid less than previous bid
+                if (newBidValue < rookState.getBidNum()) {
                     /*do nothing*/
                 } else {
                     bidText.setText(newBidValue + "");
@@ -165,9 +166,9 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
 
 
-        // if discard phase and human player is bidWinner, allow them to trade with nest
+
         if (rookState.getPhase() == rookState.DISCARD_PHASE && rookState.bidWinner == playerNum) {
-            if (button.getId() == R.id.passButton) { // done trading
+            if (button.getId() == R.id.passButton) {
                 game.sendAction(new DiscardingAction(this, -1));
             }else{
                 sendAction(DISCARD, button.getId());
@@ -180,9 +181,6 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     } //onClick
 
     /**
-     * Intended to get resourceID of card image to be assigned to card buttons
-     * in updateDisplay method
-     *
      * assisted in writing by Prof Nuxoll
      */
     public int getResourceIdForCard(Card c) {
@@ -308,6 +306,9 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
     }
 
+
+
+
     /**
      * callback method when we get a message (e.g., from the game)
      *
@@ -330,10 +331,10 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      * @param activity the activity under which we are running
      */
     public void setAsGui(GameMainActivity activity) {
+
         // remember the activity
         this.myActivity = activity;
 
-        // sound effects
         mp = MediaPlayer.create(this.myActivity,R.raw.jazz);
         mp.start();
         mp.setLooping(true);
@@ -342,7 +343,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         activity.setContentView(R.layout.activity_main);
         bidText = activity.findViewById(R.id.betValueTextView);
 
-        // initialize widget reference member variables
+        //initialize widget reference member variables
         this.bidButton = (Button) activity.findViewById(R.id.bidButton);
         this.plusButton = (Button) activity.findViewById(R.id.plusButton);
         this.minusButton = (Button) activity.findViewById(R.id.minusButton);
@@ -370,8 +371,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         this.trumpSuit = (TextView) activity.findViewById(R.id.trumpSuitTextView);
         this.currPhase = (TextView) activity.findViewById(R.id.phase_textView);
         this.playerTurn = (TextView) activity.findViewById(R.id.playerTurn_textView);
-
-        // listen for button presses
+        //listen for button presses
         bidButton.setOnClickListener(this);
         plusButton.setOnClickListener(this);
         minusButton.setOnClickListener(this);
@@ -380,11 +380,14 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         for(int i = 0; i < cardButtons.length; i++) {
             cardButtons[i].setOnClickListener(this);
         }
+
+
     }//setAsGui
 
     @Override
     public void setPlayerNum(int playerNum) {
         //ignore
     }
-}// class RookHumanPlayer
+
+}// class CounterHumanPlayer
 
