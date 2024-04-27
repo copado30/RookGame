@@ -85,13 +85,13 @@ public class RookLocalGame extends LocalGame {
                     rookState.setPhase(RookState.DISCARD_PHASE);
                 }
                 nextBidderID(playerNum);
-                return true;//action was successful
+                return true; // action was successful
             }
         } else if (action instanceof PlayCardAction) {
             PlayCardAction pca = (PlayCardAction) action;
 
             if(pca.getCard().getCardSuit() == null) {
-                //do nothing, will return false at the end
+                // do nothing, will return false at the end
             } else if (rookState.playCard(pca)) {
                 // add the card the player played to the cards played array
                 rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];
