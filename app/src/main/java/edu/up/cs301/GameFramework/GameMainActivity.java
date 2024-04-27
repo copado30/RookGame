@@ -1,6 +1,11 @@
 package edu.up.cs301.GameFramework;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -525,39 +530,26 @@ public abstract class GameMainActivity extends Activity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_help) {
-            String msg = 
-                    "Welcome to ROOK!\n" +
-                    "\n" +
-                    "This game is a 4 player game in which you will be split into two teams." +
-                    "You will sit across from your team member and you will not be aware of each" +
-                    "others hands throughtout the game.\n" +
-                    "\n" +
-                    "OBJECTIVE: The objective of this game is to be the first team to score 300" +
-                    "points by winning \"tricks\" (rounds).\n" +
-                    "\n" +
-                    "DISCARD/NEST: Each player receives 9 cards, and 5 cards are set aside for the" +
-                    "\"nest\". The bid winner has the option to select up to 5 of their cards to" +
-                    "trade with the cards within the \"nest\". At the end of the round (end of 9 cards" +
-                    "being played), the last team to \"take the trick\" has the nest added to their" +
-                    "score.\n" +
-                    "\n" +
-                    "BIDDING: You have the option to bid a minimum of 70 points and a maximum of 120" +
-                    "points, or pass. The highest bidder has the chance to trade with the nest and" +
-                    "select the trump suit. You should be bidding the amount of points you think your" +
-                    "team will win at the end of the round; if you do not reach the bid amount, you" +
-                    "do not receive the points from that round and the bid amount is subtracted from" +
-                    "your team's total score.\n" +
-                    "\n" +
-                    "PLAY: The player who \"takes the trick\" is the first to play their card and," +
-                    "as a result, gets to choose the leading suit for that subround. If you have a" +
-                    "card of the leading suit, you must play that card or the Rook bird card; you may" +
-                    "only play another card (including the trump suit) if you do not have a card of" +
-                    "the leading suit.\n" +
-                    "\n" +
-                    "POINTS: 5 - 5 points\n" +
-                    "\t10 - 10 points\n" +
-                    "\t14 - 10 points\n" +
-                    "\tRook - 20 points\n";
+            InputStream inputStream = getResources().openRawResource(R.raw.rook_rules);
+            StringBuilder stringBuilder = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            try {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line).append("\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            String msg = stringBuilder.toString();
+
             Logger.log(TAG, "This is the help button!");
             MessageBox.popUpMessage(msg, this);
             return true;
