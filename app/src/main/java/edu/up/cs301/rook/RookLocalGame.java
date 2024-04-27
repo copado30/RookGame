@@ -51,7 +51,6 @@ public class RookLocalGame extends LocalGame {
         }
         this.rookState = (RookState) state;
         super.state = state;
-
     }
 
     /**
