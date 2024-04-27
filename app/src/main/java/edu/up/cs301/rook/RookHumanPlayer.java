@@ -1,5 +1,6 @@
 package edu.up.cs301.rook;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.view.View;
@@ -64,6 +65,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      * sets the card drawable to card image buttons
      * sets text displayed to user: team scores, phase, player turn, and round instructions
      */
+    @SuppressLint("SetTextI18n")
     protected void updateDisplay() {
         // assign images to card buttons
         Card[] myHand = rookState.playerHands[this.playerNum];
@@ -186,7 +188,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
      * assisted in writing by Prof Nuxoll
      */
     public int getResourceIdForCard(Card c) {
-        //Nuxol said this is fine, no other way to do it
+        //Nuxoll said this is fine, no other way to do it
         if(c.getCardSuit() == null) { return R.drawable.null_card; }
 
         if (c.getCardSuit().equals("Black")) {
@@ -282,13 +284,17 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
         }
         return -1; //should not happen
     }
-    //has two params the type of action
-    //bid, trump, or discard
-    //and the buttont that was clicked
 
+    /**
+     * sends actions based on button pressed
+     *
+     * @param actionType the action it's associated with
+     * @param buttonId the button that was clicked
+     */
     public void sendAction(int actionType, int buttonId){
         int indexOfButtonClicked = -1;//should get changed if a button was clicked
         int index = 0;
+
         for(int i = 0; i < cardButtons.length; i++){
             int cardId = cardButtons[i].getId();
             if(cardId == buttonId){
@@ -297,12 +303,15 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
                 break;
             }
         }
+
         if(actionType == DISCARD){
             game.sendAction(new DiscardingAction(this, indexOfButtonClicked));
         }
+
         if(actionType == TRUMP){
             game.sendAction(new TrumpSelection(this, indexOfButtonClicked));
         }
+
         if(actionType == PLAY){
             game.sendAction(new PlayCardAction(this,rookState.playerHands[playerNum][index], indexOfButtonClicked));
         }
@@ -317,6 +326,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     public void receiveInfo(GameInfo info) {
         // ignore the message if it's not a CounterState message
         if (!(info instanceof RookState)) return;
+
         // update our state; then update the display
         this.rookState = (RookState) info;
 
