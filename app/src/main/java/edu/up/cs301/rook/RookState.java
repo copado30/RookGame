@@ -17,7 +17,6 @@ public class RookState extends GameState implements Serializable {
     public static final int PLAY_PHASE = 38; //play cards on trick
     public static final int TRUMP_PHASE = 41; //trump suit selection
     public static final int ACK_PHASE = 39;  //acknowledge completed trick
-    public int trumpSuitIndex;
     int discardCount;
     public int team1Score;
     public int team2Score;
@@ -34,7 +33,6 @@ public class RookState extends GameState implements Serializable {
 
     private boolean[] canBid = new boolean[4];
     public boolean[] wonBid = new boolean[4];
-    public int[] bids = new int[4];
     public Card[] cardsPlayed = new Card[4];
     public Card[] discardedCards = new Card[5];
     public Card[] deck = new Card[41];
@@ -80,7 +78,6 @@ public class RookState extends GameState implements Serializable {
         trickCount = gameState.trickCount;
         ackCount = gameState.ackCount;
         roundsPlayed = gameState.roundsPlayed;
-        trumpSuitIndex = gameState.trumpSuitIndex;
 
         for(int i = 0; i < discardedCards.length; i++) { discardedCards[i] = new Card (gameState.discardedCards[i]); }
 
