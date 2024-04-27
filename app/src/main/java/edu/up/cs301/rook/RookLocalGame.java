@@ -159,6 +159,7 @@ public class RookLocalGame extends LocalGame {
                 int wtf = 3;
             }
             rookState.setPhase(RookState.PLAY_PHASE);
+            return true;
         }
         return false;
     }//makeMove

@@ -85,11 +85,11 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
 
 
         if (rookState.getPhase() == rookState.ACK_PHASE) {
-            currPhase.setText(" Phase: Acknowledge");
+            currPhase.setText("  Phase: Acknowledge");
             bidWinner.setText("Press any button to continue.");
         } else if (rookState.getPhase() == rookState.TRUMP_PHASE) {
-            bidWinner.setText("Now select the trump suit by selecting one of the cards in your hand.");
-            currPhase.setText(" Phase: Trump");
+            bidWinner.setText("Select the trump suit by selecting one of the cards in your hand.");
+            currPhase.setText("  Phase: Trump");
         } else {
             if(rookState.bidWinner  == 4){
                 bidWinner.setText("No player has won bid is: " + rookState.getBidNum() + "  ");
@@ -98,20 +98,25 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
             }
         }
          if (rookState.getPhase() == rookState.BID_PHASE){
-             currPhase.setText(" Phase: Bid");
+             currPhase.setText("  Phase: Bid");
         } else if (rookState.getPhase() == rookState.PLAY_PHASE){
-             currPhase.setText(" Phase: Play");
+             currPhase.setText("  Phase: Play");
         } else if (rookState.getPhase() == rookState.DISCARD_PHASE){
-             bidWinner.setText("You won the bid! Select up to 5 cards to trade with the nest. Press pass when you are done trading cards.");
-             currPhase.setText(" Phase: Discard");
+             if(rookState.bidWinner == playerNum) {
+                 bidWinner.setText("You won the bid! Select up to 5 cards to trade with the nest.\n" +
+                         "Press pass when you are done trading cards.");
+             } else {
+                 bidWinner.setText("Please wait for the bid winner to complete collecting their prize.");
+             }
+             currPhase.setText("  Phase: Discard");
         }
 
 
-        leadingSuit.setText("  Leading Suit: " + rookState.leadingSuit);
-        trumpSuit.setText("  Trump Suit: " + rookState.trumpSuit);
+        leadingSuit.setText("  Leading: " + rookState.leadingSuit);
+        trumpSuit.setText("  Trump: " + rookState.trumpSuit);
 
 
-        playerTurn.setText("Player:" + (rookState.playerId + 1) + " turn");
+        playerTurn.setText("  Player:" + (rookState.playerId + 1) + " turn");
 
 
 
@@ -246,7 +251,7 @@ public class RookHumanPlayer extends GameHumanPlayer implements View.OnClickList
     } //onClick
 
     /**
-     *
+     * assisted in writing by Prof Nuxoll
      */
     public int getResourceIdForCard(Card c) {
         if(c.getCardSuit() == null) { return R.drawable.null_card; }

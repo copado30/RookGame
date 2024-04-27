@@ -311,10 +311,6 @@ public class RookState extends GameState implements Serializable {
         return (phase == BID_PHASE);
     }
 
-    public boolean isSelectionPhase() {
-        return (phase == TRUMP_PHASE);
-    }
-
     public void setPhase(int newPhase){
         this.phase = newPhase;
     }
