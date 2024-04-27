@@ -64,13 +64,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_weight="4"
+            android:layout_weight="8"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/bidWinner_textView"
-                android:layout_width="49dp"
-                android:layout_height="8dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="#F3EBEB"
                 android:text=" Bid Winner "
                 android:gravity="center"

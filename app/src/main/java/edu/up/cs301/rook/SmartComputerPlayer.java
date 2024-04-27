@@ -10,23 +10,26 @@ import edu.up.cs301.GameFramework.infoMessage.GameInfo;
 import edu.up.cs301.GameFramework.utilities.Tickable;
 
 /**
- * A computer-version of a counter-player.  Since this is such a simple game,
+ * BASE CODE: A computer-version of a counter-player.  Since this is such a simple game,
  * it just sends "+" and "-" commands with equal probability, at an average
  * rate of one per second.
+ *
+ * OURS: Smart computer play set to send certain actions based on player hand and chances
+ * of winning.
  *
  * @author Steven R. Vegdahl
  * @author Andrew M. Nuxoll
  * @version September 2013
  */
 public class SmartComputerPlayer extends GameComputerPlayer {
+    String[] colors = new String[]{"Black","Green","Yellow","Red"};
 
     /**
-     * Constructor for objects of class CounterComputerPlayer1
+     * Constructor for objects of SmartComputerPlayer
      *
      * @param name
      * 		the player's name
      */
-    String[] colors = new String[]{"Black","Green","Yellow","Red"};
     public SmartComputerPlayer(String name) {super(name);}
 
     /**
@@ -101,7 +104,13 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         } // if its the players turn
     }
 
-    public int highestOfColor(RookState rookState,String searchColor){
+    /**
+     * Should return the index of the card that has the highest cardNum of the searchColor
+     *
+     * @param rookState
+     * @param searchColor
+     * */
+    public int highestOfColor(RookState rookState, String searchColor){
         // should return the index of the card that has the
         // highest cardNum of the searchColor
         int indexOfCardToPlay = -1;
@@ -117,9 +126,12 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         return indexOfCardToPlay;
     }
 
+    /**
+     * Will calculate how much they can bid based on their hand
+     *
+     * @param rookState
+     */
     public int bidAmountCalc(RookState rookState){
-        // this method will calculate how much they can bid
-        // based on their hand
         if(handQuality(rookState) <= 3 ) {
             return 75; // do not bid high because they have a bad hand
         } else if(handQuality(rookState) <= 5) {
@@ -131,20 +143,26 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         //bidding anything over 90 is hard to reach
     }
 
+    /**
+     * Has them select trump suit based on the most colors they have in their hand
+     *
+     * @param rookState
+     */
     public String selectTrumpSuit(RookState rookState){
         int dummy = -100;
         int arrayCountOfColor[] = new int[4];
         String returnString = "";
+
         for(int i = 0; i < 9; i++){
             if(rookState.playerHands[playerNum][i].getCardSuit() == null){
                 // don't do anything card is empty(should not happen)
-            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[0])) {
+            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[0])) {
                 arrayCountOfColor[0]++;
-            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[1])) {
+            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[1])) {
                 arrayCountOfColor[1]++;
-            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[2])) {
+            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[2])) {
                 arrayCountOfColor[2]++;
-            }else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[3])) {
+            } else if(rookState.playerHands[playerNum][i].getCardSuit().equals(colors[3])) {
                 arrayCountOfColor[3]++;
             }
         }
@@ -157,9 +175,13 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         }
         return returnString;
     }
-    // will return a number between 0 and nine
-    // depending on how many good cards they have
-    // good = cards that are worth points && cards with a higher number than 9
+
+    /**
+     * Will return number between 0 and 9 depending on how many good cards they have. Good =
+     * cards that are worth points and a higher number than 9
+     *
+     * @param rookState
+     */
     public int handQuality(RookState rookState){
         int goodCardCount = 0;
         for(int i = 0; i < 9; i++) {
@@ -174,6 +196,9 @@ public class SmartComputerPlayer extends GameComputerPlayer {
         return goodCardCount;
     }
 
+    /***
+     * @param playerNum
+     */
     @Override
     public void setPlayerNum(int playerNum) {
         //ignore
