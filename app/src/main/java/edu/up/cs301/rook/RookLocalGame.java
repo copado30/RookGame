@@ -49,6 +49,8 @@ public class RookLocalGame extends LocalGame {
     /**
      * Types of GameAction is BidAction, PassingAction, PlayCardAction, DiscardingAction,
      * and TrumpSelection
+     *
+     * @param action
      */
     @Override
     protected boolean makeMove(GameAction action) {
@@ -58,15 +60,16 @@ public class RookLocalGame extends LocalGame {
         if(rookState.trickCount == 0 && rookState.playerId == 0){
             correctPlayerID();
         }
+
         int playerNum = action.getPlayer().getPlayerNum();
 
         if (action instanceof BidAction) {
             BidAction ba = (BidAction)action;
-            if(rookState.bid(ba)){//if the action is legal
-                rookState.setBidNum(ba.getTotalBid());//make the rookState bidNum equal to the
+            if(rookState.bid(ba)){ // if the action is legal
+                rookState.setBidNum(ba.getTotalBid()); // make the rookState bidNum equal to the
                 nextBidderID(playerNum);
 
-                if(ba.getTotalBid() == 120) {//if the player bids 120 they win it right away
+                if(ba.getTotalBid() == 120) { // if the player bids 120 they win it right away
                     rookState.bidWinner = playerNum;
                     rookState.wonBid[playerNum] = true;
                     rookState.setPhase(RookState.DISCARD_PHASE);
@@ -75,8 +78,9 @@ public class RookLocalGame extends LocalGame {
             }
         } else if (action instanceof PassingAction) {
             PassingAction pa = (PassingAction)action;
-            if(rookState.passTurn(pa)){//if they can  pass then do the following
-                rookState.setCanBid(playerNum, false);//player can no longer bid
+
+            if(rookState.passTurn(pa)){ // if they can  pass then do the following
+                rookState.setCanBid(playerNum, false); // player can no longer bid
                 if(rookState.isBiddingOver()){
                     rookState.setPhase(RookState.DISCARD_PHASE);
                 }
@@ -86,24 +90,27 @@ public class RookLocalGame extends LocalGame {
         } else if (action instanceof PlayCardAction) {
             PlayCardAction pca = (PlayCardAction) action;
 
-            if(pca.getCard().getCardSuit() == null){
+            if(pca.getCard().getCardSuit() == null) {
                 //do nothing, will return false at the end
             } else if (rookState.playCard(pca)) {
-                rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];//add the card the player played to the cards played array
-                rookState.playerHands[playerNum][pca.getCardIndex()] = null;//delete the card from the players hand
+                // add the card the player played to the cards played array
+                rookState.cardsPlayed[playerNum] = rookState.playerHands[playerNum][pca.getCardIndex()];
+                rookState.playerHands[playerNum][pca.getCardIndex()] = null; // delete the card from the players hand
                 changePlayerTurn(playerNum);
+
                 try {
                     rookState.leadingSuit = rookState.cardsPlayed[firstPlayerOfTrick()].getCardSuit();
-                }catch(NullPointerException npe) {
+                } catch(NullPointerException npe) {
                     int wtf = 3;
                 }
-                if(playerNum == lastPlayerOfTrick()){//if its the player that should go last
+
+                if(playerNum == lastPlayerOfTrick()){ // if its the player that should go last
                     rookState.trickCount++;
                     rookState.scoreCalc();
-                    rookState.playerId = firstPlayerOfTrick();//make the winner of the bid the player that goes first
+                    rookState.playerId = firstPlayerOfTrick(); // make the winner of the bid the player that goes first
                     rookState.setPhase(RookState.ACK_PHASE);
                 }
-                if(rookState.trickCount == 9){
+                if(rookState.trickCount == 9){ // if last winner of round, add Nest to their score and reset
                     rookState.addNest();
                     try {
                         Thread.sleep(2000);
@@ -114,13 +121,13 @@ public class RookLocalGame extends LocalGame {
                 }
                 return true;
             }
-        } else if (action instanceof AcknowledgeTrick) {
+        } else if (action instanceof AcknowledgeTrick) { // acknowledges end of subround to reset
             if (rookState.getPhase() == RookState.ACK_PHASE) {
                 rookState.ackTrick();
                 changePlayerTurn(playerNum);
                 return true;
             }
-        } else if (action instanceof DiscardingAction) {
+        } else if (action instanceof DiscardingAction) { // trading cards with the nest
             DiscardingAction discardingAction = (DiscardingAction) action;
             if(rookState.discardCard(discardingAction)) {
                 int index = ((DiscardingAction) action).getDiscardedIndex();
@@ -132,7 +139,7 @@ public class RookLocalGame extends LocalGame {
                 rookState.discardCardCount();
                 return true;
             }
-        } else if (action instanceof TrumpSelection) {
+        } else if (action instanceof TrumpSelection) { // if they win bid, they select trump suit
             rookState.trumpSuit = rookState.playerHands[playerNum][((TrumpSelection) action).index].getCardSuit();
             rookState.setPhase(RookState.PLAY_PHASE);
             rookState.playerId = 0;
@@ -141,26 +148,39 @@ public class RookLocalGame extends LocalGame {
         return false;
     }//makeMove
 
+    /**
+     * Assigns correct playerID to proxy player. Was not being recognized by program.
+     *
+     * Met with Nuxoll to resolve
+     */
     public void correctPlayerID(){
         for(int i = 0; i < players.length; i++) {
-            if (players[i].getPlayerNum() == -9999) {//if they are a proxy players
-                players[i].setPlayerNum(i);//set the proxy players number to their index in the array
+            if (players[i].getPlayerNum() == -9999) { // if they are a proxy players
+                players[i].setPlayerNum(i); // set the proxy players number to their index in the array
             }
-        }//first for loop
+        } // first for loop
     }
 
 
-    //isPlayCard is a boolean that lets us know if it is being called by PlayCardAction
+    /**
+     * Makes it the next player turn, if its the last player in the subround it resets
+     *
+     * @param currentPlayer
+     */
     public void changePlayerTurn(int currentPlayer){
         if(currentPlayer < 3){
-            rookState.playerId++;//make it the next persons turn
+            rookState.playerId++; // make it the next persons turn
         } else {
             rookState.playerId = 0; // Start over with player 0 since it was player 3's turn.
         }
     }
 
+    /**
+     * Returns the player id of the next bidder
+     *
+     * @param currentPlayer
+     */
     public void nextBidderID(int currentPlayer){
-        //will return the player id of the next bidder
         if(currentPlayer == 3) {
             for (int i = 0; i < players.length; i++){
                 if(rookState.getCanBid(i)){
@@ -169,6 +189,7 @@ public class RookLocalGame extends LocalGame {
                 }
             }
         }
+
         for (int i = currentPlayer + 1; i < players.length; i++){
             if(rookState.getCanBid(i)){
                 rookState.playerId = i;
@@ -177,27 +198,30 @@ public class RookLocalGame extends LocalGame {
         }
     }
 
-    //The lastPlayerOfTrick method returns the player id of the last player to play a card in the trick
-    //used to check when the trick is over in the PCA
+    /**
+     * Returns the player id of the last player to play a card in the trick. Used to check
+     * when the trick is over in the PlayCardAction
+     */
     public int lastPlayerOfTrick(){
-        if(rookState.trickCount != 0){//if its not the zero trick
-            //if the zero player wins then do nothing nothing cause that is the default
-            if(rookState.trickWinner[rookState.trickCount -1] == 1){//winner of the last trick
+        if(rookState.trickCount != 0){ // if its not the zero trick
+            // if the zero player wins then do nothing nothing cause that is the default
+            if(rookState.trickWinner[rookState.trickCount -1] == 1){ // winner of the last trick
                 return 0;
-            } else if(rookState.trickWinner[rookState.trickCount -1] == 2){//winner of the last trick
+            } else if(rookState.trickWinner[rookState.trickCount -1] == 2){ // winner of the last trick
                 return 1;
             }
-            else if(rookState.trickWinner[rookState.trickCount -1] == 3){//winner of the last trick
+            else if(rookState.trickWinner[rookState.trickCount -1] == 3){ // winner of the last trick
                 return 2;
             }
         }
-        return 3;//default is player 3
+        return 3; // default is player 3
     }
 
-    //using who went last decide who goes first for the next trick calls the lastPlayerOfTrickMethod
+    /**
+     * Uses who went last to decide who goes first for the next trick.
+     * Calls lastPlayerOfTrick method
+     */
     public int firstPlayerOfTrick(){
-        //timing seems to be off, probably because of trick count.
-
         if(lastPlayerOfTrick() == 0){
             return 1;
         } else if (lastPlayerOfTrick() == 1) {
@@ -205,13 +229,14 @@ public class RookLocalGame extends LocalGame {
         }else if (lastPlayerOfTrick() == 2) {
             return 3;
         }
-
-        return 0;//if player 3 went last then player zero went first
+        return 0; // if player 3 went last, then player zero goes first
     }
 
 
     /**
      * send the updated state to a given player
+     *
+     * @param p
      */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
@@ -219,8 +244,7 @@ public class RookLocalGame extends LocalGame {
         // complete copy of the state to send to the player
         RookState state = new RookState(this.rookState);
         p.sendInfo(state);
-
-    }//sendUpdatedSate
+    } // sendUpdatedState
 
     /**
      * Check if the game is over. It is over, return a string that tells
@@ -233,8 +257,8 @@ public class RookLocalGame extends LocalGame {
     protected String checkIfGameOver() {
         if(rookState.trickCount == 9){
             rookState.resetRound();
-
         }
+
         if(rookState.team1Score >= 300 && rookState.team1Score > rookState.team2Score) {
             return "Team 1 has won the game with " + rookState.team1Score + " points";
         } else if (rookState.team2Score >= 300 && rookState.team1Score < rookState.team2Score) {
@@ -243,5 +267,4 @@ public class RookLocalGame extends LocalGame {
 
         return null;
     }
-
-}// class CounterLocalGame
+}// class RookLocalGame
